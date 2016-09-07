@@ -1,0 +1,23 @@
+.sidebar {
+    > .storage {
+        margin: ($padding-large-vertical) 0;
+        > li > .item {
+            font-size: 13px;
+            color: $gray;
+            font-weight: bold;
+            margin-bottom:6px;
+            > .glyphicon {
+                position: relative;
+                left: -2px;
+                margin-left: 2px;
+            }
+        }
+        > li > .storage-filters {
+            padding-left:6px;
+            .panel {
+                margin-top:1em;
+                margin-left:-6px;
+            }
+        }
+    }
+}

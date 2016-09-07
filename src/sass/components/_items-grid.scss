@@ -1,0 +1,50 @@
+.items-grid {
+    margin:10px -5px;
+    .item {
+        position: relative;
+        width: 96px;
+        max-height: 100px;
+        float: left;
+        padding: 22px 6px 6px 6px;
+        margin:1px 0 0 1px;
+        text-align: center;
+        cursor:default;
+        &:hover, &.selected {
+            background: #eeeeee;
+        }
+        .glyphicon {
+            font-size:32px;
+            &.item-ext::after {
+                font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+                content: attr(data-ext);
+                left: 4px;
+                position: absolute;
+                color: #fff;
+                font-size: 9px;
+                text-transform: uppercase;
+                top: 21px;
+            }
+        }
+        .item-thumbnail {
+            position: absolute;
+            width:84px;
+            top:6px;
+            left:6px;
+            height:56px;
+            overflow:hidden;
+            background-size:cover;
+            background-position: center;
+        }
+        > div {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;         /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
+            -o-text-overflow: ellipsis;    /** Opera 9 & 10 **/
+        }
+    }
+
+    .item:last-child {
+        margin-right: 0;
+    }
+}

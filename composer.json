@@ -1,0 +1,15 @@
+{
+    "name": "netresearch/assetpicker",
+    "description": "A free asset or file picker with abstraction layer allowing several adapters like GitHub, EnterMediaDB, Amazon S3, Google Drive, Dropbox etc.",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Christian Opitz",
+            "email": "christian.opitz@netresearch.de"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "jenssegers/proxy": "^2.2"
+    }
+}

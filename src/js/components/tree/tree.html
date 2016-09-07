@@ -1,0 +1,12 @@
+<template v-if="item">
+    <span v-if="items && items.filterBy('type', 'dir').length" class="glyphicon glyphicon glyphicon-triangle-{{open ? 'bottom' : 'right'}}" v-on:click="open = !open"></span>
+    <span class="item{{selected ? ' selected' : ''}}" v-on:click="select">
+        <span class="glyphicon glyphicon-folder-close"></span>
+        {{item.name}}
+    </span>
+</template>
+<ul v-if="open || !item" class="{{item ? '' : 'tree'}}">
+    <li v-for="item in items | filterBy 'dir' in 'type'">
+        <tree :item="item" :name="name"></tree>
+    </li>
+</ul>

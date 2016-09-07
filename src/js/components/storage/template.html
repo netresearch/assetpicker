@@ -1,0 +1,12 @@
+<ul class="tree storage">
+    <li>
+        <span class="glyphicon glyphicon-triangle-{{open ? 'bottom' : 'right'}}" v-on:click="open = !open"></span>
+        <span class="item{{selected ? ' selected' : ''}}" v-on:click="select">
+            <span class="glyphicon glyphicon-hdd"></span>
+            {{storage.label || storage.adapter}}
+        </span>
+        <div class="storage-filters" v-show="open">
+            <div v-if="open || selected" :is="storage.adapter" :config="storage"></div>
+        </div>
+    </li>
+</ul>

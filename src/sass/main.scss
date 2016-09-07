@@ -1,0 +1,66 @@
+$gray-base:                            #000 !default;
+$gray-darker:                        lighten($gray-base, 13.5%) !default; // #222
+$gray-dark:                            #212121 !default;
+$gray:                                     #666 !default;
+$gray-light:                         #bbb !default;
+$gray-lighter:                     lighten($gray-base, 93.5%) !default; // #eee
+
+$brand-primary:                 #2196F3 !default;
+$brand-success:                 #4CAF50 !default;
+$brand-info:                        #9C27B0 !default;
+$brand-warning:                 #ff9800 !default;
+$brand-danger:                    #e51c23 !default;
+
+$padding-base-vertical: 6px;
+$padding-large-vertical: 16px;
+$padding-base-horizontal: $padding-base-vertical;
+$padding-large-horizontal: $padding-large-vertical;
+
+$line-height: 1.846;
+
+$navbar-height: 48px;
+$navbar-font-size: 16px;
+
+@import url("https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css");
+@import "components/tree";
+@import "components/sidebar";
+@import "components/items-grid";
+
+.navbar {
+    min-height: $navbar-height;
+    .navbar-brand {
+        height:$navbar-height;
+        font-size:18px;
+    }
+    $padding: 12px;
+    .navbar-brand,
+    .navbar-nav>li>a {
+        padding-top: $padding;
+        padding-bottom: $padding;
+    }
+    .navbar-form {
+        margin-top: $padding - 3;
+        margin-bottom: $padding - 3;
+    }
+    .nav {
+        font-size: $navbar-font-size;
+    }
+}
+
+#main {
+    position: absolute;
+    top: $navbar-height;
+    right:0;
+    bottom:0;
+    left:0;
+    > .row,
+    > .row > div {
+        height: 100%;
+    }
+    > .row > div {
+        overflow: auto;
+        &.sidebar {
+            background:$gray-lighter;
+        }
+    }
+}
