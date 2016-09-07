@@ -7,6 +7,7 @@ Vue.http.interceptors.push(function(options, next) {
 });
 
 module.exports = {
+    template: '<div><tree></tree></div>',
     props: {
         config: {
             type: Object,
@@ -30,7 +31,7 @@ module.exports = {
             }
             return function (url, base) {
                 if (base) {
-                    url = base.replace(/\/+$/, '') + '/' + url.replace(/^\/+/, '');
+                    url = (base + '').replace(/\/+$/, '') + '/' + (url + '').replace(/^\/+/, '');
                 }
                 if ($proxy) {
                     $proxy.url = encodeURIComponent(url);

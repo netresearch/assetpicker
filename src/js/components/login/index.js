@@ -21,7 +21,7 @@ module.exports = {
                             this.$remove().$destroy();
                             resolve();
                         } else {
-                            login.failure = true;
+                            this.failure = true;
                         }
                     }).bind(this));
                 }).bind(this));

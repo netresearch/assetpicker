@@ -14,8 +14,8 @@
   "homepage": "https://github.com/netresearch/assetpicker#readme",
   "dependencies": {
     "vue": "^1.0.0",
-    "vue-resource": "^0.9.3",
-    "vue-i18n-mixin": "^0.1.0"
+    "vue-i18n-mixin": "^0.1.0",
+    "vue-resource": "^0.9.3"
   },
   "devDependencies": {
     "browserify": "^11.2.0",

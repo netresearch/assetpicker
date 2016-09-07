@@ -18,4 +18,8 @@ Coming soon
     - Amazon S3
     - Dropbox
 - Symfony Bundle
+- github:
+    - Two Factor Auth
+    - Branch selector
+    - Deal with submodules and symlinks
 - Management features like upload, renaming, moving etc.
