@@ -9,20 +9,30 @@
         margin:1px 0 0 1px;
         text-align: center;
         cursor:default;
+        -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+        -moz-user-select: none; /* mozilla browsers */
+        -khtml-user-select: none; /* webkit (konqueror) browsers */
+        -ms-user-select: none; /* IE10+ */
         &:hover, &.selected {
-            background: #eeeeee;
+            background: $gray-lighter;
         }
         .glyphicon {
             font-size:32px;
             &.item-ext::after {
                 font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+                text-align: left;
                 content: attr(data-ext);
-                left: 4px;
+                left: 5px;
                 position: absolute;
                 color: #fff;
-                font-size: 9px;
+                font-size: 8px;
                 text-transform: uppercase;
                 top: 21px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;         /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
+                -o-text-overflow: ellipsis;
+                right:4px;
             }
         }
         .item-thumbnail {

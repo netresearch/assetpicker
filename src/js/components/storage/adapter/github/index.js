@@ -8,9 +8,14 @@ module.exports = {
     events: {
         'load-items': function (tree) {
             if (token) {
-                this.$http.get(this.url(
-                    'https://api.github.com/repos/' + this.config.username + '/' + this.config.repository + '/contents/' + (tree.item ? tree.item.id : '')
-                )).then(
+                this.$http.get(
+                    this.url('https://api.github.com/repos/' + this.config.username + '/' + this.config.repository + '/contents/' + (tree.item ? tree.item.id : '')),
+                    {
+                        headers: {
+                            Authorization: 'token ' + token
+                        }
+                    }
+                ).then(
                     function(response) {
                         tree.items = response.data.map(function (file) {
                             file.id = file.path.replace(/^\/+/, '');
@@ -29,17 +34,6 @@ module.exports = {
                 }).bind(this));
             }
         }
-    },
-    http: function () {
-        var options = {headers:{}};
-        if (this.config.auth) {
-            if (this.config.auth.token) {
-                options.headers.Authorization = 'token ' + this.config.auth.token;
-            } else if (this.config.auth.username && this.config.auth.password) {
-                options.headers.Authorization = 'Basic ' + btoa(auth.username + ':' + auth.password);
-            }
-        }
-        return options;
     },
     methods: {
         createToken: function () {

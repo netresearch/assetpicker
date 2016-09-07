@@ -1,5 +1,5 @@
 <div class="items-grid">
-    <div class="item" v-for="item in selection.items" v-on:dblclick.prevent="openItem(item)">
+    <div class="item" v-for="item in selection.items" track-by="id" v-on:dblclick.prevent="openItem(item)">
         <span v-if="item.type === 'dir'" class="glyphicon glyphicon-folder-open"></span>
         <span v-if="item.type !== 'dir'" class="glyphicon glyphicon-file item-ext" data-ext="{{item.extension}}"></span>
         <div v-if="item.thumbnail" class="item-thumbnail" v-bind:style="{backgroundImage: 'url(' + item.thumbnail + ')'}"></div>
