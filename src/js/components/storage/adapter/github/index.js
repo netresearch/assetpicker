@@ -38,7 +38,8 @@ module.exports = {
     methods: {
         createToken: function () {
             return this.login(function (username, password, callback) {
-                var fingerprint = 'netresearch-assetpicker-github',
+                var baseUrl = document.location.protocol + '//' + document.location.host,
+                    fingerprint = 'netresearch-assetpicker-github-' + baseUrl,
                     url = 'https://api.github.com/authorizations',
                     options = {
                         headers: {
@@ -49,7 +50,7 @@ module.exports = {
                         this.$http.post(
                             this.url(url),
                             {
-                                note: 'Repository access for ' + this.t('header.title'),
+                                note: 'Repository access for ' + this.t('header.title') + ' at ' + baseUrl,
                                 scopes: ['public_repo', 'repo'],
                                 fingerprint: fingerprint
                             },
