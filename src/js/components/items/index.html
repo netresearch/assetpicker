@@ -1,0 +1,11 @@
+<div class="items-container">
+    <div v-if="search" class="items-search">
+        <template v-for="(storage, items) in selection.results">
+            <h4>{{storage}}</h4>
+            <div :is="layout" :items="items" :storage="storage"></div>
+        </template>
+    </div>
+    <div v-else>
+        <div :is="layout" :items="selection.items"></div>
+    </div>
+</div>

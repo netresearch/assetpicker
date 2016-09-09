@@ -1,15 +1,12 @@
 module.exports = {
     template: require('./grid.html'),
-    data: function () {
-        return {
-            selection: require('../model/selection')
-        }
+    props: {
+        items: Array,
+        storage: String
     },
     methods: {
         openItem: function (item) {
-            if (item.type === 'dir') {
-                this.$root.$dispatch('tree-select', item);
-            }
+            this.$dispatch('open-item', item, this.storage);
         }
     }
 };

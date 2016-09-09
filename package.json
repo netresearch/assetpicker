@@ -13,6 +13,7 @@
   },
   "homepage": "https://github.com/netresearch/assetpicker#readme",
   "dependencies": {
+    "escape-string-regexp": "^1.0.5",
     "vue": "^1.0.0",
     "vue-i18n-mixin": "^0.1.0",
     "vue-resource": "^0.9.3"

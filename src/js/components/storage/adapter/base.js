@@ -7,12 +7,13 @@ Vue.http.interceptors.push(function(options, next) {
 });
 
 module.exports = {
-    template: '<div><tree></tree></div>',
+    template: '<tree :fetch="search ? true : false"></tree>',
     props: {
         config: {
             type: Object,
             required: true
-        }
+        },
+        search: String
     },
     data: function() {
         return {

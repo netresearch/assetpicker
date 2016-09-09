@@ -21,11 +21,11 @@
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-                <form class="navbar-form navbar-right" role="search">
+                <div class="navbar-form navbar-right" role="search">
                     <div class="form-group form-group-sm">
-                        <input type="text" class="form-control" placeholder="Search">
+                        <input type="text" class="form-control" v-model="sword" placeholder="Search" debounce="500">
                     </div>
-                </form>
+                </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">Link</a></li>
                 </ul>
@@ -35,10 +35,10 @@
     <div class="container-fluid" id="main">
         <div class="row">
             <div class="col-md-3 sidebar">
-                <storage v-for="storage in config.storages" :storage="storage"></storage>
+                <storage v-for="(id, storage) in config.storages" :id="id" :storage="storage" :search="sword"></storage>
             </div>
             <div class="col-md-9">
-                <items-grid></items-grid>
+                <items :search.sync="sword"></items>
             </div>
         </div>
     </div>

@@ -15,14 +15,14 @@ new Vue({
     data: function () {
         return {
             locale: 'de',
-            config: require('./config')
+            config: require('./config'),
+            sword: null,
+            search: null
         }
     },
     translations: require('./locales'),
-    methods: {
-    },
     components: {
         storage: require('./components/storage'),
-        'items-grid': require('./components/items/grid')
+        'items': require('./components/items')
     }
 });

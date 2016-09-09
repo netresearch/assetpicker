@@ -8,8 +8,8 @@ module.exports = {
         },
         github: {
             adapter: 'github',
-            username: 'laravel',
-            repository: 'laravel'
+            username: 'netresearch',
+            repository: 'assetpicker'
         }
     },
     proxy: {
