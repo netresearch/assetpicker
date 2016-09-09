@@ -30,7 +30,8 @@ module.exports = {
     data: function () {
         return {
             category: null,
-            selection: require('../../../model/selection')
+            selection: require('../../../model/selection'),
+            items: null
         }
     },
     methods: {
@@ -80,6 +81,20 @@ module.exports = {
         }
     },
     events: {
+        'select-item': function (item) {
+            if (item === 'entrypoint') {
+                if (this.items === null) {
+                    this.loadAssets().then((function(response) {
+                        this.items = response.items;
+                        this.$parent.$dispatch('select-item', this);
+                    }).bind(this));
+                } else {
+                    this.$parent.$dispatch('select-item', this);
+                }
+            } else {
+                return true;
+            }
+        },
         'category-load-items': function (tree) {
             this.http.post(
                 'lists/search/category',
@@ -109,15 +124,6 @@ module.exports = {
                 if (tree.selected) {
                     this.selection.items = response.items;
                 }
-            });
-        },
-        'select-storage': function () {
-            this.category = null;
-        },
-        // Triggered by parent
-        'load-items': function (storage) {
-            this.loadAssets().then(function(response) {
-                storage.items = response.items;
             });
         }
     }

@@ -45,7 +45,9 @@ Vue.component('tree', {
         'select-item': function (item) {
             if (item instanceof Vue) {
                 if (item.entryPoint) {
-                    this.$broadcast('select-item', 'entrypoint');
+                    this.$nextTick(function () {
+                        this.$broadcast('select-item', 'entrypoint');
+                    });
                     return false;
                 }
                 item = item.item;
@@ -86,22 +88,21 @@ Vue.component('tree', {
             if (lastSearch.sword) {
                 var regex = new RegExp(escapeRegExp(lastSearch.sword), 'i');
                 for (var i = 0, l = this.items.length; i < l ; i++) {
-                    console.log(this.items[i].name, escapeRegExp(lastSearch.sword), regex.test(this.items[i].name));
                     if (regex.test(this.items[i].name)) {
                         lastSearch.results.push(this.items[i]);
                     }
                 }
             }
         },
-        select: function (notify) {
-            if (notify !== false) {
+        select: function (doSwitch) {
+            if (doSwitch !== false) {
                 if (selected && selected !== this) {
                     selected.selected = false;
                 }
                 selected = this;
             }
             this.selected = true;
-            this.$parent.$dispatch(this.prefix + 'select-item', this);
+            (this.entryPoint ? this : this.$parent).$dispatch(this.prefix + 'select-item', this);
         }
     },
     watch: {
