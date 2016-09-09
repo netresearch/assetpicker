@@ -84,6 +84,7 @@ module.exports = {
         'select-item': function (item) {
             if (item === 'entrypoint') {
                 if (this.items === null) {
+                    this.category = null;
                     this.loadAssets().then((function(response) {
                         this.items = response.items;
                         this.$parent.$dispatch('select-item', this);

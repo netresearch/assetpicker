@@ -2,10 +2,6 @@ var Vue = require('vue');
 var escapeRegExp = require('escape-string-regexp');
 
 var selected;
-var lastSearch = {
-    sword: null,
-    results: null
-};
 
 Vue.component('tree', {
     template: require('./tree.html'),
@@ -25,6 +21,14 @@ Vue.component('tree', {
             }
         }
     },
+    data: function () {
+        return {
+            search: this.$parent.search || {
+                sword: null,
+                results: null
+            }
+        }
+    },
     computed: {
         prefix: function () {
             return this.name ? this.name + '-' : '';
@@ -37,8 +41,8 @@ Vue.component('tree', {
     },
     events: {
         'search': function (sword, results) {
-            lastSearch.sword = sword;
-            lastSearch.results = results;
+            this.search.sword = sword;
+            this.search.results = results;
             this.doSearch();
             return true;
         },
@@ -85,11 +89,11 @@ Vue.component('tree', {
     },
     methods: {
         doSearch: function () {
-            if (lastSearch.sword) {
-                var regex = new RegExp(escapeRegExp(lastSearch.sword), 'i');
+            if (this.search.sword) {
+                var regex = new RegExp(escapeRegExp(this.search.sword), 'i');
                 for (var i = 0, l = this.items.length; i < l ; i++) {
                     if (regex.test(this.items[i].name)) {
-                        lastSearch.results.push(this.items[i]);
+                        this.search.results.push(this.items[i]);
                     }
                 }
             }

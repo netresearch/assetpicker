@@ -24,7 +24,7 @@ module.exports = {
             }
         },
         search: function (sword) {
-            if (sword) {
+            if (sword) {//
                 this.$nextTick(function () {
                     this.$root.$broadcast('deselect-items');
                 });
