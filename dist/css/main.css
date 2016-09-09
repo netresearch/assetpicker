@@ -1,0 +1,149 @@
+@import url("https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css");
+ul.tree li {
+  position: relative;
+  padding-left: 13px; }
+  ul.tree li > .glyphicon {
+    position: absolute;
+    left: 0px;
+    top: 7px;
+    z-index: 2;
+    font-size: 9px;
+    margin-right: 2px; }
+    ul.tree li > .glyphicon:hover {
+      color: #000; }
+  ul.tree li .item {
+    z-index: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
+    -o-text-overflow: ellipsis;
+    /** Opera 9 & 10 **/
+    cursor: pointer; }
+    ul.tree li .item:before {
+      content: "A";
+      display: block;
+      position: absolute;
+      left: -1000px;
+      width: 2000px;
+      right: 0;
+      background: #000;
+      opacity: 0;
+      top: 0; }
+    ul.tree li .item.selected:before {
+      opacity: 0.15; }
+    ul.tree li .item:hover:before {
+      opacity: 0.07; }
+
+ul.tree, ul.tree ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; }
+
+.sidebar > .storage {
+  margin: 16px 0; }
+  .sidebar > .storage > li > .item {
+    font-size: 13px;
+    color: #666;
+    font-weight: bold;
+    margin-bottom: 6px; }
+    .sidebar > .storage > li > .item > .glyphicon {
+      position: relative;
+      left: -2px;
+      margin-left: 2px; }
+  .sidebar > .storage > li > .storage-filters {
+    padding-left: 6px; }
+    .sidebar > .storage > li > .storage-filters .panel {
+      margin-top: 1em;
+      margin-left: -6px; }
+
+.items-grid {
+  margin: 10px -5px; }
+  .items-grid:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .items-grid .item {
+    position: relative;
+    width: 96px;
+    max-height: 100px;
+    float: left;
+    padding: 22px 6px 6px 6px;
+    margin: 1px 0 0 1px;
+    text-align: center;
+    cursor: default;
+    -webkit-user-select: none;
+    /* webkit (safari, chrome) browsers */
+    -moz-user-select: none;
+    /* mozilla browsers */
+    -khtml-user-select: none;
+    /* webkit (konqueror) browsers */
+    -ms-user-select: none;
+    /* IE10+ */ }
+    .items-grid .item:hover, .items-grid .item.selected {
+      background: #eeeeee; }
+    .items-grid .item .glyphicon {
+      font-size: 32px; }
+      .items-grid .item .glyphicon.item-ext::after {
+        font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+        text-align: left;
+        content: attr(data-ext);
+        left: 5px;
+        position: absolute;
+        color: #fff;
+        font-size: 8px;
+        text-transform: uppercase;
+        top: 21px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
+        -o-text-overflow: ellipsis;
+        right: 4px; }
+    .items-grid .item .item-thumbnail {
+      position: absolute;
+      width: 84px;
+      top: 6px;
+      left: 6px;
+      height: 56px;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center; }
+    .items-grid .item > div {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
+      -o-text-overflow: ellipsis;
+      /** Opera 9 & 10 **/ }
+  .items-grid .item:last-child {
+    margin-right: 0; }
+
+.navbar {
+  min-height: 48px; }
+  .navbar .navbar-brand {
+    height: 48px;
+    font-size: 18px; }
+  .navbar .navbar-brand,
+  .navbar .navbar-nav > li > a {
+    padding-top: 12px;
+    padding-bottom: 12px; }
+  .navbar .navbar-form {
+    margin-top: 9px;
+    margin-bottom: 9px; }
+  .navbar .nav {
+    font-size: 16px; }
+
+#main {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  bottom: 0;
+  left: 0; }
+  #main > .row,
+  #main > .row > div {
+    height: 100%; }
+  #main > .row > div {
+    overflow: auto; }
+    #main > .row > div.sidebar {
+      background: #eeeeee; }
