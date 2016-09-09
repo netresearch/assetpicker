@@ -19,6 +19,7 @@
     "vue-resource": "^0.9.3"
   },
   "devDependencies": {
+    "browser-sync": "^2.15.0",
     "browserify": "^11.2.0",
     "core-js": "^2.4.1",
     "eslint": "^1.7.3",
