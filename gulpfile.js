@@ -6,18 +6,18 @@ var browserify = require('browserify');
 var partialify = require('partialify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var browserSync = require('browser-sync').create();
+var livereload = require('gulp-livereload');
 
 gulp.task('html', function() {
     // Touch the html file
-    gulp.src('index.html').pipe(gulp.dest('./'));
+    gulp.src('index.html').pipe(livereload());
 });
 
 gulp.task('sass', function() {
     return gulp.src('./src/sass/**/*.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest('./dist/css'))
-        .pipe(browserSync.stream());
+        .pipe(livereload());
 });
 
 gulp.task('js', function() {
@@ -41,7 +41,7 @@ gulp.task('js', function() {
         })
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/js'))
-    .pipe(browserSync.stream());
+    .pipe(livereload());
 });
 
 gulp.task('start-server', function() {
@@ -50,12 +50,10 @@ gulp.task('start-server', function() {
 
 gulp.task('compile', ['html', 'sass', 'js']);
 gulp.task('watch', function () {
-    browserSync.init({
-        proxy: "http://localhost"
-    });
-    gulp.watch('index.html').on('change', browserSync.reload);
-    gulp.watch('src/js/**/*.*', ['js']).on('change', browserSync.reload);
-    gulp.watch('./src/sass/**/*.scss', ['sass']).on('change', browserSync.reload);
+    livereload.listen();
+    gulp.watch('index.html', ['html']);
+    gulp.watch('src/js/**/*.*', ['js']);
+    gulp.watch('./src/sass/**/*.scss', ['sass']);
 });
 gulp.task('serve', ['watch', 'start-server']);
 gulp.task('default', ['compile']);
