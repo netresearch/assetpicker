@@ -5,6 +5,6 @@ module.exports = {
     results: {}
 };
 
-Object.keys(require('../../config').storages).forEach(function (key) {
+Object.keys(require('../config').storages).forEach(function (key) {
     module.exports.results[key] = [];
 });

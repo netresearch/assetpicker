@@ -37,9 +37,7 @@
             <div class="col-md-3 sidebar">
                 <storage v-for="(id, storage) in config.storages" :id="id" :storage="storage" :search="sword"></storage>
             </div>
-            <div class="col-md-9">
-                <items :search.sync="sword"></items>
-            </div>
+            <items class="col-md-9" :search.sync="sword"></items>
         </div>
     </div>
 </div>

@@ -1,4 +1,4 @@
-var Item = require('../../../model/item');
+var Item = require('../../../../model/item');
 var Config = require('../../../../config');
 
 var token = Config.github.token || localStorage.getItem('github_token');

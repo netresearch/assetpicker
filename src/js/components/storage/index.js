@@ -11,7 +11,7 @@ module.exports = {
     data: function () {
         return {
             items: null,
-            selection: require('../model/selection')
+            selection: require('../../model/selection')
         };
     },
     events: {
@@ -32,18 +32,20 @@ module.exports = {
                     this.$broadcast('deselect-items');
                 }
             }
+        },
+        'load-more-items': function (results) {
+            if (this.selection.storage === this || this.search && results) {
+                return true;
+            }
+        },
+        'search': function (storageId, sword, items) {
+            if (storageId === this.id) {
+                this.$broadcast('search', sword, items);
+            }
         }
     },
     components: {
         github: require('./adapter/github'),
         entermediadb: require('./adapter/entermediadb')
-    },
-    watch: {
-        'search': function (sword) {
-            this.$nextTick(function () {
-                this.selection.results[this.id] = [];
-                this.$broadcast('search', sword, this.selection.results[this.id]);
-            });
-        }
     }
 };

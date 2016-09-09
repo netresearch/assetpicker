@@ -1,5 +1,6 @@
 .items-grid {
     margin:10px -5px;
+    @include clearfix;
     .item {
         position: relative;
         width: 96px;

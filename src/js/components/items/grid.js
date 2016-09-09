@@ -2,11 +2,12 @@ module.exports = {
     template: require('./grid.html'),
     props: {
         items: Array,
-        storage: String
+        storage: String,
+        limit: Number
     },
     methods: {
         openItem: function (item) {
-            this.$dispatch('open-item', item, this.storage);
+            this.$root.$broadcast('select-item', item, this.storage)
         }
     }
 };

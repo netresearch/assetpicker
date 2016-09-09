@@ -1,5 +1,25 @@
-var Item = require('../../../model/item');
+var Item = require('../../../../model/item');
 var Vue = require('vue');
+
+var Terms = function () {
+    var terms = [{
+            field: 'id',
+            operator: 'matches',
+            value: '*'
+        }],
+        termsSet = false;
+    terms.hash = 'id matches "*"';
+    terms.push = function (field, operator, value) {
+        if (!termsSet) {
+            terms.pop();
+            termsSet = true;
+            terms.hash = '';
+        }
+        Array.prototype.push.call(terms, {field: field, operator: operator, value: value});
+        terms.hash = field + ' ' + operator + ' "' + value + '";';
+    };
+    return terms;
+};
 
 module.exports = {
     template: require('./template.html'),
@@ -31,8 +51,9 @@ module.exports = {
         return {
             category: null,
             search: null,
-            selection: require('../../../model/selection'),
-            items: null
+            selection: require('../../../../model/selection'),
+            items: null,
+            results: {}
         }
     },
     methods: {
@@ -43,72 +64,80 @@ module.exports = {
                 this.config.url
             );
         },
-        loadAssets: function () {
-            terms = [];
+        loadAssets: function (more) {
+            var terms = new Terms();
             if (this.category) {
-                terms.push({
-                    field: 'category',
-                    operator: 'exact',
-                    value: this.category.id
-                });
+                terms.push('category', 'exact', this.category.id);
             }
             if (this.search) {
-                terms.push({
-                    field: 'description',
-                    operator: 'freeform',
-                    value: this.search
-                })
+                terms.push('description', 'freeform', this.search);
             }
-            if (!terms.length) {
-                terms.push({
-                    field: 'id',
-                    operator: 'matches',
-                    value: '*'
+            var result = this.results[terms.hash];
+            if (result && (!more || result.page === result.pages)) {
+                return this.$promise(function (resolve) {
+                    resolve(result);
                 });
+            } else if (!result) {
+                result = {page: 0, pages: 0, total: 0, items: []};
+                this.results[terms.hash] = result;
             }
+
             return this.http.post(
                 'module/asset/search',
                 {
+                    page: '' + (result.page + 1),
                     hitsperpage: '20',
                     query: {
                         terms: terms
                     }
                 }
             ).then(function(response) {
-                response.items = response.data.results.map((function (asset) {
-                    return Item({
-                        id: asset.id,
-                        type: 'file',
-                        name: asset.primaryfile || asset.name,
-                        title: asset.assettitle,
-                        thumbnail: this.getThumbnail(asset)
-                    });
+                result.page = parseInt(response.data.response.page);
+                result.pages = parseInt(response.data.response.pages);
+                result.total = parseInt(response.data.response.totalhits);
+                response.data.results.forEach((function (asset) {
+                    result.items.push(
+                        new Item({
+                            id: asset.id,
+                            type: 'file',
+                            name: asset.primaryfile || asset.name,
+                            title: asset.assettitle,
+                            thumbnail: this.getThumbnail(asset)
+                        })
+                    );
                 }).bind(this));
-                return response;
+                return result;
             });
         }
     },
     events: {
         'select-item': function (item) {
             if (item === 'entrypoint') {
-                if (this.items === null) {
-                    this.category = null;
-                    this.search = null;
-                    this.loadAssets().then((function(response) {
-                        this.items = response.items;
-                        this.$parent.$dispatch('select-item', this);
-                    }).bind(this));
-                } else {
+                this.category = null;
+                this.search = null;
+                this.loadAssets().then((function(response) {
+                    this.items = response.items;
                     this.$parent.$dispatch('select-item', this);
-                }
+                }).bind(this));
             } else {
                 return true;
             }
         },
+        'load-more-items': function (results) {
+            this.loadAssets(true).then((function (response) {
+                if (results && results.source === this) {
+                    results.push.apply(results, response.items.slice(results.length));
+                } else {
+                    this.selection.items = response.items;
+                }
+            }));
+        },
         'search': function (sword, results) {
             this.search = sword;
+            results.source = this;
             if (sword) {
                 this.loadAssets().then(function (response) {
+                    results.total = response.total;
                     results.push.apply(results, response.items);
                 });
             }

@@ -1,11 +1,13 @@
-<div class="items-container">
-    <div v-if="search" class="items-search">
+<div class="items-container" v-infinite-scroll="loadMore()" infinite-scroll-disabled="search && !isSingleStorage" infinite-scroll-distance="10" infinite-scroll-listen-for-event="items-set">
+    <div v-if="search && !isSingleStorage" class="items-search">
         <template v-for="(storage, items) in selection.results">
-            <h4>{{storage}}</h4>
-            <div :is="layout" :items="items" :storage="storage"></div>
+            <h5>{{storage}}</h5>
+            <div :is="layout" v-ref:items :items="items" :storage="storage" :limit="10"></div>
+            <span v-if="$refs.items && !$refs.items.limit && items.total > items.length" v-on:click.prevent="loadMore(items)" class="btn btn-link">Load more...</span>
+            <span v-if="$refs.items && $refs.items.limit && items.length > $refs.items.limit" v-on:click.prevent="$refs.items.limit = undefined" class="btn btn-link">Show all...</span>
         </template>
     </div>
     <div v-else>
-        <div :is="layout" :items="selection.items"></div>
+        <div :is="layout" :items="selection.items" :storage="storage"></div>
     </div>
 </div>
