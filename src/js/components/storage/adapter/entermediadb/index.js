@@ -30,6 +30,7 @@ module.exports = {
     data: function () {
         return {
             category: null,
+            search: null,
             selection: require('../../../model/selection'),
             items: null
         }
@@ -50,6 +51,13 @@ module.exports = {
                     operator: 'exact',
                     value: this.category.id
                 });
+            }
+            if (this.search) {
+                terms.push({
+                    field: 'description',
+                    operator: 'freeform',
+                    value: this.search
+                })
             }
             if (!terms.length) {
                 terms.push({
@@ -85,6 +93,7 @@ module.exports = {
             if (item === 'entrypoint') {
                 if (this.items === null) {
                     this.category = null;
+                    this.search = null;
                     this.loadAssets().then((function(response) {
                         this.items = response.items;
                         this.$parent.$dispatch('select-item', this);
@@ -94,6 +103,14 @@ module.exports = {
                 }
             } else {
                 return true;
+            }
+        },
+        'search': function (sword, results) {
+            this.search = sword;
+            if (sword) {
+                this.loadAssets().then(function (response) {
+                    results.push.apply(results, response.items);
+                });
             }
         },
         'category-load-items': function (tree) {
