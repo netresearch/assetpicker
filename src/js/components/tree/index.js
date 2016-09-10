@@ -15,7 +15,6 @@ Vue.component('tree', {
         main: Boolean,
         items: {
             type: Array,
-            twoWay: true,
             default: function () {
                 return [];
             }
@@ -66,7 +65,7 @@ Vue.component('tree', {
             if (item && this.item && item.id === this.item.id) {
                 this.select();
                 return false;
-            } else {
+            } else if (item) {
                 for (var i = 0, l = this.items.length; i < l; i++) {
                     if (this.items[i].id === item.id) {
                         if (!this.open && !this.entryPoint) {
@@ -80,6 +79,10 @@ Vue.component('tree', {
                     }
                 }
             }
+            return true;
+        },
+        '_open': function () {
+            this.open = true;
             return true;
         },
         'deselect-items': function () {
@@ -107,6 +110,7 @@ Vue.component('tree', {
             }
             this.selected = true;
             (this.entryPoint ? this : this.$parent).$dispatch(this.prefix + 'select-item', this);
+            this.$parent.$dispatch('_open');
         }
     },
     watch: {

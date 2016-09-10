@@ -1,4 +1,4 @@
-var Item = require('../../../../model/item');
+
 var Config = require('../../../../config');
 
 var token = Config.github.token || localStorage.getItem('github_token');
@@ -17,10 +17,10 @@ module.exports = {
                     }
                 ).then(
                     function(response) {
-                        tree.items = response.data.map(function (file) {
+                        tree.items = response.data.map((function (file) {
                             file.id = file.path.replace(/^\/+/, '');
-                            return new Item(file);
-                        });
+                            return this.createItem(file);
+                        }).bind(this));
                     },
                     (function () {
                         localStorage.removeItem('github_token');

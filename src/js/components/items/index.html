@@ -1,4 +1,8 @@
-<div class="items-container" v-infinite-scroll="loadMore()" infinite-scroll-disabled="search && !isSingleStorage" infinite-scroll-distance="10" infinite-scroll-listen-for-event="items-set">
+<div
+    class="items-container"
+    v-infinite-scroll="loadMore()"
+    infinite-scroll-distance="10"
+    infinite-scroll-listen-for-event="items-set">
     <div v-if="search && !isSingleStorage" class="items-search">
         <template v-for="(storage, items) in selection.results">
             <h5>{{storage}}</h5>

@@ -26,7 +26,7 @@ module.exports = {
     extends: require('../base'),
     http: function() {
         var options = {
-            base: this.config.url.replace(/\/+$/, '') + '/assets/mediadb/services',
+            base: this.config.url.replace(/\/+$/, '') + '/mediadb/services',
             validate: function (response) {
                 response.data = response.json();
                 if (response.data.response.status !== 'ok') {
@@ -57,14 +57,7 @@ module.exports = {
         }
     },
     methods: {
-        getThumbnail: function (asset) {
-            return this.url(
-                '/assets/emshare/views/modules/asset/downloads/preview/thumb/' +
-                encodeURI(asset.sourcepath) + '/thumb.jpg',
-                this.config.url
-            );
-        },
-        loadAssets: function (more) {
+        loadAssets: function (items) {
             var terms = new Terms();
             if (this.category) {
                 terms.push('category', 'exact', this.category.id);
@@ -73,14 +66,13 @@ module.exports = {
                 terms.push('description', 'freeform', this.search);
             }
             var result = this.results[terms.hash];
-            if (result && (!more || result.page === result.pages)) {
-                return this.$promise(function (resolve) {
-                    resolve(result);
-                });
-            } else if (!result) {
-                result = {page: 0, pages: 0, total: 0, items: []};
+            if (!result) {
+                result = {page: 0, pages: 0, items: items || []};
+                result.items.total = result.items.total || result.items.length;
                 this.results[terms.hash] = result;
             }
+
+            result.items.loading = true;
 
             return this.http.post(
                 'module/asset/search',
@@ -91,23 +83,27 @@ module.exports = {
                         terms: terms
                     }
                 }
-            ).then(function(response) {
+            ).then((function(response) {
                 result.page = parseInt(response.data.response.page);
                 result.pages = parseInt(response.data.response.pages);
-                result.total = parseInt(response.data.response.totalhits);
+                result.items.total = parseInt(response.data.response.totalhits);
+                result.items.loading = false;
                 response.data.results.forEach((function (asset) {
-                    result.items.push(
-                        new Item({
-                            id: asset.id,
-                            type: 'file',
-                            name: asset.primaryfile || asset.name,
-                            title: asset.assettitle,
-                            thumbnail: this.getThumbnail(asset)
-                        })
-                    );
+                    var item = this.createItem({
+                        id: asset.id,
+                        type: 'file',
+                        name: asset.primaryfile || asset.name,
+                        title: asset.assettitle,
+                        thumbnail: this.url(
+                            '/emshare/views/modules/asset/downloads/preview/thumb/' +
+                            encodeURI(asset.sourcepath) + '/thumb.jpg',
+                            this.config.url
+                        )
+                    });
+                    result.items.push(item);
                 }).bind(this));
                 return result;
-            });
+            }).bind(this));
         }
     },
     events: {
@@ -124,13 +120,7 @@ module.exports = {
             }
         },
         'load-more-items': function (results) {
-            this.loadAssets(true).then((function (response) {
-                if (results && results.source === this) {
-                    results.push.apply(results, response.items.slice(results.length));
-                } else {
-                    this.selection.items = response.items;
-                }
-            }));
+            this.loadAssets(results);
         },
         'search': function (sword, results) {
             this.search = sword;
@@ -158,10 +148,10 @@ module.exports = {
                     }
                 }
             ).then(function (response) {
-                tree.items = response.data.results.map(function(category) {
+                tree.items = response.data.results.map((function(category) {
                     category.type = 'dir';
-                    return new Item(category);
-                });
+                    return this.createItem(category);
+                }).bind(this));
             });
         },
         'category-select-item': function (tree) {

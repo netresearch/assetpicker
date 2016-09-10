@@ -22,5 +22,15 @@ module.exports = {
             en: 'Your username or password were wrong',
             de: 'Benutzername oder Passwort sind falsch'
         }
+    },
+    footer: {
+        pick: {
+            en: 'Select',
+            de: 'Auswählen'
+        },
+        cancel: {
+            en: 'Cancel',
+            de: 'Abbrechen'
+        }
     }
 };

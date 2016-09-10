@@ -21,6 +21,8 @@ $line-height: 1.846;
 $navbar-height: 48px;
 $navbar-font-size: 16px;
 
+$footer-height: $navbar-height + 2;
+
 @import url("https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css");
 @import "mixins";
 @import "components/tree";
@@ -51,8 +53,8 @@ $navbar-font-size: 16px;
 #main {
     position: absolute;
     top: $navbar-height;
+    bottom: $footer-height;
     right:0;
-    bottom:0;
     left:0;
     > .row,
     > .row > div {
@@ -64,4 +66,16 @@ $navbar-font-size: 16px;
             background:$gray-lighter;
         }
     }
+
+}
+
+#footer {
+    position: absolute;
+    height: $footer-height;
+    background: lighten($gray-lighter, 5%);
+    border-top:1px solid darken($gray-lighter, 5%);
+    bottom:0;
+    width:100%;
+    padding:10px 15px;
+    text-align: right;
 }

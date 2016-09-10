@@ -1,5 +1,7 @@
 var Vue = require('vue');
 
+var Item = require('../../../model/item');
+
 Vue.http.interceptors.push(function(options, next) {
     next(function(response) {
         response.options = options;
@@ -7,13 +9,17 @@ Vue.http.interceptors.push(function(options, next) {
 });
 
 module.exports = {
-    template: '<tree :fetch="fetch"></tree>',
+    template: '<div><tree :fetch="fetch"></tree></div>',
     props: {
         config: {
             type: Object,
             required: true
         },
-        fetch: Boolean
+        fetch: Boolean,
+        storage: {
+            type: String,
+            required: true
+        }
     },
     data: function() {
         return {
@@ -96,6 +102,10 @@ module.exports = {
         }
     },
     methods: {
+        createItem: function (data) {
+            data.storage = this.storage;
+            return new Item(data);
+        },
         login: function(authenticate) {
             if (!this.currentLogin) {
                 if (this.loginDone) {

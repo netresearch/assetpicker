@@ -137,8 +137,8 @@ ul.tree, ul.tree ul {
 #main {
   position: absolute;
   top: 48px;
+  bottom: 50px;
   right: 0;
-  bottom: 0;
   left: 0; }
   #main > .row,
   #main > .row > div {
@@ -147,3 +147,13 @@ ul.tree, ul.tree ul {
     overflow: auto; }
     #main > .row > div.sidebar {
       background: #eeeeee; }
+
+#footer {
+  position: absolute;
+  height: 50px;
+  background: #fbfbfb;
+  border-top: 1px solid #e2e2e2;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 15px;
+  text-align: right; }

@@ -5,26 +5,25 @@ module.exports = {
     props: {
         storage: Object,
         open: Boolean,
-        search: String,
         id: String
     },
     data: function () {
         return {
             items: null,
-            selection: require('../../model/selection')
+            selection: require('../../model/selection'),
+            fetch: false
         };
     },
     events: {
-        'select-item': function(item, storageId) {
+        'select-item': function(item) {
             if (item instanceof Vue) {
                 // Triggered from sidebar
-                this.selection.storage = this;
+                item.items.storage = this.id;
                 this.selection.items = item.items;
             } else {
                 // Triggered from stage
-                if (storageId === this.id || this.selection.storage === this) {
+                if (item.storage === this.id) {
                     this.open = true;
-                    this.selection.storage = this;
                     this.$nextTick(function () {
                         this.$broadcast('select-item', item);
                     });
@@ -34,13 +33,16 @@ module.exports = {
             }
         },
         'load-more-items': function (results) {
-            if (this.selection.storage === this || this.search && results) {
-                return true;
+            if (results.storage === this.id) {
+                this.$broadcast('load-more-items', results);
             }
         },
         'search': function (storageId, sword, items) {
             if (storageId === this.id) {
-                this.$broadcast('search', sword, items);
+                this.fetch = true;
+                this.$nextTick(function() {
+                    this.$broadcast('search', sword, items);
+                });
             }
         }
     },

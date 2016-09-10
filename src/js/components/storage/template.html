@@ -1,3 +1,3 @@
-<tree v-ref:tree :open="open" :fetch="search ? true : false" :entry-point="storage.label || storage.adapter">
-    <div :is="storage.adapter" :fetch="search ? true : false" :config="storage"></div>
+<tree v-ref:tree :open="open" :fetch="fetch" :entry-point="storage.label || storage.adapter">
+    <div :is="storage.adapter" :fetch="fetch" :config="storage" :storage="id"></div>
 </tree>

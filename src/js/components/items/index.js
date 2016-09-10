@@ -9,24 +9,27 @@ module.exports = {
         search: String
     },
     data: function () {
+        var selection = require('../../model/selection');
+        var keys = Object.keys(selection.results);
         return {
-            selection: require('../../model/selection')
+            selection: selection,
+            storage: keys.length > 1 ? null : keys[0],
+            loadedMore: false
         }
     },
     computed: {
         isSingleStorage: function () {
             return Object.keys(this.selection.results).length === 1;
-        },
-        storage: function () {
-            return this.isSingleStorage ? Object.keys(this.selection.results)[0] : null;
+        }
+    },
+    events: {
+        'select-item': function (item) {
+            this.search = null;
+            this.storage = item.storage;
+            return true;
         }
     },
     watch: {
-        'selection.storage': function (storage) {
-            if (storage) {
-                this.search = null;
-            }
-        },
         search: function (sword) {
             this.$nextTick(function () {
                 if (sword) {
@@ -43,9 +46,10 @@ module.exports = {
                 }
             });
         },
-        'selection.items': function () {
+        'selection.items': function (items) {
+            this.storage = items.storage;
             this.$nextTick(function () {
-                if (!this.search || this.isSingleStorage) {
+                if ((!this.search || isSingleStorage) && items && !items.loading && items.total && items.length < items.total) {
                     this.$dispatch('items-set');
                 }
             })
@@ -53,7 +57,7 @@ module.exports = {
     },
     methods: {
         loadMore: function (results) {
-            this.$root.$broadcast('load-more-items', results);
+            this.$root.$broadcast('load-more-items', results || this.selection.items);
         }
     },
     components: {

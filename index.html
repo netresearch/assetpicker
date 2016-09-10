@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vue.js Github Explorer Blog</title>
-
+    <title>AssetPicker</title>
     <link rel="stylesheet" href="dist/css/main.css">
 </head>
 <body>
@@ -35,10 +34,14 @@
     <div class="container-fluid" id="main">
         <div class="row">
             <div class="col-md-3 sidebar">
-                <storage v-for="(id, storage) in config.storages" :id="id" :storage="storage" :search="sword"></storage>
+                <storage v-for="(id, storage) in config.storages" :id="id" :storage="storage"></storage>
             </div>
             <items class="col-md-9" :search.sync="sword"></items>
         </div>
+    </div>
+    <div id="footer">
+        <button class="btn btn-sm btn-primary" :disabled="!selection.picked.length">{{t('footer.pick')}}</button>
+        <button class="btn btn-sm btn-default">{{t('footer.cancel')}}</button>
     </div>
 </div>
 

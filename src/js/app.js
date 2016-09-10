@@ -17,7 +17,8 @@ new Vue({
             locale: 'de',
             config: require('./config'),
             sword: null,
-            search: null
+            search: null,
+            selection: require('./model/selection')
         }
     },
     translations: require('./locales'),
