@@ -25,5 +25,20 @@ new Vue({
     components: {
         storage: require('./components/storage'),
         'items': require('./components/items')
+    },
+    ready: function() {
+        if (!window.parent) {
+            console.log('This script is intended to be included in an iframe');
+        } else {
+            this.postMessage('ready');
+        }
+    },
+    methods: {
+        postMessage: function(message) {
+            window.parent.postMessage(message, '*');
+        },
+        cancel: function() {
+            this.postMessage('cancel');
+        }
     }
 });

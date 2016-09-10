@@ -20,29 +20,35 @@ gulp.task('sass', function() {
         .pipe(livereload());
 });
 
-gulp.task('js', function() {
-    browserify({
-        entries: 'src/js/app.js',
-        debug: true
-    })
-    .transform(partialify)
-    .bundle()
-    .on('error', function (err) {
-        console.log(err.toString());
-        this.emit("end");
-    })
-    .pipe(source('app.min.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(uglify())
-        .on('error', function (err) {
-            console.log(err.toString());
-            this.emit("end");
+var bundles = ['app', 'picker'];
+bundles.forEach(function(bundle) {
+    gulp.task('js-' + bundle, function() {
+        browserify({
+            entries: 'src/js/' + bundle + '/index.js',
+            debug: true
         })
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('dist/js'))
-    .pipe(livereload());
+            .transform(partialify)
+            .bundle()
+            .on('error', function (err) {
+                console.log(err.toString());
+                this.emit("end");
+            })
+            .pipe(source(bundle + '.min.js'))
+            .pipe(buffer())
+            .pipe(sourcemaps.init({ loadMaps: true }))
+            .pipe(uglify())
+            .on('error', function (err) {
+                console.log(err.toString());
+                this.emit("end");
+            })
+            .pipe(sourcemaps.write())
+            .pipe(gulp.dest('dist/js'))
+            .pipe(livereload());
+    });
 });
+gulp.task('js', bundles.map(function (bundle) {
+    return 'js-' + bundle;
+}));
 
 gulp.task('start-server', function() {
     connect.server({ root: 'dist', livereload: true });
@@ -52,8 +58,10 @@ gulp.task('compile', ['html', 'sass', 'js']);
 gulp.task('watch', function () {
     livereload.listen();
     gulp.watch('index.html', ['html']);
-    gulp.watch('src/js/**/*.*', ['js']);
-    gulp.watch('./src/sass/**/*.scss', ['sass']);
+    bundles.forEach(function(bundle) {
+        gulp.watch('src/js/' + bundle + '/**/*.*', ['js-' + bundle]);
+    });
+    gulp.watch('src/sass/**/*.scss', ['sass']);
 });
 gulp.task('serve', ['watch', 'start-server']);
 gulp.task('default', ['compile']);

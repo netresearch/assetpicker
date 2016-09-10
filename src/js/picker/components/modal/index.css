@@ -1,0 +1,37 @@
+.assetpicker-modal {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0);
+    z-index: -1;
+    transition: background 0.2s, z-index 0s 0.2s;
+}
+.assetpicker-modal.assetpicker-modal-open {
+    z-index:3000;
+    background: rgba(0, 0, 0, 0.8);
+    transition: background 0.2s
+}
+.assetpicker-modal .assetpicker-modal-inner {
+    position: absolute;
+    left:30px;
+    right:30px;
+    top:30px;
+    bottom:30px;
+    background: #fff;
+    opacity: 0;
+    transition: opacity 0.1s 0.1s;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.assetpicker-modal.assetpicker-modal-open .assetpicker-modal-inner {
+    opacity: 1;
+}
+.assetpicker-modal .assetpicker-modal-inner iframe {
+    position: absolute;
+    width:100%;
+    height: 100%;
+    overflow: hidden;
+    border: none;
+}
