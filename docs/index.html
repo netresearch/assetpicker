@@ -5,8 +5,27 @@
         <title>AssetPicker</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css">
         <script src="../dist/js/picker.min.js"></script>
+        <script>
+            var picker = new AssetPicker({
+                storages: {
+                    assetpicker: {
+                        label: 'AssetPicker',
+                        adapter: 'github',
+                        username: 'netresearch',
+                        repository: 'assetpicker'
+                    }
+                }
+            });
+            picker.onPicked(function() {
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('resultHint').style.display = 'none';
+            });
+        </script>
     </head>
     <body>
-    <button class="btn btn-default" rel="assetpicker">Select files</button>
+    <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputName" data-target="#result">Select files</button>
+    <h5>Result</h5>
+    <pre id="result" style="display: none"></pre>
+    <p id="resultHint">Select an asset first</p>
     </body>
 </html>

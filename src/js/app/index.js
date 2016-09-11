@@ -10,35 +10,61 @@ Vue.mixin(i18nMixin);
 require('./util');
 require('./components/tree');
 
-new Vue({
-    el: '#app',
-    data: function () {
-        return {
-            locale: 'de',
-            config: require('./config'),
-            sword: null,
-            search: null,
-            selection: require('./model/selection')
-        }
-    },
-    translations: require('./locales'),
-    components: {
-        storage: require('./components/storage'),
-        'items': require('./components/items')
-    },
-    ready: function() {
-        if (!window.parent) {
-            console.log('This script is intended to be included in an iframe');
-        } else {
-            this.postMessage('ready');
-        }
-    },
-    methods: {
-        postMessage: function(message) {
-            window.parent.postMessage(message, '*');
+var messaging;
+var config = require('./config');
+
+if (window.parent) {
+    var Messaging = require('../shared/util/messaging');
+    messaging = new Messaging(window.parent.location.origin, window.parent);
+    messaging.call('picker.getConfig').then(function(configOverride) {
+        require('extend')(true, config, configOverride);
+        create();
+    });
+} else {
+    config.storages = {
+        entermediaDB: {
+            adapter: 'entermediadb',
+            url: 'http://em9.entermediadb.org/openinstitute',
+            proxy: true
         },
-        cancel: function() {
-            this.postMessage('cancel');
+        github: {
+            adapter: 'github',
+            username: 'netresearch',
+            repository: 'assetpicker'
         }
-    }
-});
+    };
+    create();
+}
+
+function create() {
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                locale: 'de',
+                config: config,
+                sword: null,
+                search: null,
+                selection: require('./model/selection')
+            }
+        },
+        translations: require('./locales'),
+        components: {
+            storage: require('./components/storage'),
+            'items': require('./components/items')
+        },
+        methods: {
+            callPicker: function(method) {
+                if (messaging) {
+                    messaging.call.apply(messaging, arguments);
+                }
+            },
+            cancel: function() {
+                this.callPicker('picker.modal.close');
+            },
+            pick: function() {
+                this.callPicker('picker.picked', this.config.picker.multiple ? this.selection.picked : this.selection.picked[0])
+            }
+        }
+    });
+}

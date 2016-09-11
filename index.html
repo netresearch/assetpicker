@@ -40,7 +40,7 @@
         </div>
     </div>
     <div id="footer">
-        <button class="btn btn-sm btn-primary" :disabled="!selection.picked.length">{{t('footer.pick')}}</button>
+        <button class="btn btn-sm btn-primary" :disabled="!selection.picked.length" v-on:click="pick">{{t('footer.pick')}}</button>
         <button class="btn btn-sm btn-default" v-on:click="cancel">{{t('footer.cancel')}}</button>
     </div>
 </div>

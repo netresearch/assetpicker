@@ -1,4 +1,5 @@
-var insertCss = require('insert-css'),
+var extend = require('extend'),
+    insertCss = require('insert-css'),
     addClass = function(element, className) {
         if (element.className.split(' ').indexOf(className) === -1) {
             element.className += ' ' + className;
@@ -36,24 +37,27 @@ var insertCss = require('insert-css'),
             }
         });
         return hasTransition.length ? true : false;
-    };
+    },
+    Messaging = require('../../../shared/util/messaging');
 
-module.exports = require('../../util/createClass')({
+module.exports = require('../../../shared/util/createClass')({
     construct: function (options) {
-        if (options) {
-            Object.keys(options).forEach((function(key) {
-                this.options[key] = options[key];
-            }).bind(this));
-        }
+        this.options = extend(
+            {
+                template: require('./index.html'),
+                css: require('./index.css'),
+                openClassName: 'assetpicker-modal-open',
+                src: null,
+                messagingServer: null
+            },
+            options
+        );
+        this.modal = null;
+        this.frame = null;
+
+        var matches = this.options.src.match(/^https?:\/\/[^\/]+/);
+        this.messaging = new Messaging(matches ? matches[0] : document.location.origin)
     },
-    options: {
-        template: require('./index.html'),
-        css: require('./index.css'),
-        openClassName: 'assetpicker-modal-open',
-        src: null
-    },
-    modal: null,
-    frame: null,
     render: function() {
         if (this.options.css) {
             insertCss(this.options.css);
@@ -78,10 +82,11 @@ module.exports = require('../../util/createClass')({
             return;
         }
         this.frame.src = this.options.src;
+        this.messaging.window = this.frame.contentWindow;
         addClass(this.modal, this.options.openClassName);
     },
     _closed: function() {
-        this.frame.src = '';
+        this.frame.src = 'about:blank';
     },
     close: function() {
         if (transitionEvent && hasTransitions(this.modal)) {

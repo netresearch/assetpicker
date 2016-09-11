@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
 var browserify = require('browserify');
 var partialify = require('partialify');
 var source = require('vinyl-source-stream');
@@ -35,13 +34,11 @@ bundles.forEach(function(bundle) {
             })
             .pipe(source(bundle + '.min.js'))
             .pipe(buffer())
-            .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(uglify())
             .on('error', function (err) {
                 console.log(err.toString());
                 this.emit("end");
             })
-            .pipe(sourcemaps.write())
             .pipe(gulp.dest('dist/js'))
             .pipe(livereload());
     });
@@ -61,6 +58,7 @@ gulp.task('watch', function () {
     bundles.forEach(function(bundle) {
         gulp.watch('src/js/' + bundle + '/**/*.*', ['js-' + bundle]);
     });
+    gulp.watch('src/js/shared/**/*.*', ['js']);
     gulp.watch('src/sass/**/*.scss', ['sass']);
 });
 gulp.task('serve', ['watch', 'start-server']);

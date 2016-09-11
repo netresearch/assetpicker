@@ -1,7 +1,7 @@
 module.exports = {
     title: 'AssetPicker',
     storages: {
-        entermediaDB: {
+        /* entermediaDB: {
             adapter: 'entermediadb',
             url: 'http://em9.entermediadb.org/openinstitute',
             proxy: true
@@ -10,7 +10,7 @@ module.exports = {
             adapter: 'github',
             username: 'netresearch',
             repository: 'assetpicker'
-        }
+        } */
     },
     proxy: {
         url: 'proxy.php?to={{url}}',
@@ -21,6 +21,7 @@ module.exports = {
     },
     picker: {
         multiple: false,
+        limit: 10, // accounted when multiple
         types: ['file'],
         extensions: []
     }
