@@ -9,11 +9,12 @@ Vue.mixin(i18nMixin);
 
 require('./util');
 require('./components/tree');
+require('./components/loader');
 
 var messaging;
 var config = require('./config');
 
-if (window.parent) {
+if (window.parent && window.parent !== window) {
     var Messaging = require('../shared/util/messaging');
     messaging = new Messaging(window.parent.location.origin, window.parent);
     messaging.call('picker.getConfig').then(function(configOverride) {
@@ -52,6 +53,12 @@ function create() {
         components: {
             storage: require('./components/storage'),
             'items': require('./components/items')
+        },
+        ready: function () {
+            this.$el.className += (this.$el.className ? ' ' : '') + 'loaded';
+            var loader = document.getElementById(this.$el.id + '-loader');
+            loader.parentNode.removeChild(loader);
+            delete loader;
         },
         methods: {
             callPicker: function(method) {

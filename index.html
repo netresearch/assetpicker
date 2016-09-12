@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="dist/css/main.css">
 </head>
 <body>
+<div id="app-loader" class="loader-signal"></div>
 <div id="app">
     <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
@@ -30,6 +31,7 @@
                 </ul>
             </div>
         </div>
+        <div id="app-progress" class="loader-progress"></div>
     </nav>
     <div class="container-fluid" id="main">
         <div class="row">
@@ -44,7 +46,6 @@
         <button class="btn btn-sm btn-default" v-on:click="cancel">{{t('footer.cancel')}}</button>
     </div>
 </div>
-
 <script src="dist/js/app.min.js"></script>
 </body>
 </html>

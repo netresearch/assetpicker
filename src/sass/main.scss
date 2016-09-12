@@ -28,6 +28,15 @@ $footer-height: $navbar-height + 2;
 @import "components/tree";
 @import "components/sidebar";
 @import "components/items-grid";
+@import "components/loaders";
+
+#app {
+    opacity: 0;
+    transition: opacity 0.2s;
+    &.loaded {
+        opacity: 1;
+    }
+}
 
 .navbar {
     min-height: $navbar-height;
@@ -42,11 +51,16 @@ $footer-height: $navbar-height + 2;
         padding-bottom: $padding;
     }
     .navbar-form {
-        margin-top: $padding - 3;
-        margin-bottom: $padding - 3;
+        margin-top: $padding - 4;
+        margin-bottom: $padding - 4;
     }
     .nav {
         font-size: $navbar-font-size;
+    }
+    .loader-progress {
+        position: absolute;
+        bottom: 0;
+        margin:0;
     }
 }
 
@@ -66,7 +80,6 @@ $footer-height: $navbar-height + 2;
             background:$gray-lighter;
         }
     }
-
 }
 
 #footer {

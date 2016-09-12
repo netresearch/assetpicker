@@ -1,0 +1,60 @@
+.loader-signal {
+    border: 5px solid $gray;
+    border-radius: 30px;
+    height: 30px;
+    left: 50%;
+    margin: -15px 0 0 -15px;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    width: 30px;
+
+    animation: loader-pulsate 1s ease-out;
+    animation-iteration-count: infinite;
+}
+
+@keyframes loader-pulsate {
+    0% {
+        transform: scale(.1);
+        opacity: 0.0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
+.loader-progress {
+    height: 4px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: lighten($brand-primary, 15%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.loader-progress.active {
+    opacity: 1;
+}
+.loader-progress.active:before{
+    display: block;
+    position: absolute;
+    content: "";
+    left: -200px;
+    width: 200px;
+    height: 4px;
+    background-color: darken($brand-primary, 5%);
+    animation: loader-progress 2s linear infinite;
+}
+
+@keyframes loader-progress {
+    from {left: -200px; width: 0;}
+    50% {width: 30%;}
+    70% {width: 70%;}
+    80% { left: 50%;}
+    95% {left: 120%;}
+    to {left: 100%;}
+}

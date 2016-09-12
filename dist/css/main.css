@@ -52,9 +52,10 @@ ul.tree, ul.tree ul {
       margin-left: 2px; }
   .sidebar > .storage > li > .storage-filters {
     padding-left: 6px; }
-    .sidebar > .storage > li > .storage-filters .panel {
-      margin-top: 1em;
-      margin-left: -6px; }
+
+.sidebar .panel {
+  margin-top: 1em;
+  margin-left: -6px; }
 
 .items-grid {
   margin: 10px -5px; }
@@ -119,6 +120,72 @@ ul.tree, ul.tree ul {
   .items-grid .item:last-child {
     margin-right: 0; }
 
+.loader-signal {
+  border: 5px solid #666;
+  border-radius: 30px;
+  height: 30px;
+  left: 50%;
+  margin: -15px 0 0 -15px;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  width: 30px;
+  animation: loader-pulsate 1s ease-out;
+  animation-iteration-count: infinite; }
+
+@keyframes loader-pulsate {
+  0% {
+    transform: scale(0.1);
+    opacity: 0.0; }
+  50% {
+    opacity: 1; }
+  100% {
+    transform: scale(1.2);
+    opacity: 0; } }
+
+.loader-progress {
+  height: 4px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #6ab8f7;
+  opacity: 0;
+  transition: opacity 0.3s; }
+
+.loader-progress.active {
+  opacity: 1; }
+
+.loader-progress.active:before {
+  display: block;
+  position: absolute;
+  content: "";
+  left: -200px;
+  width: 200px;
+  height: 4px;
+  background-color: #0d8aee;
+  animation: loader-progress 2s linear infinite; }
+
+@keyframes loader-progress {
+  from {
+    left: -200px;
+    width: 0; }
+  50% {
+    width: 30%; }
+  70% {
+    width: 70%; }
+  80% {
+    left: 50%; }
+  95% {
+    left: 120%; }
+  to {
+    left: 100%; } }
+
+#app {
+  opacity: 0;
+  transition: opacity 0.2s; }
+  #app.loaded {
+    opacity: 1; }
+
 .navbar {
   min-height: 48px; }
   .navbar .navbar-brand {
@@ -129,10 +196,14 @@ ul.tree, ul.tree ul {
     padding-top: 12px;
     padding-bottom: 12px; }
   .navbar .navbar-form {
-    margin-top: 9px;
-    margin-bottom: 9px; }
+    margin-top: 8px;
+    margin-bottom: 8px; }
   .navbar .nav {
     font-size: 16px; }
+  .navbar .loader-progress {
+    position: absolute;
+    bottom: 0;
+    margin: 0; }
 
 #main {
   position: absolute;
