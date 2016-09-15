@@ -16,7 +16,7 @@ var config = require('./config');
 
 if (window.parent && window.parent !== window) {
     var Messaging = require('../shared/util/messaging');
-    messaging = new Messaging(window.parent.location.origin || window.parent.location.protocol + '//' + window.parent.location.hostname, window.parent);
+    messaging = new Messaging('*', window.parent);
     messaging.call('picker.getConfig').then(function(configOverride) {
         require('extend')(true, config, configOverride);
         create();
