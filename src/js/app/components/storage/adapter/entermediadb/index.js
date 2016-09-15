@@ -54,20 +54,26 @@ module.exports = {
             selection: require('../../../../model/selection'),
             items: null,
             results: {},
-            extensions: null,
-            appConfig: require('../../../../config')
+            extensions: null
         }
     },
     watch: {
-        'appConfig.pick': {
-            handler: function (config) {
-                this.extensions = config.extensions
-            },
-            immediate: true
+        'appConfig.pick': function (config) {
+            // Reload latest items when extensions have changed
+            var oldTerms = this.assembleTerms();
+            this.extensions = config.extensions;
+            var newTerms = this.assembleTerms();
+            if (oldTerms.hash !== newTerms.hash && this.results[oldTerms.hash]) {
+                var items = this.results[oldTerms.hash].items;
+                while (items.length > 0) {
+                    items.pop();
+                }
+                this.loadAssets(items);
+            }
         }
     },
     methods: {
-        loadAssets: function (items) {
+        assembleTerms: function () {
             var terms = new Terms();
             if (this.category) {
                 terms.push('category', 'exact', this.category.id);
@@ -78,6 +84,10 @@ module.exports = {
             if (this.extensions && this.extensions.length) {
                 terms.push('fileformat', 'matches', this.extensions.join('|'))
             }
+            return terms;
+        },
+        loadAssets: function (items) {
+            var terms = this.assembleTerms();
             var result = this.results[terms.hash];
             if (!result) {
                 result = {page: 0, pages: 0, items: items || []};
@@ -86,6 +96,7 @@ module.exports = {
             }
 
             result.items.loading = true;
+            result.items.hash = terms.hash;
 
             return this.http.post(
                 'module/asset/search',
@@ -97,25 +108,27 @@ module.exports = {
                     }
                 }
             ).then((function(response) {
-                result.page = parseInt(response.data.response.page);
-                result.pages = parseInt(response.data.response.pages);
-                result.items.total = parseInt(response.data.response.totalhits);
-                result.items.loading = false;
-                response.data.results.forEach((function (asset) {
-                    var item = this.createItem({
-                        id: asset.id,
-                        type: asset.isfolder ? 'file' : 'dir',
-                        name: asset.primaryfile || asset.name,
-                        title: asset.assettitle,
-                        extension: asset.fileformat.id,
-                        thumbnail: this.url(
-                            '/emshare/views/modules/asset/downloads/preview/thumb/' +
-                            encodeURI(asset.sourcepath) + '/thumb.jpg',
-                            this.config.url
-                        )
-                    });
-                    result.items.push(item);
-                }).bind(this));
+                if (result.items.hash === terms.hash) {
+                    result.page = parseInt(response.data.response.page);
+                    result.pages = parseInt(response.data.response.pages);
+                    result.items.total = parseInt(response.data.response.totalhits);
+                    result.items.loading = false;
+                    response.data.results.forEach((function (asset) {
+                        var item = this.createItem({
+                            id: asset.id,
+                            type: asset.isfolder ? 'file' : 'dir',
+                            name: asset.primaryfile || asset.name,
+                            title: asset.assettitle,
+                            extension: asset.fileformat.id,
+                            thumbnail: this.url(
+                                '/emshare/views/modules/asset/downloads/preview/thumb/' +
+                                encodeURI(asset.sourcepath) + '/thumb.jpg',
+                                this.config.url
+                            )
+                        });
+                        result.items.push(item);
+                    }).bind(this));
+                }
                 return result;
             }).bind(this));
         }

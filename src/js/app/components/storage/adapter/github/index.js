@@ -5,11 +5,14 @@ var token = Config.github.token || localStorage.getItem('github_token');
 
 module.exports = {
     extends: require('../base'),
+    http: {
+        base: 'https://api.github.com'
+    },
     events: {
         'load-items': function (tree) {
             if (token) {
-                this.$http.get(
-                    this.url('https://api.github.com/repos/' + this.config.username + '/' + this.config.repository + '/contents/' + (tree.item ? tree.item.id : '')),
+                this.http.get(
+                    'repos/' + this.config.username + '/' + this.config.repository + '/contents/' + (tree.item ? tree.item.id : ''),
                     {
                         headers: {
                             Authorization: 'token ' + token
@@ -40,15 +43,14 @@ module.exports = {
             return this.login(function (username, password, callback) {
                 var baseUrl = document.location.protocol + '//' + document.location.host,
                     fingerprint = 'netresearch-assetpicker-github-' + baseUrl,
-                    url = 'https://api.github.com/authorizations',
                     options = {
                         headers: {
                             Authorization: 'Basic ' + btoa(username + ':' + password)
                         }
                     },
                     createAuthorization = (function () {
-                        this.$http.post(
-                            this.url(url),
+                        this.http.post(
+                            'authorizations',
                             {
                                 note: 'Repository access for ' + this.t('header.title') + ' at ' + baseUrl,
                                 scopes: ['public_repo', 'repo'],
@@ -65,11 +67,11 @@ module.exports = {
                         })
                     }).bind(this);
 
-                this.$http.get(this.url(url), options).then(
+                this.http.get('authorizations', options).then(
                     (function(response) {
                         for (var i = 0, l = response.data.length; i < l; i++) {
                             if (response.data[i].fingerprint === fingerprint) {
-                                this.$http.delete(this.url(response.data[i].id, url), options).then(createAuthorization);
+                                this.http.delete('authorizations/' + response.data[i].id, options).then(createAuthorization);
                                 return;
                             }
                         }

@@ -2,11 +2,20 @@ var Vue = require('vue');
 
 var Item = require('../../../model/item');
 
+var extend = require('extend');
+
 Vue.http.interceptors.push(function(options, next) {
     next(function(response) {
         response.options = options;
     });
 });
+
+var UrlClass = function(url) {
+    this.raw = url;
+};
+UrlClass.prototype.toString = function () {
+    return encodeURIComponent(this.raw);
+};
 
 module.exports = {
     template: '<div><tree :fetch="fetch"></tree></div>',
@@ -24,14 +33,21 @@ module.exports = {
     data: function() {
         return {
             loginDone: false,
-            currentLogin: null
+            currentLogin: null,
+            appConfig: require('../../../config')
         }
     },
     computed: {
+        proxy: function () {
+            if (this.config.proxy || this.appConfig.proxy.all && this.config.proxy !== false) {
+                return (typeof this.config.proxy === 'object' ? this.config : this.appConfig).proxy;
+            }
+            return false;
+        },
         url: function () {
-            var proxyUrl, $proxy, config = require('../../../config');
-            if (this.config.proxy || config.proxy.all && this.config.proxy !== false) {
-                proxyUrl = (typeof this.config.proxy === 'object' ? this.config : config).proxy.url;
+            var proxyUrl, $proxy;
+            if (this.proxy) {
+                proxyUrl = this.proxy.url;
                 $proxy = new Vue({
                     data: { url: null }
                 });
@@ -41,7 +57,7 @@ module.exports = {
                     url = (base + '').replace(/\/+$/, '') + '/' + (url + '').replace(/^\/+/, '');
                 }
                 if ($proxy) {
-                    $proxy.url = encodeURIComponent(url);
+                    $proxy.url = new UrlClass(url);
                     return $proxy.$interpolate(proxyUrl);
                 }
                 return url;
@@ -59,30 +75,36 @@ module.exports = {
                         options.url = this.url(options.url, base);
                         options.keepUrl = true;
                     }
-                    return this.$promise(function (resolve) {
-                        this.$http(options).then((function(response) {
-                            if (response.options.validate) {
-                                response.reload = function () {
-                                    return request(options).then(resolve);
-                                };
-                                response.isValid = function (isValid) {
-                                    if (isValid === false) {
-                                        throw 'Invalid response';
-                                    } else {
-                                        resolve(response);
-                                    }
-                                };
-                                response.options.validate.call(this, response, resolve);
-                            } else {
-                                resolve(response);
-                            }
-                        }).bind(this));
+                    if (this.proxy && this.proxy.credentials !== options.credentials) {
+                        options.credentials = this.proxy.credentials;
+                    }
+                    return this.$promise(function (resolve, reject) {
+                        this.$http(options).then(
+                            function(response) {
+                                if (response.options.validate) {
+                                    response.reload = function () {
+                                        return request(options).then(resolve);
+                                    };
+                                    response.isValid = function (isValid) {
+                                        if (isValid === false) {
+                                            throw 'Invalid response';
+                                        } else {
+                                            resolve(response);
+                                        }
+                                    };
+                                    response.options.validate.call(this, response, resolve);
+                                } else {
+                                    resolve(response);
+                                }
+                            }.bind(this),
+                            reject
+                        );
                     });
                 }).bind(this);
 
             ['get', 'delete', 'head', 'jsonp'].forEach(function(method) {
                 api[method] = function (url, options) {
-                    options = options || {};
+                    options = extend({}, options);
                     options.method = method.toUpperCase();
                     options.url = url;
                     return request(options);
@@ -91,7 +113,7 @@ module.exports = {
 
             ['post', 'put', 'patch'].forEach(function(method) {
                 api[method] = function (url, data, options) {
-                    options = options || {};
+                    options = extend({}, options);
                     options.method = method.toUpperCase();
                     options.url = url;
                     options.body = data;

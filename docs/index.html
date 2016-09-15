@@ -17,7 +17,17 @@
                         adapter: 'github',
                         username: 'netresearch',
                         repository: 'assetpicker'
+                    },
+                    entermediaDB: {
+                        label: 'EnterMediaDB Demo',
+                        adapter: 'entermediadb',
+                        url: 'http://em9.entermediadb.org/openinstitute',
+                        proxy: true
                     }
+                },
+                proxy: {
+                    url: 'https://fierce-fortress-84430.herokuapp.com/{{url.raw}}',
+                    credentials: true
                 }
             });
             picker.onPick(onPick);
@@ -37,7 +47,8 @@
     </head>
     <body>
     <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputDefault" data-target="#result">Single file</button>
-    <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputMultiple" data-target="#result" data-ext="json,js">JS or JSON files</button>
+    <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputMultiple" data-target="#result" data-ext="js,json">JS or JSON files</button>
+    <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputMultiple" data-target="#result" data-ext="jpg,jpeg,gif,png">Images</button>
     <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputMultiple" data-target="#result" data-limit="0">Multiple files</button>
     <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputMax2" data-target="#result" data-limit="2">Max 2 files</button>
     <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputFolder" data-target="#result" data-types="dir">Folder</button>

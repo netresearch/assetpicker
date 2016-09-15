@@ -220,7 +220,8 @@ ul.tree, ul.tree ul {
   #main > .row > div {
     height: 100%; }
   #main > .row > div {
-    overflow: auto; }
+    overflow-x: hidden;
+    overflow-y: auto; }
     #main > .row > div.sidebar {
       background: #eeeeee; }
 
