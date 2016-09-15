@@ -6,6 +6,10 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css">
         <script src="../dist/js/picker.min.js"></script>
         <script>
+            var onPick = function() {
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('resultHint').style.display = 'none';
+            };
             var picker = new AssetPicker({
                 storages: {
                     assetpicker: {
@@ -16,14 +20,28 @@
                     }
                 }
             });
-            picker.onPicked(function() {
-                document.getElementById('result').style.display = 'block';
-                document.getElementById('resultHint').style.display = 'none';
-            });
+            picker.onPick(onPick);
+            var picker2 = new AssetPicker({
+                title: 'Another Storage',
+                storages: {
+                    kite: {
+                        label: 'Kite',
+                        adapter: 'github',
+                        username: 'netresearch',
+                        repository: 'kite'
+                    }
+                }
+            }, {selector: '[rel="assetpicker2"]'});
+            picker2.onPick(onPick);
         </script>
     </head>
     <body>
-    <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputName" data-target="#result">Select files</button>
+    <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputDefault" data-target="#result">Single file</button>
+    <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputMultiple" data-target="#result" data-ext="json,js">JS or JSON files</button>
+    <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputMultiple" data-target="#result" data-limit="0">Multiple files</button>
+    <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputMax2" data-target="#result" data-limit="2">Max 2 files</button>
+    <button class="btn btn-default" rel="assetpicker" data-name="hiddenInputFolder" data-target="#result" data-types="dir">Folder</button>
+    <button class="btn btn-default" rel="assetpicker2" data-name="hiddenInputOther" data-target="#result">Use another storage</button>
     <h5>Result</h5>
     <pre id="result" style="display: none"></pre>
     <p id="resultHint">Select an asset first</p>

@@ -17,18 +17,18 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">{{t('header.title')}}</a>
+                <a class="navbar-brand" href="#">{{config.title || t('header.title')}}</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a v-on:click.prevent="cancel" class="close-x" title="{{t('footer.cancel')}}"><span aria-hidden="true">&times;</span></a></li>
+                </ul>
                 <div class="navbar-form navbar-right" role="search">
                     <div class="form-group form-group-sm">
-                        <input type="text" class="form-control" v-model="sword" placeholder="Search" debounce="500">
+                        <input type="text" class="form-control" v-model="selection.search" placeholder="Search" debounce="500">
                     </div>
                 </div>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Link</a></li>
-                </ul>
             </div>
         </div>
         <div id="app-progress" class="loader-progress"></div>
@@ -36,13 +36,13 @@
     <div class="container-fluid" id="main">
         <div class="row">
             <div class="col-md-3 sidebar">
-                <storage v-for="(id, storage) in config.storages" :id="id" :storage="storage"></storage>
+                <storage v-for="(id, storage) in config.storages" :open="$root.numStorages === 1" :id="id" :storage="storage"></storage>
             </div>
-            <items class="col-md-9" :search.sync="sword"></items>
+            <items class="col-md-9"></items>
         </div>
     </div>
     <div id="footer">
-        <button class="btn btn-sm btn-primary" :disabled="!selection.picked.length" v-on:click="pick">{{t('footer.pick')}}</button>
+        <button class="btn btn-sm btn-primary" :disabled="!picked.length" v-on:click="pick">{{t('footer.pick')}}</button>
         <button class="btn btn-sm btn-default" v-on:click="cancel">{{t('footer.cancel')}}</button>
     </div>
 </div>

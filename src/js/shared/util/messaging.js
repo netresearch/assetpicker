@@ -7,7 +7,7 @@ module.exports = require('./createClass')({
         var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
         eventer(messageEvent, function(e) {
             var origin = e.origin || e.originalEvent.origin;
-            if (origin === this.origin || this.origin === '*') {
+            if (e.source === this.window && origin === this.origin || this.origin === '*') {
                 this.handle(e.data);
             }
         }.bind(this), false);

@@ -1,6 +1,3 @@
-var selection = require('../../model/selection'),
-    config = require('../../config');
-
 module.exports = {
     template: require('./grid.html'),
     props: {
@@ -15,34 +12,33 @@ module.exports = {
             },
             data: function () {
                 return {
-                    picked: selection.picked
+                    picked: require('../../model/pick')
                 }
             },
             computed: {
                 selected: function() {
                     return this.picked.contains(this.item);
+                },
+                visible: function () {
+                    return this.item.type !== 'file' || this.picked.isAllowed(this.item);
                 }
             },
             detached: function() {
-                var picked = this.picked;
-                if (picked.contains(this.item)) {
-                    picked.remove(this.item);
+                if (this.picked.contains(this.item)) {
+                    this.picked.remove(this.item);
                 }
             },
             methods: {
                 select: function() {
-                    var picked = this.picked;
-                    if (picked.contains(this.item)) {
-                        picked.remove(this.item);
-                    } else {
-                        if (!config.picker.multiple && picked.length) {
-                            picked.clear();
-                        }
-                        picked.push(this.item);
-                    }
+                    this.picked.toggle(this.item);
                 },
                 open: function() {
-                    this.$root.$broadcast('select-item', this.item);
+                    if (this.item.type === 'file' && this.picked.isAllowed(this.item)) {
+                        this.picked.add(this.item);
+                        this.$dispatch('finish-pick');
+                    } else {
+                        this.$root.$broadcast('select-item', this.item);
+                    }
                 }
             }
         }

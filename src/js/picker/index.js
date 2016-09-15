@@ -8,52 +8,79 @@ var scriptURL = (function() {
 })();
 
 window.AssetPicker = require('../shared/util/createClass')({
-    construct: function(options) {
+    construct: function(config, options) {
         options = extend(
             true,
             {
-                picker: {
-                    selector: '[rel="assetpicker"]',
-                    modal: {
-                        src: null
-                    }
+                selector: '[rel="assetpicker"]',
+                modal: {
+                    src: null
                 }
             },
             options || {}
         );
-        if (!options.picker.modal.src) {
-            options.picker.modal.src = scriptURL.split('/').slice(0, -3).join('/') + '/';
+        if (!options.modal.src) {
+            options.modal.src = scriptURL.split('/').slice(0, -3).join('/') + '/';
         }
-        if (options.picker.modal.src.match(/^https?:\/\/localhost/) || document.location.hostname === 'localhost') {
-            options.picker.modal.src += '?' + uid();
+        if (options.modal.src.match(/^https?:\/\/localhost/) || document.location.hostname === 'localhost') {
+            options.modal.src += '?' + uid();
         }
 
+        this.config = config || {};
         this.options = options;
         this.modal = null;
         this.element = null;
         this._onPickedCallback = null;
+        this._appReady = false;
+        this._onAppReadyCallback = null;
 
-        document.addEventListener('DOMContentLoaded', this.init.bind(this));
+        document.addEventListener('DOMContentLoaded', this._init.bind(this));
     },
-    init: function() {
-        this.modal = new Modal(this.options.picker.modal);
+    _init: function() {
+        this.modal = new Modal(this.options.modal);
         this.modal.messaging.registerServer('picker', this);
-        document.querySelectorAll(this.options.picker.selector).forEach(this.initInput.bind(this));
+        this.modal.messaging.registerServer('app', {isReady: this._onAppReady.bind(this)});
+        var inputs = document.querySelectorAll(this.options.selector);
+        for (var i = 0, l = inputs.length; i < l; i++) {
+            this._initInput(inputs[i]);
+        }
     },
-    initInput: function (element) {
+    _initInput: function (element) {
         element.addEventListener('click', function(event) {
             event.preventDefault();
             this.element = element;
             this.modal.open();
+            this._onAppReady(function () {
+                this.modal.messaging.call('app.setPickConfig', {
+                    limit: element.hasAttribute('data-limit') ? parseInt(element.getAttribute('data-limit')) : 1,
+                    types: element.hasAttribute('data-types') ? element.getAttribute('data-types').split(',') : ['file'],
+                    extensions: element.hasAttribute('data-ext') ? element.getAttribute('data-ext').split(',') : []
+                });
+            }.bind(this));
         }.bind(this));
     },
-    getConfig: function() {
-        return this.options;
+    _onAppReady: function (callback) {
+        if (typeof callback === 'function') {
+            if (this._appReady) {
+                callback();
+            } else {
+                this._onAppReadyCallback = callback;
+            }
+        } else {
+            this._appReady = true;
+            if (this._onAppReadyCallback) {
+                this._onAppReadyCallback();
+                delete this._onAppReadyCallback;
+            }
+        }
     },
-    onPicked: function(callback) {
+    getConfig: function() {
+        return this.config;
+    },
+    onPick: function(callback) {
         this._onPickedCallback = callback;
     },
-    picked: function(picked) {
+    pick: function(picked) {
         var targetSelector = this.element.getAttribute('data-target');
         var inputName = this.element.getAttribute('data-name');
         if (targetSelector || inputName) {
@@ -62,13 +89,14 @@ window.AssetPicker = require('../shared/util/createClass')({
                 var area = document.createElement('textarea');
                 area.innerText = stringified;
                 var escaped = area.innerHTML;
-                document.querySelectorAll(targetSelector).forEach(function(target) {
-                    if (target.tagName === 'input') {
-                        target.setAttribute('value', stringified);
+                var targets = document.querySelectorAll(targetSelector);
+                for (var i = 0, l = targets.length; i < l; i++) {
+                    if (targets[i].tagName === 'input') {
+                        targets[i].setAttribute('value', stringified);
                     } else {
-                        target.innerHTML = escaped;
+                        targets[i].innerHTML = escaped;
                     }
-                });
+                }
             }
             if (inputName) {
                 var inputElement = document.createElement('input');

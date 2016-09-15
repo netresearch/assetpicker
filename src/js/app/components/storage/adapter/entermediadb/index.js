@@ -124,13 +124,7 @@ module.exports = {
         },
         'search': function (sword, results) {
             this.search = sword;
-            results.source = this;
-            if (sword) {
-                this.loadAssets().then(function (response) {
-                    results.total = response.total;
-                    results.push.apply(results, response.items);
-                });
-            }
+            this.loadAssets(results);
         },
         'category-load-items': function (tree) {
             this.http.post(

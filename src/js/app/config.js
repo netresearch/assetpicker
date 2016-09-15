@@ -19,9 +19,8 @@ module.exports = {
     github: {
         //token: 'j2332dwedcdj33dx3jm8389xdq'
     },
-    picker: {
-        multiple: false,
-        limit: 10, // accounted when multiple
+    pick: {
+        limit: 1,
         types: ['file'],
         extensions: []
     }

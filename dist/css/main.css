@@ -204,6 +204,11 @@ ul.tree, ul.tree ul {
     position: absolute;
     bottom: 0;
     margin: 0; }
+  .navbar .close-x {
+    font-size: 32px;
+    cursor: pointer;
+    position: relative;
+    top: -2px; }
 
 #main {
   position: absolute;

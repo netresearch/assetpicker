@@ -12,15 +12,8 @@ module.exports = function (data) {
         id: data.id,
         storage: data.storage,
         name: data.name,
-        get type() {
-            return data.type;
-        },
-        get extension() {
-            var matches = this.name.match(/\.([0-9a-z]+)$/i);
-            if (matches) {
-                return matches.pop();
-            }
-        },
+        type: data.type,
+        extension: (data.name.match(/\.([0-9a-z]+)$/i) || []).pop(),
         thumbnail: data.thumbnail
     };
 };

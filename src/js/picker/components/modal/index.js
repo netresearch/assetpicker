@@ -78,15 +78,14 @@ module.exports = require('../../../shared/util/createClass')({
         if (!this.modal) {
             this.render();
             var that = this;
+            this.frame.src = this.options.src;
             window.setTimeout(function() { that.open(); }, 1);
             return;
         }
-        this.frame.src = this.options.src;
         this.messaging.window = this.frame.contentWindow;
         addClass(this.modal, this.options.openClassName);
     },
     _closed: function() {
-        this.frame.src = 'about:blank';
     },
     close: function() {
         if (transitionEvent && hasTransitions(this.modal)) {

@@ -5,15 +5,10 @@ services:
     ports:
       - 80:80
     volumes_from:
-      - files
       - php
     links:
       - php
   php:
     build: .
-    volumes_from:
-      - files
-  files:
-    image: busybox
     volumes:
       - .:/var/www/html
