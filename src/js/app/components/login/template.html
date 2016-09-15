@@ -11,6 +11,8 @@
             </div>
             <div class="form-group">
                 <label for="loginPassword">{{t('login.password')}}</label>
+                <!-- It's not possible to get the password via javascript in chrome inside iframes (http://stackoverflow.com/a/38269071), so trick off auto complete -->
+                <input type="password" style="position:absolute;left:-200px;top:0;" tabindex="-1">
                 <input v-model="password" type="password" class="form-control" id="loginPassword" placeholder="{{t('login.password')}}">
             </div>
             <button type="submit" class="btn btn-default">{{t('login.login')}}</button>
