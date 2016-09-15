@@ -13,7 +13,7 @@ module.exports = function (data) {
         storage: data.storage,
         name: data.name,
         type: data.type,
-        extension: (data.name.match(/\.([0-9a-z]+)$/i) || []).pop(),
+        extension: data.extension || (data.name.match(/\.([0-9a-z]+)$/i) || []).pop(),
         thumbnail: data.thumbnail
     };
 };

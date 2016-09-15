@@ -53,7 +53,17 @@ module.exports = {
             search: null,
             selection: require('../../../../model/selection'),
             items: null,
-            results: {}
+            results: {},
+            extensions: null,
+            appConfig: require('../../../../config')
+        }
+    },
+    watch: {
+        'appConfig.pick': {
+            handler: function (config) {
+                this.extensions = config.extensions
+            },
+            immediate: true
         }
     },
     methods: {
@@ -64,6 +74,9 @@ module.exports = {
             }
             if (this.search) {
                 terms.push('description', 'freeform', this.search);
+            }
+            if (this.extensions && this.extensions.length) {
+                terms.push('fileformat', 'matches', this.extensions.join('|'))
             }
             var result = this.results[terms.hash];
             if (!result) {
@@ -91,9 +104,10 @@ module.exports = {
                 response.data.results.forEach((function (asset) {
                     var item = this.createItem({
                         id: asset.id,
-                        type: 'file',
+                        type: asset.isfolder ? 'file' : 'dir',
                         name: asset.primaryfile || asset.name,
                         title: asset.assettitle,
+                        extension: asset.fileformat.id,
                         thumbnail: this.url(
                             '/emshare/views/modules/asset/downloads/preview/thumb/' +
                             encodeURI(asset.sourcepath) + '/thumb.jpg',
