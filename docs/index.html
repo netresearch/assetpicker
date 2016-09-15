@@ -4,7 +4,11 @@
         <meta charset="UTF-8">
         <title>AssetPicker</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css">
-        <script src="../dist/js/picker.min.js"></script>
+        <!--<script src="../dist/js/picker.min.js"></script>-->
+        <script>
+            document.write('\x3Cscript type="text/javascript" src="' + (document.location.hostname === 'localhost' ? '../dist/js/picker.min.js' : 'https://rawgit.com/netresearch/assetpicker/master/dist/js/picker.min.js') + '">\x3C/script>');
+        </script>
+        
         <script>
             var onPick = function() {
                 document.getElementById('result').style.display = 'block';
