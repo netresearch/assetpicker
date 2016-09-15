@@ -30,6 +30,10 @@ $footer-height: $navbar-height + 2;
 @import "components/items-grid";
 @import "components/loaders";
 
+body {
+    background: transparent;
+}
+
 #app {
     opacity: 0;
     transition: opacity 0.2s;

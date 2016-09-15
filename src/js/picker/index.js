@@ -67,6 +67,7 @@ window.AssetPicker = require('../shared/util/createClass')({
                 this._onAppReadyCallback = callback;
             }
         } else {
+            this.modal.modal.className += ' assetpicker-ready';
             this._appReady = true;
             if (this._onAppReadyCallback) {
                 this._onAppReadyCallback();

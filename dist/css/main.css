@@ -120,29 +120,6 @@ ul.tree, ul.tree ul {
   .items-grid .item:last-child {
     margin-right: 0; }
 
-.loader-signal {
-  border: 5px solid #666;
-  border-radius: 30px;
-  height: 30px;
-  left: 50%;
-  margin: -15px 0 0 -15px;
-  opacity: 0;
-  position: absolute;
-  top: 50%;
-  width: 30px;
-  animation: loader-pulsate 1s ease-out;
-  animation-iteration-count: infinite; }
-
-@keyframes loader-pulsate {
-  0% {
-    transform: scale(0.1);
-    opacity: 0.0; }
-  50% {
-    opacity: 1; }
-  100% {
-    transform: scale(1.2);
-    opacity: 0; } }
-
 .loader-progress {
   height: 4px;
   width: 100%;
@@ -179,6 +156,9 @@ ul.tree, ul.tree ul {
     left: 120%; }
   to {
     left: 100%; } }
+
+body {
+  background: transparent; }
 
 #app {
   opacity: 0;

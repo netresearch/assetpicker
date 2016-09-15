@@ -62,9 +62,6 @@ function create() {
         },
         ready: function () {
             this.$el.className += (this.$el.className ? ' ' : '') + 'loaded';
-            var loader = document.getElementById(this.$el.id + '-loader');
-            loader.parentNode.removeChild(loader);
-            delete loader;
         },
         events: {
             'finish-pick': function () {
