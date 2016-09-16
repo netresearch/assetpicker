@@ -53,7 +53,8 @@ function create() {
         translations: require('./locales'),
         components: {
             storage: require('./components/storage'),
-            'items': require('./components/items')
+            'items': require('./components/items'),
+            handle: require('./components/handle')
         },
         created: function () {
             if (messaging) {

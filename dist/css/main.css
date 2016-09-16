@@ -106,23 +106,24 @@ ul.tree, ul.tree ul {
   padding: 0;
   margin: 0; }
 
-.sidebar > .storage {
-  margin: 16px 0; }
-  .sidebar > .storage > li > .item {
-    font-size: 13px;
-    color: #666;
-    font-weight: bold;
-    margin-bottom: 6px; }
-    .sidebar > .storage > li > .item > .glyphicon {
-      position: relative;
-      left: -2px;
-      margin-left: 2px; }
-  .sidebar > .storage > li > .storage-filters {
-    padding-left: 6px; }
-
-.sidebar .panel {
-  margin-top: 1em;
-  margin-left: -6px; }
+#sidebar {
+  padding: 0 15px; }
+  #sidebar > .storage {
+    margin: 16px 0; }
+    #sidebar > .storage > li > .item {
+      font-size: 13px;
+      color: #666;
+      font-weight: bold;
+      margin-bottom: 6px; }
+      #sidebar > .storage > li > .item > .glyphicon {
+        position: relative;
+        left: -2px;
+        margin-left: 2px; }
+    #sidebar > .storage > li > .storage-filters {
+      padding-left: 6px; }
+  #sidebar .panel {
+    margin-top: 1em;
+    margin-left: -6px; }
 
 .items-grid {
   margin: 10px -5px; }
@@ -227,6 +228,12 @@ ul.tree, ul.tree ul {
 body {
   background: transparent; }
 
+* {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none; }
+
 #app {
   opacity: 0;
   transition: opacity 0.2s; }
@@ -235,18 +242,27 @@ body {
 
 #main {
   position: absolute;
-  top: 48px;
-  bottom: 50px;
-  right: 0;
-  left: 0; }
-  #main > .row,
-  #main > .row > div {
-    height: 100%; }
-  #main > .row > div {
+  padding-top: 48px;
+  padding-bottom: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: table; }
+  #main > div {
+    display: table-cell;
+    height: 100%;
     overflow-x: hidden;
     overflow-y: auto; }
-    #main > .row > div.sidebar {
-      background: #eeeeee; }
+    #main > div#sidebar {
+      background: #eeeeee;
+      width: 250px; }
+    #main > div.handle {
+      margin-left: -2px;
+      height: 100%;
+      width: 3px;
+      border-left: 1px solid #e2e2e2;
+      cursor: col-resize; }
 
 #footer {
   position: absolute;

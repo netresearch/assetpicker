@@ -33,13 +33,12 @@
         </div>
         <div id="app-progress" class="loader-progress"></div>
     </nav>
-    <div class="container-fluid" id="main">
-        <div class="row">
-            <div class="col-md-3 sidebar">
-                <storage v-for="(id, storage) in config.storages" :open="$root.numStorages === 1" :id="id" :storage="storage"></storage>
-            </div>
-            <items class="col-md-9"></items>
+    <div id="main">
+        <div id="sidebar" :style="{width: $refs.handle.x + 'px'}">
+            <storage v-for="(id, storage) in config.storages" :open="$root.numStorages === 1" :id="id" :storage="storage"></storage>
         </div>
+        <handle class="handle" v-ref:handle></handle>
+        <items id="stage"></items>
     </div>
     <div id="footer">
         <button class="btn btn-sm btn-primary" :disabled="!picked.length" v-on:click="pick">{{t('footer.pick')}}</button>

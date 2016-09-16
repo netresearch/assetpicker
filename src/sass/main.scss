@@ -34,6 +34,12 @@ $footer-height: $navbar-height + 2;
 body {
     background: transparent;
 }
+* {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
 
 #app {
     opacity: 0;
@@ -45,19 +51,30 @@ body {
 
 #main {
     position: absolute;
-    top: $navbar-height;
-    bottom: $footer-height;
-    right:0;
+    padding-top: $navbar-height;
+    padding-bottom: $footer-height;
     left:0;
-    > .row,
-    > .row > div {
+    top:0;
+    width:100%;
+    height:100%;
+    display: table;
+    > div {
+        display: table-cell;
         height: 100%;
-    }
-    > .row > div {
         overflow-x:hidden;
         overflow-y: auto;
-        &.sidebar {
+        &#sidebar {
             background:$gray-lighter;
+            width: 250px;
+        }
+        &#stage {
+        }
+        &.handle {
+            margin-left: -2px;
+            height: 100%;
+            width: 3px;
+            border-left:1px solid darken($gray-lighter, 5%);
+            cursor: col-resize;
         }
     }
 }

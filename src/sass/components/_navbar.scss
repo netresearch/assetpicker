@@ -1,0 +1,86 @@
+.navbar {
+    min-height: $navbar-height;
+    .navbar-brand {
+        height:$navbar-height;
+        font-size:18px;
+    }
+    $padding: 12px;
+    .navbar-brand,
+    .navbar-nav>li>a {
+        padding-top: $padding;
+        padding-bottom: $padding;
+    }
+    .navbar-form {
+        margin-top: $padding - 4;
+        margin-bottom: $padding - 4;
+    }
+    .nav {
+        font-size: $navbar-font-size;
+    }
+    .loader-progress {
+        position: absolute;
+        bottom: 0;
+        margin:0;
+    }
+    .navbar-window-icons {
+        margin:0 0 0 5px;
+        > li {
+            margin-left:10px;
+        }
+        a {
+            cursor: pointer;
+            display:inline-block;
+            width:18px;
+            height:24px;
+            padding: 0;
+            border-color: lighten($brand-primary, 30%);
+            &:before {
+                border-color: lighten($brand-primary, 30%);
+            }
+            &:hover {
+                border-color: #fff;
+            }
+            &:hover:before {
+                border-color: #fff;
+            }
+        }
+        .close-x {
+            font-size: 32px;
+            position: relative;
+            top: -2px;
+        }
+        .minmax {
+            $border-width: 2px;
+            $max-size: 16px;
+            $min-size: 12px;
+            position: relative;
+            top: $border-width;
+            display: inline-block;
+            width: $max-size;
+            height: $max-size;
+            border: $border-width solid;
+            background: $brand-primary;
+            border-radius: $border-width;
+            transition: border-color 0.2s;
+            &.minimize {
+                top: $border-width / 2;
+                margin-right: $min-size / 2 - $border-width;
+                width: $min-size;
+                height: $min-size;
+                &:before {
+                    z-index: -1;
+                    content: " ";
+                    display: block;
+                    position: absolute;
+                    border: $border-width solid;
+                    background: $brand-primary;
+                    border-radius: $border-width;
+                    width: $min-size;
+                    height: $min-size;
+                    right: $min-size / -2;
+                    top: $min-size / -2 + $border-width / 2;
+                }
+            }
+        }
+    }
+}
