@@ -34,7 +34,7 @@
                     credentials: true
                 }
             });
-            picker.onPick(onPick);
+            picker.on('pick', onPick);
             var picker2 = new AssetPicker({
                 title: 'Another Storage',
                 storages: {
@@ -46,7 +46,7 @@
                     }
                 }
             }, {selector: '[rel="assetpicker2"]'});
-            picker2.onPick(onPick);
+            picker2.on('pick', onPick);
         </script>
     </head>
     <body>

@@ -20,8 +20,9 @@
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a v-on:click.prevent="cancel" class="close-x" title="{{t('footer.cancel')}}"><span aria-hidden="true">&times;</span></a></li>
+                <ul class="nav navbar-nav navbar-right navbar-window-icons">
+                    <li><a v-on:click.prevent="maximized = !maximized"><span class="minmax {{maximized ? 'min' : 'max'}}imize"></span></a></li>
+                    <li><a v-on:click.prevent="cancel" class="close-x" title="{{t('footer.cancel')}}">&times;</a></li>
                 </ul>
                 <div class="navbar-form navbar-right" role="search">
                     <div class="form-group form-group-sm">

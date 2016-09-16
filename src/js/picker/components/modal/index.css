@@ -15,15 +15,22 @@
 }
 .assetpicker-modal .assetpicker-modal-inner {
     position: absolute;
-    left:30px;
-    right:30px;
-    top:30px;
-    bottom:30px;
     background: #fff;
+    width: 800px;
+    height: 500px;
+    max-width: calc(100% - 30px);
+    max-height: calc(100% - 30px);
+    left:50%;
+    top:50%;
+    transform: translateY(-50%) translateX(-50%);
     opacity: 0;
     transition: opacity 0.1s 0.1s;
     border-radius: 4px;
     overflow: hidden;
+}
+.assetpicker-modal.assetpicker-maximized .assetpicker-modal-inner {
+    width: 100%;
+    height: 100%;
 }
 .assetpicker-modal.assetpicker-modal-open .assetpicker-modal-inner {
     opacity: 1;

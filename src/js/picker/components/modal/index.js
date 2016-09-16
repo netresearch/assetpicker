@@ -1,19 +1,5 @@
 var extend = require('extend'),
     insertCss = require('insert-css'),
-    addClass = function(element, className) {
-        if (element.className.split(' ').indexOf(className) === -1) {
-            element.className += ' ' + className;
-        }
-    },
-    removeClass = function(element, className) {
-        var classNames = element.className.split(' '), newClassNames = [];
-        for (var i = 0, l = classNames.length; i < l; i++) {
-            if (classNames[i] !== className) {
-                newClassNames.push(classNames[i]);
-            }
-        }
-        element.className = newClassNames.join(' ');
-    },
     transitionEvent = (function() {
         var el = document.createElement('div');
         var transitions = {
@@ -83,7 +69,7 @@ module.exports = require('../../../shared/util/createClass')({
             return;
         }
         this.messaging.window = this.frame.contentWindow;
-        addClass(this.modal, this.options.openClassName);
+        this.addClass(this.options.openClassName);
     },
     _closed: function() {
     },
@@ -97,6 +83,20 @@ module.exports = require('../../../shared/util/createClass')({
         } else {
             this._closed();
         }
-        removeClass(this.modal, this.options.openClassName);
+        this.removeClass(this.options.openClassName);
+    },
+    addClass: function(className) {
+        if (this.modal.className.split(' ').indexOf(className) === -1) {
+            this.modal.className += ' ' + className;
+        }
+    },
+    removeClass: function(className) {
+        var classNames = this.modal.className.split(' '), newClassNames = [];
+        for (var i = 0, l = classNames.length; i < l; i++) {
+            if (classNames[i] !== className) {
+                newClassNames.push(classNames[i]);
+            }
+        }
+        this.modal.className = newClassNames.join(' ');
     }
 });

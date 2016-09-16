@@ -30,16 +30,45 @@ window.AssetPicker = require('../shared/util/createClass')({
         this.options = options;
         this.modal = null;
         this.element = null;
-        this._onPickedCallback = null;
-        this._appReady = false;
-        this._onAppReadyCallback = null;
+
+        this._memoryEvents = {
+            'ready': null
+        };
+        this._callbacks = {};
+
+        this.on('ready', function () {
+            this.modal.modal.className += ' assetpicker-ready'
+        });
+        this.on('resize', function (maximize) {
+            this.modal[maximize ? 'addClass' : 'removeClass']('assetpicker-maximized');
+        });
 
         document.addEventListener('DOMContentLoaded', this._init.bind(this));
+    },
+    on: function (event, callback) {
+        if (!this._callbacks.hasOwnProperty(event)) {
+            this._callbacks[event] = [];
+        }
+        this._callbacks[event].push(callback);
+        if (this._memoryEvents[event]) {
+            callback.apply(this, this._memoryEvents[event]);
+        }
+        return this;
+    },
+    _trigger: function (event) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        if (this._callbacks[event]) {
+            this._callbacks[event].forEach(function (callback) {
+                return callback.apply(this, args);
+            }.bind(this));
+        }
+        if (this._memoryEvents.hasOwnProperty(event)) {
+            this._memoryEvents[event] = args;
+        }
     },
     _init: function() {
         this.modal = new Modal(this.options.modal);
         this.modal.messaging.registerServer('picker', this);
-        this.modal.messaging.registerServer('app', {isReady: this._onAppReady.bind(this)});
         var inputs = document.querySelectorAll(this.options.selector);
         for (var i = 0, l = inputs.length; i < l; i++) {
             this._initInput(inputs[i]);
@@ -50,36 +79,20 @@ window.AssetPicker = require('../shared/util/createClass')({
             event.preventDefault();
             this.element = element;
             this.modal.open();
-            this._onAppReady(function () {
-                this.modal.messaging.call('app.setPickConfig', {
-                    limit: element.hasAttribute('data-limit') ? parseInt(element.getAttribute('data-limit')) : 1,
-                    types: element.hasAttribute('data-types') ? element.getAttribute('data-types').split(',') : ['file'],
-                    extensions: element.hasAttribute('data-ext') ? element.getAttribute('data-ext').split(',') : []
-                });
-            }.bind(this));
+            this.on(
+                'app-ready',
+                function () {
+                    this.modal.messaging.call('app.setPickConfig', {
+                        limit: element.hasAttribute('data-limit') ? parseInt(element.getAttribute('data-limit')) : 1,
+                        types: element.hasAttribute('data-types') ? element.getAttribute('data-types').split(',') : ['file'],
+                        extensions: element.hasAttribute('data-ext') ? element.getAttribute('data-ext').split(',') : []
+                    })
+                }
+            );
         }.bind(this));
-    },
-    _onAppReady: function (callback) {
-        if (typeof callback === 'function') {
-            if (this._appReady) {
-                callback();
-            } else {
-                this._onAppReadyCallback = callback;
-            }
-        } else {
-            this.modal.modal.className += ' assetpicker-ready';
-            this._appReady = true;
-            if (this._onAppReadyCallback) {
-                this._onAppReadyCallback();
-                delete this._onAppReadyCallback;
-            }
-        }
     },
     getConfig: function() {
         return this.config;
-    },
-    onPick: function(callback) {
-        this._onPickedCallback = callback;
     },
     pick: function(picked) {
         var targetSelector = this.element.getAttribute('data-target');
@@ -107,9 +120,7 @@ window.AssetPicker = require('../shared/util/createClass')({
                 this.element.parentNode.insertBefore(inputElement, this.element);
             }
         }
-        if (this._onPickedCallback) {
-            this._onPickedCallback(picked, this);
-        }
+        this._trigger('pick', picked);
         this.modal.close();
     }
 });

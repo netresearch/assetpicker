@@ -46,7 +46,8 @@ function create() {
                 config: config,
                 picked: require('./model/pick'),
                 selection: require('./model/selection'),
-                numStorages: Object.keys(config.storages).length
+                numStorages: Object.keys(config.storages).length,
+                maximized: false
             }
         },
         translations: require('./locales'),
@@ -57,7 +58,7 @@ function create() {
         created: function () {
             if (messaging) {
                 messaging.registerServer('app', this);
-                messaging.call('app.isReady');
+                messaging.call('picker._trigger', 'ready');
             }
         },
         ready: function () {
@@ -66,6 +67,11 @@ function create() {
         events: {
             'finish-pick': function () {
                 this.pick();
+            }
+        },
+        watch: {
+            maximized: function (maximized) {
+                this.callPicker('picker._trigger', 'resize', maximized);
             }
         },
         methods: {

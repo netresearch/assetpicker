@@ -1,4 +1,71 @@
 @import url("https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css");
+.navbar {
+  min-height: 48px; }
+  .navbar .navbar-brand {
+    height: 48px;
+    font-size: 18px; }
+  .navbar .navbar-brand,
+  .navbar .navbar-nav > li > a {
+    padding-top: 12px;
+    padding-bottom: 12px; }
+  .navbar .navbar-form {
+    margin-top: 8px;
+    margin-bottom: 8px; }
+  .navbar .nav {
+    font-size: 16px; }
+  .navbar .loader-progress {
+    position: absolute;
+    bottom: 0;
+    margin: 0; }
+  .navbar .navbar-window-icons {
+    margin: 0 0 0 5px; }
+    .navbar .navbar-window-icons > li {
+      margin-left: 10px; }
+    .navbar .navbar-window-icons a {
+      cursor: pointer;
+      display: inline-block;
+      width: 18px;
+      height: 24px;
+      padding: 0;
+      border-color: #b2dbfb; }
+      .navbar .navbar-window-icons a:before {
+        border-color: #b2dbfb; }
+      .navbar .navbar-window-icons a:hover {
+        border-color: #fff; }
+      .navbar .navbar-window-icons a:hover:before {
+        border-color: #fff; }
+    .navbar .navbar-window-icons .close-x {
+      font-size: 32px;
+      position: relative;
+      top: -2px; }
+    .navbar .navbar-window-icons .minmax {
+      position: relative;
+      top: 2px;
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid;
+      background: #2196F3;
+      border-radius: 2px;
+      transition: border-color 0.2s; }
+      .navbar .navbar-window-icons .minmax.minimize {
+        top: 1px;
+        margin-right: 4px;
+        width: 12px;
+        height: 12px; }
+        .navbar .navbar-window-icons .minmax.minimize:before {
+          z-index: -1;
+          content: " ";
+          display: block;
+          position: absolute;
+          border: 2px solid;
+          background: #2196F3;
+          border-radius: 2px;
+          width: 12px;
+          height: 12px;
+          right: -6px;
+          top: -5px; }
+
 ul.tree li {
   position: relative;
   padding-left: 13px; }
@@ -165,30 +232,6 @@ body {
   transition: opacity 0.2s; }
   #app.loaded {
     opacity: 1; }
-
-.navbar {
-  min-height: 48px; }
-  .navbar .navbar-brand {
-    height: 48px;
-    font-size: 18px; }
-  .navbar .navbar-brand,
-  .navbar .navbar-nav > li > a {
-    padding-top: 12px;
-    padding-bottom: 12px; }
-  .navbar .navbar-form {
-    margin-top: 8px;
-    margin-bottom: 8px; }
-  .navbar .nav {
-    font-size: 16px; }
-  .navbar .loader-progress {
-    position: absolute;
-    bottom: 0;
-    margin: 0; }
-  .navbar .close-x {
-    font-size: 32px;
-    cursor: pointer;
-    position: relative;
-    top: -2px; }
 
 #main {
   position: absolute;
