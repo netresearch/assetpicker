@@ -253,7 +253,8 @@ body {
     display: table-cell;
     height: 100%;
     overflow-x: hidden;
-    overflow-y: auto; }
+    overflow-y: auto;
+    vertical-align: top; }
     #main > div#sidebar {
       background: #eeeeee;
       width: 250px; }

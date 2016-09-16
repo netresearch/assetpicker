@@ -63,6 +63,7 @@ body {
         height: 100%;
         overflow-x:hidden;
         overflow-y: auto;
+        vertical-align: top;
         &#sidebar {
             background:$gray-lighter;
             width: 250px;
