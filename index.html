@@ -35,10 +35,14 @@
     </nav>
     <div id="main">
         <div id="sidebar" :style="{width: $refs.handle.x + 'px'}">
-            <storage v-for="(id, storage) in config.storages" :open="$root.numStorages === 1" :id="id" :storage="storage"></storage>
+            <div>
+                <storage v-for="(id, storage) in config.storages" :open="$root.numStorages === 1" :id="id" :storage="storage"></storage>
+            </div>
         </div>
         <handle class="handle" v-ref:handle></handle>
-        <items id="stage"></items>
+        <div id="stage">
+            <items></items>
+        </div>
     </div>
     <div id="footer">
         <button class="btn btn-sm btn-primary" :disabled="!picked.length" v-on:click="pick">{{t('footer.pick')}}</button>

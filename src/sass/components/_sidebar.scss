@@ -1,6 +1,7 @@
-#sidebar {
+#sidebar > div {
+    background:$gray-lighter;
     padding:0 15px;
-    > .storage {
+    .storage {
         margin: ($padding-large-vertical) 0;
         > li > .item {
             font-size: 13px;
