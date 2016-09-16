@@ -71,11 +71,10 @@ body {
         &#sidebar {
             width: 250px;
         }
-        &#stage {
-
+        &#stage > div {
+            padding: 0 15px 0 12px;
         }
         &.handle {
-            margin-left: -2px;
             height: 100%;
             width: 3px;
             border-left:1px solid darken($gray-lighter, 5%);
