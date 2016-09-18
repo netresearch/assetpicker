@@ -16,7 +16,7 @@ var Terms = function () {
             terms.hash = '';
         }
         Array.prototype.push.call(terms, {field: field, operator: operator, value: value});
-        terms.hash = field + ' ' + operator + ' "' + value + '";';
+        terms.hash += field + ' ' + operator + ' "' + value + '";';
     };
     return terms;
 };
@@ -93,6 +93,10 @@ module.exports = {
                 result = {page: 0, pages: 0, items: items || []};
                 result.items.total = result.items.total || result.items.length;
                 this.results[terms.hash] = result;
+            } else if (result.page === result.pages) {
+                return this.$promise(function (resolve) {
+                    resolve(result);
+                });
             }
 
             result.items.loading = true;
@@ -152,6 +156,7 @@ module.exports = {
         'search': function (sword, results) {
             this.search = sword;
             this.loadAssets(results);
+            return true;
         },
         'category-load-items': function (tree) {
             this.http.post(
@@ -176,13 +181,14 @@ module.exports = {
             });
         },
         'category-select-item': function (tree) {
-            this.$dispatch('select-item', tree);
             this.category = tree.item;
+            this.search = null;
+            this.selection.items = [];
             this.loadAssets().then(function (response) {
                 if (tree.selected) {
                     this.selection.items = response.items;
                 }
-            });
+            }.bind(this));
         }
     }
 };
