@@ -80,7 +80,7 @@ window.AssetPicker = require('../shared/util/createClass')({
             this.element = element;
             this.modal.open();
             this.on(
-                'app-ready',
+                'ready',
                 function () {
                     this.modal.messaging.call('app.setPickConfig', {
                         limit: element.hasAttribute('data-limit') ? parseInt(element.getAttribute('data-limit')) : 1,
