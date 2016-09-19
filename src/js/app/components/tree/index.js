@@ -68,7 +68,7 @@ Vue.component('tree', {
                 this.select(false);
                 return false;
             }
-            if (item && this.item && item.id === this.item.id) {
+            if (item && this.item && item.id === this.item.id || this.entryPoint && !item.id) {
                 this.select();
                 return false;
             } else if (item) {

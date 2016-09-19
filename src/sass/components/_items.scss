@@ -1,0 +1,34 @@
+.items-container {
+    @import "items-grid";
+    .storage {
+        &:first-child {
+            margin-top:15px;
+        }
+        position: relative;
+        padding:15px;
+        padding-left: 72px;
+        .glyphicon {
+            font-size:32px;
+            position: absolute;
+            left: 22px;
+            top: 15px;
+        }
+        h6 {
+            margin: -2px 0 2px;
+        }
+        p {
+            margin: 0;
+        }
+        h6, p {
+            line-height: normal;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;         /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
+            -o-text-overflow: ellipsis;
+        }
+        cursor: default;
+        &:hover, &.selected {
+            background: $gray-lighter;
+        }
+    }
+}

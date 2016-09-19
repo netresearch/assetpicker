@@ -10,8 +10,15 @@
             <span v-if="$refs.items && $refs.items.limit && items.length > $refs.items.limit" v-on:click.prevent="selectStorage(storage)" class="btn btn-link">Show all...</span>
         </template>
     </div>
-    <div v-else>
+    <div v-if="storage || selection.search">
         <h5 v-if="selection.search">{{storage}}</h5>
         <div :is="layout" :items="selection.items" :storage="storage"></div>
     </div>
+    <template v-if="!storage && !selection.search">
+        <div v-for="(storage, config) in storages" v-on:click.prevent="$root.$broadcast('select-item', {storage: storage})" class="storage">
+            <span class="glyphicon glyphicon-folder-close"></span>
+            <h6>{{config.label || storage}}</h6>
+            <p class="text-muted">{{$interpolate(t('adapters.' + config.adapter))}}</p>
+        </div>
+    </template>
 </div>

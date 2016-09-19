@@ -3,6 +3,18 @@ module.exports = {
         title: {
             en: 'Explorer',
             de: 'Explorer'
+        },
+        search: {
+            en: 'Search',
+            de: 'Suchen'
+        },
+        minimize: {
+            en: 'Minimize',
+            de: 'Verkleinern'
+        },
+        maximize: {
+            en: 'Maximize',
+            de: 'Maximieren'
         }
     },
     login: {
@@ -35,6 +47,16 @@ module.exports = {
         category: {
             en: 'Category',
             de: 'Kategorie'
+        }
+    },
+    adapters: {
+        github: {
+            en: 'GitHub',
+            de: 'GitHub: {{config.username}}/{{config.repository}}'
+        },
+        entermediadb: {
+            en: 'EnterMediaDB',
+            de: 'EnterMediaDB: {{config.url}}'
         }
     },
     footer: {

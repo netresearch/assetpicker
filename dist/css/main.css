@@ -126,13 +126,13 @@ ul.tree, ul.tree ul {
     margin-top: 1em;
     margin-left: -6px; }
 
-.items-grid {
+.items-container .items-grid {
   margin: 10px -5px; }
-  .items-grid:after {
+  .items-container .items-grid:after {
     content: "";
     display: table;
     clear: both; }
-  .items-grid .item {
+  .items-container .items-grid .item {
     position: relative;
     width: 96px;
     max-height: 100px;
@@ -149,11 +149,11 @@ ul.tree, ul.tree ul {
     /* webkit (konqueror) browsers */
     -ms-user-select: none;
     /* IE10+ */ }
-    .items-grid .item:hover, .items-grid .item.selected {
+    .items-container .items-grid .item:hover, .items-container .items-grid .item.selected {
       background: #eeeeee; }
-    .items-grid .item .glyphicon {
+    .items-container .items-grid .item .glyphicon {
       font-size: 32px; }
-      .items-grid .item .glyphicon.item-ext::after {
+      .items-container .items-grid .item .glyphicon.item-ext::after {
         font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
         text-align: left;
         content: attr(data-ext);
@@ -169,7 +169,7 @@ ul.tree, ul.tree ul {
         /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
         -o-text-overflow: ellipsis;
         right: 4px; }
-    .items-grid .item .item-thumbnail {
+    .items-container .items-grid .item .item-thumbnail {
       position: absolute;
       width: 84px;
       top: 6px;
@@ -178,7 +178,7 @@ ul.tree, ul.tree ul {
       overflow: hidden;
       background-size: cover;
       background-position: center; }
-    .items-grid .item > div {
+    .items-container .items-grid .item > div {
       width: 100%;
       white-space: nowrap;
       overflow: hidden;
@@ -186,8 +186,34 @@ ul.tree, ul.tree ul {
       /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
       -o-text-overflow: ellipsis;
       /** Opera 9 & 10 **/ }
-  .items-grid .item:last-child {
+  .items-container .items-grid .item:last-child {
     margin-right: 0; }
+
+.items-container .storage {
+  position: relative;
+  padding: 15px;
+  padding-left: 72px;
+  cursor: default; }
+  .items-container .storage:first-child {
+    margin-top: 15px; }
+  .items-container .storage .glyphicon {
+    font-size: 32px;
+    position: absolute;
+    left: 22px;
+    top: 15px; }
+  .items-container .storage h6 {
+    margin: -2px 0 2px; }
+  .items-container .storage p {
+    margin: 0; }
+  .items-container .storage h6, .items-container .storage p {
+    line-height: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
+    -o-text-overflow: ellipsis; }
+  .items-container .storage:hover, .items-container .storage.selected {
+    background: #eeeeee; }
 
 .loader-progress {
   height: 4px;

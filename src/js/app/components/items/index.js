@@ -12,7 +12,8 @@ module.exports = {
         var keys = Object.keys(selection.results);
         return {
             selection: selection,
-            storage: keys.length > 1 ? null : keys[0]
+            storage: keys.length > 1 ? null : keys[0],
+            storages: require('../../config').storages
         }
     },
     events: {
