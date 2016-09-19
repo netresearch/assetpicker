@@ -14,6 +14,8 @@ module.exports = function (data) {
         name: data.name,
         type: data.type,
         extension: data.extension || (data.name.match(/\.([0-9a-z]+)$/i) || []).pop(),
-        thumbnail: data.thumbnail
+        thumbnail: data.thumbnail,
+        list: data.list,
+        query: data.query
     };
 };

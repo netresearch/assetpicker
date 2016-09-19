@@ -1,26 +1,6 @@
 var Item = require('../../../../model/item');
 var Vue = require('vue');
 
-var Terms = function () {
-    var terms = [{
-            field: 'id',
-            operator: 'matches',
-            value: '*'
-        }],
-        termsSet = false;
-    terms.hash = 'id matches "*"';
-    terms.push = function (field, operator, value) {
-        if (!termsSet) {
-            terms.pop();
-            termsSet = true;
-            terms.hash = '';
-        }
-        Array.prototype.push.call(terms, {field: field, operator: operator, value: value});
-        terms.hash += field + ' ' + operator + ' "' + value + '";';
-    };
-    return terms;
-};
-
 module.exports = {
     template: require('./template.html'),
     extends: require('../base'),
@@ -57,49 +37,68 @@ module.exports = {
         }
     },
     watch: {
-        'appConfig.pick': function (config) {
-            // Reload latest items when extensions have changed
-            var oldTerms = this.assembleTerms();
-            this.extensions = config.extensions;
-            var newTerms = this.assembleTerms();
-            if (oldTerms.hash !== newTerms.hash && this.results[oldTerms.hash]) {
-                var items = this.results[oldTerms.hash].items;
-                while (items.length > 0) {
-                    items.pop();
+        'appConfig.pick': {
+            handler: function (config) {
+                // Reload latest items when extensions have changed
+                var oldTerms = this.assembleTerms();
+                this.extensions = config.extensions;
+                var newTerms = this.assembleTerms();
+                if (oldTerms.hash !== newTerms.hash && this.results[oldTerms.hash]) {
+                    var items = this.results[oldTerms.hash].items;
+                    while (items.length > 0) {
+                        items.pop();
+                    }
+                    this.loadAssets(items);
                 }
-                this.loadAssets(items);
-            }
+            },
+            immediate: true
         }
     },
     methods: {
         assembleTerms: function () {
-            var terms = new Terms();
+            var terms = [],
+                pushTerm = function (field, operator, value) {
+                    terms.push({field: field, operator: operator, value: value});
+                };
             if (this.category) {
-                terms.push('category', 'exact', this.category.id);
+                pushTerm('category', 'exact', this.category.id);
             }
             if (this.search) {
-                terms.push('description', 'freeform', this.search);
+                pushTerm('description', 'freeform', this.search);
             }
             if (this.extensions && this.extensions.length) {
-                terms.push('fileformat', 'matches', this.extensions.join('|'))
+                pushTerm('fileformat', 'matches', this.extensions.join('|'))
+            }
+            if (!terms.length) {
+                pushTerm('id', 'matches', '*');
             }
             return terms;
         },
         loadAssets: function (items) {
             var terms = this.assembleTerms();
-            var result = this.results[terms.hash];
+            var query = JSON.stringify(terms);
+            var result = this.results[query];
             if (!result) {
                 result = {page: 0, pages: 0, items: items || []};
                 result.items.total = result.items.total || result.items.length;
-                this.results[terms.hash] = result;
-            } else if (result.page === result.pages) {
-                return this.$promise(function (resolve) {
-                    resolve(result);
-                });
+                this.results[query] = result;
+            } else {
+                if (items && result.items !== items) {
+                    Array.prototype.push.apply(items, result.items);
+                    items.total = result.items.total;
+                    items.loading = result.items.loading;
+                    items.query = query;
+                    result.items = items;
+                }
+                if (result.page === result.pages) {
+                    return this.$promise(function (resolve) {
+                        resolve(result);
+                    });
+                }
             }
 
             result.items.loading = true;
-            result.items.hash = terms.hash;
+            result.items.query = query;
 
             return this.http.post(
                 'module/asset/search',
@@ -111,7 +110,7 @@ module.exports = {
                     }
                 }
             ).then((function(response) {
-                if (result.items.hash === terms.hash) {
+                if (result.items.query === query) {
                     result.page = parseInt(response.data.response.page);
                     result.pages = parseInt(response.data.response.pages);
                     result.items.total = parseInt(response.data.response.totalhits);
@@ -119,6 +118,7 @@ module.exports = {
                     response.data.results.forEach((function (asset) {
                         var item = this.createItem({
                             id: asset.id,
+                            query: query,
                             type: asset.isfolder ? 'file' : 'dir',
                             name: asset.primaryfile || asset.name,
                             title: asset.assettitle,

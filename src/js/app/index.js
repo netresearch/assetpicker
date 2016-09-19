@@ -67,6 +67,38 @@ function create() {
             }
         },
         translations: require('./locales'),
+        computed: {
+            summary: function () {
+                var summary = {numItems: 0, numStorages: 0},
+                    getLength = function (items) {
+                        if (items.total) {
+                            var length = items.total;
+                            for (var i = 0, l = items.length; i < l; i++) {
+                                if (items[i].query !== items.query) {
+                                    length++;
+                                }
+                            }
+                            return length;
+                        } else {
+                            return items.length;
+                        }
+                    };
+                if (this.selection.search) {
+                    for (var key in this.selection.results) {
+                        if (this.selection.results.hasOwnProperty(key)) {
+                            var l = getLength(this.selection.results[key]);
+                            summary.numItems += l;
+                            if (l > 0) {
+                                summary.numStorages++;
+                            }
+                        }
+                    }
+                } else {
+                    summary.numItems = getLength(this.selection.items);
+                }
+                return summary;
+            }
+        },
         components: {
             storage: require('./components/storage'),
             'items': require('./components/items'),

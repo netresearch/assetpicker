@@ -302,5 +302,15 @@ body {
   border-top: 1px solid #e2e2e2;
   bottom: 0;
   width: 100%;
-  padding: 10px 15px;
-  text-align: right; }
+  padding: 10px 15px; }
+  #footer span {
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left: 15px;
+    position: relative;
+    top: 4px; }
+    #footer span:first-child {
+      margin-left: 0; }
+  #footer button {
+    float: right;
+    margin-left: 15px; }

@@ -91,5 +91,18 @@ body {
     bottom:0;
     width:100%;
     padding:10px 15px;
-    text-align: right;
+    span {
+        white-space: nowrap;
+        overflow:hidden;
+        margin-left:15px;
+        position: relative;
+        top:4px;
+        &:first-child {
+            margin-left:0;
+        }
+    }
+    button {
+        float:right;
+        margin-left:15px;
+    }
 }

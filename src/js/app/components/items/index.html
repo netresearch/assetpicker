@@ -12,15 +12,17 @@
             </template>
         </template>
     </div>
-    <div v-if="storage || selection.search">
-        <h5 v-if="selection.search">{{storage}}</h5>
-        <div :is="layout" :items="selection.items" :storage="storage"></div>
+    <div v-else>
+        <template v-if="storage || selection.search">
+            <h5 v-if="selection.search && numStorages > 1">{{storages[storage].label || storage}}</h5>
+            <div :is="layout" v-ref:items :items="selection.items" :storage="storage"></div>
+        </template>
+        <template v-else>
+            <div v-for="(storage, config) in storages" v-on:click.prevent="$root.$broadcast('select-item', {storage: storage})" class="storage">
+                <span class="glyphicon glyphicon-folder-close"></span>
+                <h6>{{config.label || storage}}</h6>
+                <p class="text-muted">{{$interpolate(t('adapters.' + config.adapter))}}</p>
+            </div>
+        </template>
     </div>
-    <template v-if="!storage && !selection.search">
-        <div v-for="(storage, config) in storages" v-on:click.prevent="$root.$broadcast('select-item', {storage: storage})" class="storage">
-            <span class="glyphicon glyphicon-folder-close"></span>
-            <h6>{{config.label || storage}}</h6>
-            <p class="text-muted">{{$interpolate(t('adapters.' + config.adapter))}}</p>
-        </div>
-    </template>
 </div>

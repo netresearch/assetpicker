@@ -41,10 +41,14 @@
         </div>
         <handle class="handle" v-ref:handle></handle>
         <div id="stage">
-            <items></items>
+            <items v-ref:items></items>
         </div>
     </div>
     <div id="footer">
+        <span v-if="selection.search">{{$interpolate(t($refs.items.storage ? 'footer.results' : 'footer.resultsOverview'))}}</span>
+        <span v-if="!selection.search && $refs.items && $refs.items.storage">{{$interpolate(t('footer.items'))}}</span>
+        <span v-if="!selection.search && $refs.items && !$refs.items.storage">{{$interpolate(t('footer.storages'))}}</span>
+        <span v-if="picked.length">{{$interpolate(t('footer.picked'))}}</span>
         <button class="btn btn-sm btn-primary" :disabled="!picked.length" v-on:click="pick">{{t('footer.pick')}}</button>
         <button class="btn btn-sm btn-default" v-on:click="cancel">{{t('footer.cancel')}}</button>
     </div>

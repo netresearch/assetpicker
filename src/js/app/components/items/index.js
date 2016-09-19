@@ -9,11 +9,13 @@ module.exports = {
     },
     data: function () {
         var selection = require('../../model/selection');
-        var keys = Object.keys(selection.results);
+        var storages = require('../../config').storages;
+        var keys = Object.keys(storages);
         return {
             selection: selection,
             storage: keys.length > 1 ? null : keys[0],
-            storages: require('../../config').storages
+            storages: storages,
+            numStorages: keys.length
         }
     },
     events: {
