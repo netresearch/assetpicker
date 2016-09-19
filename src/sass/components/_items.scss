@@ -1,5 +1,13 @@
 .items-container {
     @import "items-grid";
+    .feedback {
+        position: absolute;
+        top:50%;
+        margin-top:-10px;
+        width:100%;
+        text-align: center;
+        color:$gray-light;
+    }
     .storage {
         &:first-child {
             margin-top:15px;

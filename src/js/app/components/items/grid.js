@@ -18,9 +18,6 @@ module.exports = {
             computed: {
                 selected: function() {
                     return this.picked.contains(this.item);
-                },
-                visible: function () {
-                    return this.item.type !== 'file' || this.picked.isAllowed(this.item);
                 }
             },
             detached: function() {

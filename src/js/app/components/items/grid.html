@@ -1,6 +1,6 @@
 <div class="items-grid">
     <item inline-template v-for="item in items | limitBy limit" :item="item" track-by="id">
-        <div v-on:click.prevent="select" v-if="visible" v-on:dblclick.prevent="open" class="item{{selected ? ' selected' : ''}}">
+        <div v-on:click.prevent="select" v-on:dblclick.prevent="open" class="item{{selected ? ' selected' : ''}}">
             <span v-if="item.type !== 'file'" class="glyphicon glyphicon-folder-open{{item.type !== 'dir' ? ' item-ext' : ''}}" data-ext="{{t('types.'+item.type)}}"></span>
             <span v-if="item.type === 'file'" class="glyphicon glyphicon-file item-ext" data-ext="{{item.extension}}"></span>
             <div v-if="item.thumbnail" class="item-thumbnail" v-bind:style="{backgroundImage: 'url(' + item.thumbnail + ')'}"></div>

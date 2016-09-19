@@ -63,7 +63,8 @@ function create() {
                 picked: require('./model/pick'),
                 selection: require('./model/selection'),
                 numStorages: Object.keys(config.storages).length,
-                maximized: false
+                maximized: false,
+                loading: 0 // In/decreased by components/loader.js
             }
         },
         translations: require('./locales'),
@@ -74,15 +75,15 @@ function create() {
                         if (items.total) {
                             var length = items.total;
                             for (var i = 0, l = items.length; i < l; i++) {
-                                if (items[i].query !== items.query) {
+                                if (items[i].query !== items.query && this.visible(items[i])) {
                                     length++;
                                 }
                             }
                             return length;
                         } else {
-                            return items.length;
+                            return items.filter(this.visible).length;
                         }
-                    };
+                    }.bind(this);
                 if (this.selection.search) {
                     for (var key in this.selection.results) {
                         if (this.selection.results.hasOwnProperty(key)) {
@@ -124,6 +125,9 @@ function create() {
             }
         },
         methods: {
+            visible: function (item) {
+                return item.type !== 'file' || this.picked.isAllowed(item);
+            },
             setPickConfig: function (config) {
                 this.config.pick = config;
             },

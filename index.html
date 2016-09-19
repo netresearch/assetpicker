@@ -45,10 +45,19 @@
         </div>
     </div>
     <div id="footer">
-        <span v-if="selection.search">{{$interpolate(t($refs.items.storage ? 'footer.results' : 'footer.resultsOverview'))}}</span>
-        <span v-if="!selection.search && $refs.items && $refs.items.storage">{{$interpolate(t('footer.items'))}}</span>
+        <template v-if="selection.search">
+            <span v-if="loading">{{t('footer.searching')}}</span>
+            <span v-if="summary.numItems">{{$interpolate(t($refs.items.storage ? 'footer.results' : 'footer.resultsOverview'))}}</span>
+        </template>
+        <template v-if="!selection.search && $refs.items && $refs.items.storage">
+            <span v-if="loading && !summary.numItems">{{t('footer.loading')}}</span>
+            <span v-if="summary.numItems">{{$interpolate(t('footer.items'))}}</span>
+        </template>
+
         <span v-if="!selection.search && $refs.items && !$refs.items.storage">{{$interpolate(t('footer.storages'))}}</span>
+
         <span v-if="picked.length">{{$interpolate(t('footer.picked'))}}</span>
+
         <button class="btn btn-sm btn-primary" :disabled="!picked.length" v-on:click="pick">{{t('footer.pick')}}</button>
         <button class="btn btn-sm btn-default" v-on:click="cancel">{{t('footer.cancel')}}</button>
     </div>

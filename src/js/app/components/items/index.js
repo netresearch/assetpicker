@@ -15,7 +15,8 @@ module.exports = {
             selection: selection,
             storage: keys.length > 1 ? null : keys[0],
             storages: storages,
-            numStorages: keys.length
+            numStorages: keys.length,
+            picked: require('../../model/pick')
         }
     },
     events: {
