@@ -51,7 +51,6 @@ module.exports = {
         return {
             category: null,
             search: null,
-            selection: require('../../../../model/selection'),
             items: null,
             results: {},
             extensions: null
@@ -183,10 +182,9 @@ module.exports = {
         'category-select-item': function (tree) {
             this.category = tree.item;
             this.search = null;
-            this.selection.items = [];
-            this.loadAssets().then(function (response) {
+            this.loadAssets(tree.items).then(function (response) {
                 if (tree.selected) {
-                    this.selection.items = response.items;
+                    this.$dispatch('select-item', tree);
                 }
             }.bind(this));
         }
