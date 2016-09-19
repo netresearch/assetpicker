@@ -83,7 +83,7 @@ module.exports = {
                             function(response) {
                                 if (response.options.validate) {
                                     response.reload = function () {
-                                        return request(options).then(resolve);
+                                        return request(options).then(resolve, reject);
                                     };
                                     response.isValid = function (isValid) {
                                         if (isValid === false) {
