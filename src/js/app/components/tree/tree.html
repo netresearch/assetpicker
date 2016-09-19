@@ -14,7 +14,7 @@
 </template>
 <template v-else>
     <template v-if="item">
-        <span v-if="items && items.filterBy('type', 'dir').length" class="glyphicon glyphicon glyphicon-triangle-{{open ? 'bottom' : 'right'}}" v-on:click="open = !open"></span>
+        <span v-if="items && items.filterBy('type', types).length" class="glyphicon glyphicon glyphicon-triangle-{{open ? 'bottom' : 'right'}}" v-on:click="open = !open"></span>
         <span class="item{{selected ? ' selected' : ''}}" v-on:click="select">
         <span class="glyphicon glyphicon-folder-close"></span>
             {{item.name}}
@@ -22,8 +22,8 @@
     </template>
     <div v-show="open || !item">
         <ul v-if="open || !item || fetch" class="{{item ? '' : 'tree'}}">
-            <li v-for="item in items.filterBy('type', 'dir')">
-                <tree :item="item" :name="name" :fetch="fetch"></tree>
+            <li v-for="item in items.filterBy('type', types)">
+                <tree :item="item" :name="name" :fetch="fetch" :types="types"></tree>
             </li>
         </ul>
     </div>

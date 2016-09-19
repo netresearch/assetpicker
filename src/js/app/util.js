@@ -7,9 +7,10 @@ Vue.filter('encodeURIComponent', function(data) {
 });
 
 Array.prototype.filterBy = function (key, value) {
+    var values = value.indexOf ? value : [value];
     return this.filter(function(arrayValue) {
         if (typeof arrayValue === "object") {
-            return arrayValue[key] == value;
+            return values.indexOf(arrayValue[key]) > -1;
         }
         return false;
     });

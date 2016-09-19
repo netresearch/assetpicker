@@ -23,6 +23,20 @@ module.exports = {
             de: 'Benutzername oder Passwort sind falsch'
         }
     },
+    types: {
+        file: {
+            en: 'File',
+            de: 'Datei'
+        },
+        dir: {
+            en: 'Directory',
+            de: 'Verzeichnis'
+        },
+        category: {
+            en: 'Category',
+            de: 'Kategorie'
+        }
+    },
     footer: {
         pick: {
             en: 'Select',

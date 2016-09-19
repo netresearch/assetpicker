@@ -13,6 +13,12 @@ Vue.component('tree', {
         fetch: Boolean,
         entryPoint: String,
         main: Boolean,
+        types: {
+            type: Array,
+            default: function() {
+                return ['dir']
+            }
+        },
         items: {
             type: Array,
             default: function () {
