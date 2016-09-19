@@ -2,7 +2,8 @@ module.exports = {
     template: require('./template.html'),
     props: {
         failure: Boolean,
-        username: String
+        username: String,
+        hint: String
     },
     data: function() {
         return {

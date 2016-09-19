@@ -2,15 +2,14 @@
     <div class="panel-heading">
         <h3 class="panel-title">{{t('login.login')}}</h3>
     </div>
+    <div v-if="hint" class="panel-footer">{{{hint}}}</div>
     <div class="panel-body">
         <form v-on:submit.prevent="submit(username, password)">
             <div v-if="failure" class="alert alert-danger" role="alert">{{t('login.failure')}}</div>
             <div class="form-group">
-                <label for="loginUsername">{{t('login.username')}}</label>
                 <input v-model="username" type="text" class="form-control" id="loginUsername" placeholder="{{t('login.username')}}">
             </div>
             <div class="form-group">
-                <label for="loginPassword">{{t('login.password')}}</label>
                 <!-- It's not possible to get the password via javascript in chrome inside iframes (http://stackoverflow.com/a/38269071), so trick off auto complete -->
                 <input type="password" style="position:absolute;left:-200px;top:0;" tabindex="-1">
                 <input v-model="password" type="password" class="form-control" id="loginPassword" placeholder="{{t('login.password')}}">

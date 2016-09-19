@@ -140,6 +140,9 @@ module.exports = {
                     el: this.$el.appendChild(document.createElement('div')),
                     parent: this
                 });
+                if (this.config.loginHint) {
+                    login.hint = this.config.loginHint;
+                }
                 this.currentLogin = login.login(authenticate.bind(this)).then((function () {
                     this.loginDone = true;
                     this.$parent.open = open;

@@ -24,6 +24,8 @@ if (window.parent && window.parent !== window) {
 } else {
     config.storages = {
         entermediaDB: {
+            label: 'EnterMediaDB',
+            loginHint: 'Username: admin<br>Password: admin',
             adapter: 'entermediadb',
             url: 'http://em9.entermediadb.org/openinstitute',
             proxy: true
@@ -42,7 +44,21 @@ function create() {
         el: '#app',
         data: function () {
             return {
-                locale: 'de',
+                locale: (function () {
+                    var lang, available = ['en', 'de'];
+                    if (config.language === 'auto') {
+                        lang = (navigator.language || navigator.userLanguage).replace(/^([a-z][a-z]).+$/, '$1');
+                    } else {
+                        lang = config.language;
+                    }
+                    if (available.indexOf(lang) < 0) {
+                        lang = available[0];
+                        if (config.language !== 'auto') {
+                            console.warn('Configured language %s is not available', config.language);
+                        }
+                    }
+                    return lang;
+                })(),
                 config: config,
                 picked: require('./model/pick'),
                 selection: require('./model/selection'),

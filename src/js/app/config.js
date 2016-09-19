@@ -23,5 +23,6 @@ module.exports = {
         limit: 1,
         types: ['file'],
         extensions: []
-    }
+    },
+    language: 'auto'
 };

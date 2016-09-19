@@ -51,12 +51,12 @@ module.exports = {
     },
     adapters: {
         github: {
-            en: 'GitHub',
-            de: 'GitHub: {{config.username}}/{{config.repository}}'
+            en: 'Repository {{config.username}}/{{config.repository}} on GitHub',
+            de: 'Repository {{config.username}}/{{config.repository}} auf GitHub'
         },
         entermediadb: {
-            en: 'EnterMediaDB',
-            de: 'EnterMediaDB: {{config.url}}'
+            en: 'EnterMediaDB on {{config.url}}',
+            de: 'EnterMediaDB auf {{config.url}}'
         }
     },
     footer: {
