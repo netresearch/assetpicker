@@ -152,6 +152,7 @@ module.exports = {
         'search': function (sword, results) {
             this.search = sword;
             this.loadAssets(results);
+            return true;
         },
         'category-load-items': function (tree) {
             this.http.post(
@@ -170,7 +171,7 @@ module.exports = {
                 }
             ).then(function (response) {
                 tree.items = response.data.results.map((function(category) {
-                    category.type = 'dir';
+                    category.type = 'category';
                     return this.createItem(category);
                 }).bind(this));
             });
