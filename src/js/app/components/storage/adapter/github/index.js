@@ -20,10 +20,23 @@ module.exports = {
                     }
                 ).then(
                     function(response) {
-                        tree.items = response.data.map((function (file) {
+                        var items = response.data.map((function (file) {
                             file.id = file.path.replace(/^\/+/, '');
                             return this.createItem(file);
                         }).bind(this));
+                        tree.items = items.sort(function (a, b) {
+                            if (a.type === 'dir' && b.type !== 'dir') {
+                                return -1;
+                            } else if (a.type !== 'dir' && b.type === 'dir') {
+                                return 1;
+                            }
+                            var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+                            if (nameA < nameB)
+                                return -1;
+                            if (nameA > nameB)
+                                return 1;
+                            return 0;
+                        });
                     },
                     (function () {
                         localStorage.removeItem('github_token');
