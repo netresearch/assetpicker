@@ -3,6 +3,7 @@ var Vue = require('vue');
 var Item = require('../../../model/item');
 
 var extend = require('extend');
+var fecha = require('fecha');
 
 Vue.http.interceptors.push(function(options, next) {
     next(function(response) {
@@ -123,7 +124,13 @@ module.exports = {
             return api;
         }
     },
+    dateFormat: undefined,
     methods: {
+        parseDate: function (date) {
+            if (date) {
+                return fecha.parse(date, this.$options.dateFormat);
+            }
+        },
         createItem: function (data) {
             data.storage = this.storage;
             return new Item(data);

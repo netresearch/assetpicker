@@ -1,6 +1,7 @@
 var Item = require('../../../../model/item');
 var Vue = require('vue');
 
+
 module.exports = {
     template: require('./template.html'),
     extends: require('../base'),
@@ -54,6 +55,7 @@ module.exports = {
             immediate: true
         }
     },
+    dateFormat: 'YYYY-MM-DDTHH:mm:ss',
     methods: {
         assembleTerms: function () {
             var terms = [],
@@ -120,14 +122,17 @@ module.exports = {
                             id: asset.id,
                             query: query,
                             type: asset.isfolder ? 'file' : 'dir',
-                            name: asset.primaryfile || asset.name,
+                            name: asset.assettitle || asset.name || asset.primaryfile,
                             title: asset.assettitle,
                             extension: asset.fileformat.id,
+                            created: this.parseDate(asset.assetcreationdate || asset.assetaddeddate),
+                            modified: this.parseDate(asset.assetmodificationdate),
                             thumbnail: this.url(
                                 '/emshare/views/modules/asset/downloads/preview/thumb/' +
                                 encodeURI(asset.sourcepath) + '/thumb.jpg',
                                 this.config.url
-                            )
+                            ),
+                            data: asset
                         });
                         result.items.push(item);
                     }).bind(this));
@@ -174,8 +179,12 @@ module.exports = {
                 }
             ).then(function (response) {
                 tree.items = response.data.results.map((function(category) {
-                    category.type = 'category';
-                    return this.createItem(category);
+                    return this.createItem({
+                        id: category.id,
+                        name: category.name,
+                        type: 'category',
+                        data: category
+                    });
                 }).bind(this));
             });
         },

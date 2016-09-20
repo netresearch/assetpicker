@@ -15,6 +15,7 @@
   "dependencies": {
     "escape-string-regexp": "^1.0.5",
     "extend": "^3.0.0",
+    "fecha": "^2.3.0",
     "insert-css": "^1.0.0",
     "vue": "^1.0.0",
     "vue-i18n-mixin": "^0.1.0",

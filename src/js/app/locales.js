@@ -49,6 +49,40 @@ module.exports = {
             de: 'Kategorie'
         }
     },
+    descriptor: {
+        type: {
+            en: 'Item type',
+            de: 'Elementtyp'
+        },
+        path: {
+            en: 'Path',
+            de: 'Pfad'
+        },
+        id: {
+            en: 'ID',
+            de: 'ID'
+        },
+        dimensions: {
+            en: 'Dimensions',
+            de: 'Abmessungen'
+        },
+        created: {
+            en: 'Creation date',
+            de: 'Erstellungsdatum'
+        },
+        modified: {
+            en: 'Modification date',
+            de: 'Änderungsdatum'
+        },
+        length: {
+            en: 'Length',
+            de: 'Länge'
+        },
+        pages: {
+            en: 'Pages',
+            de: 'Seiten'
+        }
+    },
     adapters: {
         github: {
             en: 'Repository {{config.username}}/{{config.repository}} on GitHub',
@@ -105,6 +139,13 @@ module.exports = {
         resultsOverview: {
             en: '{{$interpolate(t("footer.results")) + " in " + summary.numStorages + " storage" + (summary.numStorages !== 1 ? "s" : "")}}',
             de: '{{$interpolate(t("footer.results")) + " in " + summary.numStorages + " Speicher" + (summary.numStorages !== 1 ? "n" : "")}}'
+        }
+    },
+    date: {
+        // https://github.com/taylorhakes/fecha#formatting-tokens
+        full: {
+            en: 'MM/DD/YYYY HH:mm',
+            de: 'DD.MM.YYYY HH:mm'
         }
     }
 };

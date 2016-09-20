@@ -21,8 +21,12 @@ module.exports = {
                 ).then(
                     function(response) {
                         var items = response.data.map((function (file) {
-                            file.id = file.path.replace(/^\/+/, '');
-                            return this.createItem(file);
+                            return this.createItem({
+                                id: file.path.replace(/^\/+/, ''),
+                                name: file.name,
+                                type: file.type,
+                                data: file
+                            });
                         }).bind(this));
                         tree.items = items.sort(function (a, b) {
                             if (a.type === 'dir' && b.type !== 'dir') {

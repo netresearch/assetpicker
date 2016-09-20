@@ -11,11 +11,13 @@ module.exports = function (data) {
     return item = {
         id: data.id,
         storage: data.storage,
+        query: data.query,
         name: data.name,
         type: data.type,
-        extension: data.extension || (data.name.match(/\.([0-9a-z]+)$/i) || []).pop(),
+        extension: data.type === 'file' ? data.extension || (data.name.match(/\.([0-9a-z]+)$/i) || []).pop() : undefined,
         thumbnail: data.thumbnail,
-        list: data.list,
-        query: data.query
+        created: data.created,
+        modified: data.modified,
+        data: data.data
     };
 };
