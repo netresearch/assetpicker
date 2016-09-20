@@ -7,7 +7,7 @@ var scriptURL = (function() {
     return scripts[scripts.length - 1].src;
 })();
 
-window.AssetPicker = require('../shared/util/createClass')({
+module.exports = require('../shared/util/createClass')({
     construct: function(config, options) {
         options = extend(
             true,

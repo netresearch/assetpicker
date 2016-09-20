@@ -25,7 +25,8 @@ bundles.forEach(function(bundle) {
     gulp.task('js-' + bundle, function() {
         browserify({
             entries: 'src/js/' + bundle + '/index.js',
-            debug: true
+            debug: true,
+            standalone: 'AssetPicker' + (bundle !== 'picker' ? bundle[0].toUpperCase() + bundle.substr(1) : '')
         })
             .transform(partialify)
             .bundle()

@@ -133,8 +133,8 @@ module.exports = {
             de: '{{numStorages}} Speicher'
         },
         picked: {
-            en: '{{picked.length}} item{{picked.length !== 1 : "s" : ""}} picked',
-            de: '{{picked.length}} Element{{picked.length !== 1 : "e" : ""}} ausgewählt'
+            en: '{{picked.length}} item{{picked.length !== 1 ? "s" : ""}} picked',
+            de: '{{picked.length}} Element{{picked.length !== 1 ? "e" : ""}} ausgewählt'
         },
         resultsOverview: {
             en: '{{$interpolate(t("footer.results")) + " in " + summary.numStorages + " storage" + (summary.numStorages !== 1 ? "s" : "")}}',
