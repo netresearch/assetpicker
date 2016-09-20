@@ -34,7 +34,6 @@ module.exports = Vue.extend({
                 return lang;
             })(),
             config: config,
-            messaging: this.$options.messaging,
             picked: require('../../model/pick'),
             selection: require('../../model/selection'),
             numStorages: Object.keys(config.storages).length,
@@ -81,8 +80,8 @@ module.exports = Vue.extend({
         handle: require('../handle')
     },
     created: function () {
-        if (this.messaging) {
-            this.messaging.registerServer('app', this);
+        if (this.$options.messaging) {
+            this.$options.messaging.registerServer('app', this);
             this.callPicker('_trigger', 'ready');
         }
     },
@@ -107,10 +106,10 @@ module.exports = Vue.extend({
             this.config.pick = config;
         },
         callPicker: function(method) {
-            if (this.messaging) {
+            if (this.$options.messaging) {
                 var args = Array.prototype.slice.call(arguments, 0);
                 args[0] = 'picker.' + args[0];
-                return this.messaging.call.apply(this.messaging, args);
+                return this.$options.messaging.call.apply(this.$options.messaging, args);
             }
         },
         cancel: function() {
