@@ -3,7 +3,7 @@
 AssetPicker is a free asset or file picker designed to be easily included into web application interfaces. It has a file abstraction layer allowing adapters to connect to any remote storage, be it cloud storages like Amazon S3, Google Drive or Dropbox or assets from a custom web application server. In opposite to other file managers or pickers, AssetPicker is suitable for hierarchical as well as associative file storages.
 
 ## How it works
-AssetPicker consists of two bundles: The picker (`AssetPicker` in `picker.min.js`) and the app (`AssetPickerApp` in `app.min.js`). The picker is a lightweight script without any dependencies that will add it's listeners to elements matching the configured [selector](options). When one of these was clicked it'll setup a modal from a template, inject the styles for it into the header (both, template and style are [customizable](options)), loads the app into and iframe in the modal and passes it the [config](config). The communication with the iframe is done with [cross window messaging](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) so it is CORS aware.
+AssetPicker consists of two bundles: The picker (`AssetPicker` in `picker.min.js`) and the app (`AssetPickerApp` in `app.min.js`). The picker is a lightweight script without any dependencies that will add it's listeners to elements matching the configured [selector](#options). When one of these was clicked it'll setup a modal from a template, inject the styles for it into the header (both, template and style are [customizable](#options)), loads the app into and iframe in the modal and passes it the [config](#config). The communication with the iframe is done with [cross window messaging](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) so it is CORS aware.
  
  Unless you want to customize the app itself, the picker will be the only API you'll have to use. 
 
@@ -60,7 +60,7 @@ new AssetPicker(config); /* or */ new AssetPicker(config, options);
 key | type | default | description
 --- | --- | --- | ---
 **title** | string | `"AssetPicker"` | The title that will be shown in the navigation header
-**storages** | object | - | The storages that should be available, each entry must be an object, which will be passed to the [storage adapter](Adapters)
+**storages** | object | - | The storages that should be available, each entry must be an object, which will be passed to the [storage adapter](#adapters)
 **storages.xyz.adapter** | string | - | Required: name of the adapter to use (currently `github` and `entermediadb` possible)
 **storages.xyz.label** | string | key of storage | Optional: Label for the storage in navigation bar and search results 
 **storages.xyz.proxy** | bool|object | - | Controls proxy configuration for this storage (true: Use proxy with global configuration, false: disable the proxy - even when enabled for all storages, object: Use proxy with custom configuration)
@@ -69,7 +69,11 @@ key | type | default | description
 **proxy.all** | bool | `false` | Whether to enable the proxy for all storages (unless they disable it)
 **language** | string | `"auto"` | Language for the interface - use "auto" to detect the language from the browser. Possible languages are `de` and `en` for now.
 **debug** | boolean | `false` | En-/disables Vue.config.debug
-**github.token** | string | - | Optional token for the [GitHub adapter](GitHub)
+**github.token** | string | - | Optional token for the [GitHub adapter](#github)
+**picker** | object | {} | Default configuration to control what can be picked - overriden by [buttons attributes](#buttons)
+**picker.limit** | number | `1` | Maximum of assets that can be picked (0 for unlimited)
+**picker.types** | array | `['file']` | Asset types allowed to be picked
+**picker.extensions** | array | `[]` | File extensions allowed to be picked (empty means all)
 
 ### options
 
@@ -79,8 +83,26 @@ key | type | default | description
 **modal** | object | {} | Options for the modal
 **modal.src** | string | url of the picker script popped by two path parts (f.e. http://example.com/dist when picker script url is http://example.com/dist/js/picker.min.js) | URL to the AssetPicker application
 **modal.template** | string | see [here](src/js/picker/components/modal/index.html) | Template for the modal - requires an outer div with an iframe somewhere nested
-**modal.css* | string | see [here](src/js/picker/components/modal/index.css) | CSS injected before any other CSS into head
+**modal.css** | string | see [here](src/js/picker/components/modal/index.css) | CSS injected before any other CSS into head
 **modal.openClassName** | string | `'assetpicker-modal-open'` | Class to add/remove to the modal template outer div on opening/closing
+
+### Buttons
+Data attributes on the buttons can control what may be picked and what should happen after something was picked.
+
+```
+<button
+    rel="assetpicker" 
+    data-limit="0" 
+    data-exts="jpeg,jpg,png">Select multiple images</button>
+```
+
+attribute | description
+--- | ---
+**data-limit** | Number of elements allowed to be picked (0 for no limit) - overrides [`config.picker.limit`](#config)
+**data-exts** | Comma separated list of file extensions allowed to be picked (empty for any) - overrides [`config.picker.extensions`](#config)
+**data-types** | Comma separated list of element types allowed to be picked (currently `dir`, `file` and `category` are supported by the adapters) - overrides [`config.picker.extensions`](#config)
+**data-name** | Name of an hidden input element which should be created right before the button with the JSON representation of the picked elements as value
+**data-target** | CSS selector of one or more elements to which the JSON representation of the picked elements will be written - when one of these elements is an input, it's value will be set, otherwise it's innerHTML
 
 ## Adapters
 ### GitHub
@@ -131,7 +153,110 @@ new AssetPicker({
 ```
 
 ### Register your own adapter
-Coming soon
+
+Currently you need an npm development environment including browserify to add your own adapters. Once that is accomplished, adding an adapter is easy - see below example for how to hook into AssetPickerApp.
+
+## Build it your own
+
+You'll need a npm app built with browserify to customize the app. AssetPickerApp is using [Vue.js] - so you might consider reading it's [docs](http://vuejs.org/guide/) before.
+
+1. Initialize the app
+    ```bash
+    npm init
+    npm install --save assetpicker
+    ```
+2. Customize the AssertPickerApp or it's compontents
+    
+    src/app.js:
+    ```javascript
+    var Storage = require('assetpicker/src/js/app/components/storage');
+    Storage.adapters.myadapter = require('./myadapter');
+    
+    var config  = require('assetpicker/src/js/app/config');
+    config.storages = {
+        myadapterstorage: {
+            adapter: 'myadapter',
+            label: 'My Adapter'
+            // ... options for myadapter
+        }
+    }
+    
+    module.exports = require('assetpicker/src/js/app');
+    ```
+3. Build an HTML page for the app:
+
+    app.html
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>AssetPicker</title>
+        <link rel="stylesheet" href="node_modules/assetpicker/dist/css/main.css"
+    </head>
+    <body>
+    <div id="app"></div>
+    <script src="dist/js/app.js"></script>
+    <script>
+       new AssetPickerApp();
+    </script>
+    </body>
+    </html>
+    ```
+
+4. Build an HTML page to which the picker should be included:
+    
+    index.html
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>AssetPicker</title>
+    </head>
+    <body>
+    <div id="app"></div>
+    <script src="node_modules/assetpicker/dist/js/picker.min.js"></script>
+    <script>
+       new AssetPicker(null, {
+            modal: {
+                 src: 'app.html'
+            }
+       });
+    </script>
+    </body>
+    </html>
+    ```
+
+5. Setup gulp or any other build tool
+
+    ```
+    npm install -g gulp
+    npm install -S browserify vinyl-source-stream
+    ```
+    
+    gulp.js
+    ```
+    var gulp = require('gulp');
+    var browserify = require('browserify');
+    var source = require('vinyl-source-stream');
+    
+    gulp.task('js', function () {
+        var b = browserify({
+            entries: './src/app.js',
+            standalone: 'AssetPickerApp',
+            debug: true
+        });
+    
+        return b.bundle()
+            .pipe(source('app.js'))
+            .pipe(gulp.dest('./dist/js/'));
+    });
+    ```
+    
+    ```
+    gulp js
+    ```
 
 ## Roadmap
 - Adapters
