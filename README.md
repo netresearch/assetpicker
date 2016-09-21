@@ -71,6 +71,17 @@ key | type | default | description
 **debug** | boolean | `false` | En-/disables Vue.config.debug
 **github.token** | string | - | Optional token for the [GitHub adapter](GitHub)
 
+### options
+
+key | type | default | description
+--- | --- | --- | ---
+**selector** | string | `'[rel="assetpicker"]'` | CSS selector for the buttons you want to act as picker
+**modal** | object | {} | Options for the modal
+**modal.src** | string | url of the picker script popped by two path parts (f.e. http://example.com/dist when picker script url is http://example.com/dist/js/picker.min.js) | URL to the AssetPicker application
+**modal.template** | string | see [here](src/js/picker/components/modal/index.html) | Template for the modal - requires an outer div with an iframe somewhere nested
+**modal.css* | string | see [here](src/js/picker/components/modal/index.css) | CSS injected before any other CSS into head
+**modal.openClassName** | string | `'assetpicker-modal-open'` | Class to add/remove to the modal template outer div on opening/closing
+
 ## Adapters
 ### GitHub
 The GitHub adapter utilizes the GitHub API to provide files and folders in a GitHub repository to AssetPicker. For this to work, you either need an GitHub API token or the user will need a GitHub account.

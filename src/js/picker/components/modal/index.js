@@ -33,8 +33,7 @@ module.exports = require('../../../shared/util/createClass')({
                 template: require('./index.html'),
                 css: require('./index.css'),
                 openClassName: 'assetpicker-modal-open',
-                src: null,
-                messagingServer: null
+                src: null
             },
             options
         );
