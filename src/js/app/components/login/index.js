@@ -16,16 +16,19 @@ module.exports = {
         },
         login: function (authenticate) {
             return this.$promise(function (resolve) {
-                this.$on('login-submit', (function (username, password) {
-                    authenticate(username, password, (function (result) {
+                var root = this.$root;
+                root.isLogin = true;
+                this.$on('login-submit', function (username, password) {
+                    authenticate(username, password, function (result) {
                         if (result) {
                             this.$remove().$destroy();
+                            root.isLogin = false;
                             resolve();
                         } else {
                             this.failure = true;
                         }
-                    }).bind(this));
-                }).bind(this));
+                    }.bind(this));
+                }.bind(this));
             });
         }
     }

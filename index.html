@@ -9,23 +9,7 @@
 <div id="app"></div>
 <script src="dist/js/app.min.js"></script>
 <script type="text/javascript">
-    if (!window.parent || window.parent === window) {
-        AssetPickerApp.config.storages = {
-            entermediaDB: {
-                label: 'EnterMediaDB',
-                loginHint: 'Username: admin<br>Password: admin',
-                adapter: 'entermediadb',
-                url: 'http://em9.entermediadb.org/openinstitute',
-                proxy: true
-            },
-            github: {
-                adapter: 'github',
-                username: 'netresearch',
-                repository: 'assetpicker'
-            }
-        };
-    }
-    AssetPickerApp.create({el: '#app'});
+    new AssetPickerApp({el: '#app'});
 </script>
 </body>
 </html>

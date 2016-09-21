@@ -58,7 +58,7 @@ gulp.task('start-server', function() {
 gulp.task('compile', ['html', 'sass', 'js']);
 gulp.task('watch', function () {
     livereload.listen();
-    gulp.watch('index.html', ['html']);
+    gulp.watch('index*.html', ['html']);
     bundles.forEach(function(bundle) {
         gulp.watch('src/js/' + bundle + '/**/*.*', ['js-' + bundle]);
     });

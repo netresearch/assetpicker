@@ -1,0 +1,61 @@
+<div v-bind:class="[loaded ? 'loaded' : '']">
+    <template v-if="config">
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" v-on:click.prevent="$broadcast('select-item', {}); selection.search = null">{{config.title || t('header.title')}}</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                    <ul class="nav navbar-nav navbar-right navbar-window-icons">
+                        <li><a v-on:click.prevent="maximized = !maximized" title="{{t('header.'+(maximized ? 'min' : 'max')+'imize')}}"><span class="minmax {{maximized ? 'min' : 'max'}}imize"></span></a></li>
+                        <li><a v-on:click.prevent="cancel" class="close-x" title="{{t('footer.cancel')}}">&times;</a></li>
+                    </ul>
+                    <div class="navbar-form navbar-right" role="search">
+                        <div class="form-group form-group-sm">
+                            <input type="text" class="form-control" v-model="selection.search" placeholder="{{t('header.search')}}" debounce="500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="loader-progress{{loading ? ' active' : ''}}"></div>
+        </nav>
+        <div id="main">
+            <div id="sidebar" :style="{width: $refs.handle.x + 'px'}">
+                <div>
+                    <storage v-for="(id, storage) in config.storages" :open="$root.numStorages === 1" :id="id" :storage="storage"></storage>
+                </div>
+            </div>
+            <handle class="handle" v-ref:handle></handle>
+            <div id="stage">
+                <div v-if="!numStorages">
+                    <div class="alert alert-warning" style="margin-top: 15px;">No storages configured</div>
+                </div>
+                <items v-ref:items></items>
+            </div>
+        </div>
+        <div id="footer">
+            <template v-if="selection.search">
+                <span v-if="loading">{{t('footer.searching')}}</span>
+                <span v-if="summary.numItems">{{$interpolate(t($refs.items.storage ? 'footer.results' : 'footer.resultsOverview'))}}</span>
+            </template>
+            <template v-if="!selection.search && $refs.items && $refs.items.storage">
+                <span v-if="loading && !summary.numItems">{{t('footer.loading')}}</span>
+                <span v-if="summary.numItems">{{$interpolate(t('footer.items'))}}</span>
+            </template>
+
+            <span v-if="!selection.search && $refs.items && !$refs.items.storage">{{$interpolate(t('footer.storages'))}}</span>
+
+            <span v-if="picked.length">{{$interpolate(t('footer.picked'))}}</span>
+
+            <button class="btn btn-sm btn-primary" :disabled="!picked.length" v-on:click="pick">{{t('footer.pick')}}</button>
+            <button class="btn btn-sm btn-default" v-on:click="cancel">{{t('footer.cancel')}}</button>
+        </div>
+    </template>
+</div>

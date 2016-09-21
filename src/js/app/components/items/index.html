@@ -4,7 +4,7 @@
     infinite-scroll-distance="10"
     infinite-scroll-listen-for-event="items-set">
     <div v-if="selection.search && !storage" class="items-search">
-        <div v-if="!$root.loading && !$root.summary.numItems" class="feedback">{{t('stage.nothingFound')}}</div>
+        <div v-if="!$root.loading && !$root.summary.numItems && !$root.isLogin" class="feedback">{{t('stage.nothingFound')}}</div>
         <template v-for="(storage, items) in selection.results">
             <template v-if="items.length">
                 <h5>{{storages[storage].label || storage}}</h5>
@@ -16,7 +16,7 @@
     <div v-else>
         <template v-if="storage || selection.search">
             <h5 v-if="selection.search && numStorages > 1">{{storages[storage].label || storage}}</h5>
-            <div v-if="!$root.loading && !$root.summary.numItems" class="feedback">{{t('stage.noItems')}}</div>
+            <div v-if="!$root.loading && !$root.summary.numItems && !$root.isLogin" class="feedback">{{t('stage.noItems')}}</div>
             <div :is="layout" :items="selection.items.filter($root.visible)" :storage="storage"></div>
         </template>
         <template v-else>
