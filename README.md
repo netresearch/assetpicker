@@ -2,6 +2,26 @@
 
 AssetPicker is a free asset or file picker designed to be easily included into web application interfaces. It has a file abstraction layer allowing adapters to connect to any remote storage, be it cloud storages like Amazon S3, Google Drive or Dropbox or assets from a custom web application server. In opposite to other file managers or pickers, AssetPicker is suitable for hierarchical as well as associative file storages.
 
+**Contents**
+* [How it works](#how-it-works)
+* [Installation](#installation)
+    * [CDN](#cdn)
+    * [npm](#npm)
+* [Configuration](#configuration)
+    * [config](#config)
+    * [options](#options)
+    * [Buttons](#buttons)
+* [Adapters](#adapters)
+    * [GitHub](#github)
+        * [Authentication](#authentication)
+        * [Configuration](#configuration-1)
+    * [EnterMediaDB](#entermediadb)
+            * [Authentication](#authentication-1)
+            * [Configuration](#configuration-2)
+    * [Register your own adapter](#register-your-own-adapter)
+* [Build it for your own](#build-it-for-your-own)
+* [Roadmap](#roadmap)
+
 ## How it works
 AssetPicker consists of two bundles: The picker (`AssetPicker` in `picker.min.js`) and the app (`AssetPickerApp` in `app.min.js`). The picker is a lightweight script without any dependencies that will add it's listeners to elements matching the configured [selector](#options). When one of these was clicked it'll setup a modal from a template, inject the styles for it into the header (both, template and style are [customizable](#options)), loads the app into and iframe in the modal and passes it the [config](#config). The communication with the iframe is done with [cross window messaging](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) so it is CORS aware.
  
@@ -133,7 +153,7 @@ new AssetPicker({
 ### EnterMediaDB
 The EnterMediaDB adapter utilizes the [EnterMediaDB](http://entermediadb.org) API to provide categories and assets to AssetPicker.
 
-### Authentication
+#### Authentication
 Authentication with EnterMediaDB API is session based and requires the user to provide his credentials to authenticate with the API. Thus you have to make sure, that the users using AssetPicker have the [permissions](http://entermediadb.org/knowledge/roles-and-permissions/) to use the API inside EnterMediaDB.
 
 #### Configuration
@@ -156,7 +176,7 @@ new AssetPicker({
 
 Currently you need an npm development environment including browserify to add your own adapters. Once that is accomplished, adding an adapter is easy - see below example for how to hook into AssetPickerApp.
 
-## Build it your own
+## Build it for your own
 
 You'll need a npm app built with browserify to customize the app. AssetPickerApp is using [Vue.js] - so you might consider reading it's [docs](http://vuejs.org/guide/) before.
 
