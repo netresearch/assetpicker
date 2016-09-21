@@ -20,7 +20,7 @@ module.exports = require('../shared/util/createClass')({
             options || {}
         );
         if (!options.modal.src) {
-            options.modal.src = scriptURL.split('/').slice(0, -3).join('/') + '/';
+            options.modal.src = scriptURL.split('/').slice(0, -2).join('/') + '/';
         }
         if (options.modal.src.match(/^https?:\/\/localhost/) || document.location.hostname === 'localhost') {
             options.modal.src += '?' + uid();
