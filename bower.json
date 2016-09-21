@@ -1,0 +1,26 @@
+{
+    "name": "assetpicker",
+    "description": "A free asset or file picker with abstraction layer allowing several adapters like GitHub, EnterMediaDB, Amazon S3, Google Drive, Dropbox etc.",
+    "keywords": [
+        "js",
+        "asset",
+        "file",
+        "picker",
+        "selector",
+        "github",
+        "entermediadb"
+    ],
+    "homepage": "http://netresearch.github.io/assetpicker",
+    "license": "MIT",
+    "moduleType": "globals",
+    "main": [
+        "scss/bootstrap.scss",
+        "dist/js/picker.min.js"
+    ],
+    "ignore": [
+        "/.*",
+        "docs"
+    ],
+    "dependencies": {
+    }
+}

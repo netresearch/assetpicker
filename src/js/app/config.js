@@ -24,5 +24,6 @@ module.exports = {
         types: ['file'],
         extensions: []
     },
-    language: 'auto'
+    language: 'auto',
+    debug: false
 };

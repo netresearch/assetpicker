@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>AssetPicker</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css">
-        <link rel="stylesheet" href="http://rawgit.com/abodelot/jquery.json-viewer/v1.1.0/json-viewer/jquery.json-viewer.css">
+        <link rel="stylesheet" href="https://rawgit.com/abodelot/jquery.json-viewer/v1.1.0/json-viewer/jquery.json-viewer.css">
         <style type="text/css">
             a.json-toggle.collapsed:before {
                 font-size: 10px;
@@ -43,13 +43,15 @@
                         label: 'AssetPicker',
                         adapter: 'github',
                         username: 'netresearch',
-                        repository: 'assetpicker'
+                        repository: 'assetpicker',
+                        loginHint: 'Login with your GitHub account (<a href="https://github.com/netresearch/assetpicker#authentication" target="_blank">won\'t be stored anywhere</a>)'
                     },
                     entermediaDB: {
                         label: 'EnterMediaDB Demo',
                         adapter: 'entermediadb',
                         url: 'http://em9.entermediadb.org/openinstitute',
-                        proxy: true
+                        proxy: true,
+                        loginHint: 'Username: admin<br>Password: admin',
                     }
                 },
                 proxy: {
@@ -139,10 +141,14 @@
         <p>The AssetPicker consists of two bundles: The <em>picker</em> and the <em>app</em>. The <em>picker</em> is a lightweight script which is to be included into the application which you want to use the picker. It prepares the stage for the app, for which it creates a customizable modal with an iframe and registers itself for the picker button based on the configured selector. When one of these buttons is clicked, it will load the app into the iframe and establish the communication with it (for which cross window messaging is used which enables you to load the script from any other domain without security problems).</p>
         <p>The <em>app</em> provides the actual user interface and functionality. It has a default configuration which will be merged with the configuration passed to the picker. The key part of this configuration are the storages, which will be mounted as top level entries on the navigation bar (and on the start screen when you use multiple storages). Each of the storages can have a separate configuration and use other <em>adapters</em>.</p>
         <p>The <em>adapters</em> abstract the access to remote storages. They can or have to be configured along with the storage configuration by which you can pass f.i. details like user ids, tokens etc. There are some shipped by default but you can also add your own adapters.</p>
+        <h4 id="adapters">Adapters</h4>
+        <hr>
+        <h5 id="github">GitHub</h5>
+        <p>The GitHub adapter utilizes the GitHub API to provide files and folders in a GitHub repository to AssetPicker. For this to work, an GitHub API token </p>
     </div>
 
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="http://rawgit.com/abodelot/jquery.json-viewer/v1.1.0/json-viewer/jquery.json-viewer.js"></script>
+    <script src="https://rawgit.com/abodelot/jquery.json-viewer/v1.1.0/json-viewer/jquery.json-viewer.js"></script>
     </body>
 </html>

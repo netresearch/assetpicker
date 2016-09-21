@@ -2,14 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AssetPicker</title>
+    <title>AssetPicker Development</title>
     <link rel="stylesheet" href="dist/css/main.css">
 </head>
 <body>
 <div id="app"></div>
 <script src="dist/js/app.min.js"></script>
 <script type="text/javascript">
-    new AssetPickerApp({el: '#app'});
+    new AssetPickerApp({
+        el: '#app',
+        config: {
+            debug: true,
+            storages: {
+                entermediaDB: {
+                    label: 'EnterMediaDB',
+                    loginHint: 'Username: admin<br>Password: admin',
+                    adapter: 'entermediadb',
+                    url: 'http://em9.entermediadb.org/openinstitute',
+                    proxy: true
+                },
+                github: {
+                    adapter: 'github',
+                    username: 'netresearch',
+                    repository: 'assetpicker'
+                }
+            }
+        }
+    });
 </script>
 </body>
 </html>
