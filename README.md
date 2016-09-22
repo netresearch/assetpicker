@@ -2,7 +2,7 @@
 
 AssetPicker is a free asset or file picker designed to be easily included into web application interfaces. It has a file abstraction layer allowing adapters to connect to any remote storage, be it cloud storages like Amazon S3, Google Drive or Dropbox or assets from a custom web application server. In opposite to other file managers or pickers, AssetPicker is suitable for hierarchical as well as associative file storages.
 
-## [Try the demo](https://netresearch.github.io/assetpicker)
+### [Try the demo](https://netresearch.github.io/assetpicker)
 
 **Manual**
 * [How it works](#how-it-works)
@@ -21,8 +21,8 @@ AssetPicker is a free asset or file picker designed to be easily included into w
         * [Authentication](#authentication)
         * [Configuration](#configuration-1)
     * [EnterMediaDB](#entermediadb)
-            * [Authentication](#authentication-1)
-            * [Configuration](#configuration-2)
+        * [Authentication](#authentication-1)
+        * [Configuration](#configuration-2)
     * [Register your own adapter](#register-your-own-adapter)
 * [Customize the app](#customize-the-app)
 * [Roadmap](#roadmap)
@@ -30,7 +30,7 @@ AssetPicker is a free asset or file picker designed to be easily included into w
 ## How it works
 AssetPicker consists of two bundles: The picker (`AssetPicker` in `picker.js`) and the app (`AssetPickerApp` in `app.js`). The picker is a lightweight script without any dependencies that will add it's listeners to elements matching the configured [selector](#options). When one of these was clicked it'll setup a modal from a template, inject the styles for it into the header (both, template and style are [customizable](#options)), loads the app into and iframe in the modal and passes it the [config](#config). The communication with the iframe is done with [cross window messaging](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) so it is CORS aware.
 
-The app reads the storages and adapters from the config and loads the adapter source scripts into the iframe, when they are used by one of the storages - thus unneeded storages don't bloat the size of the app.
+The app provides the actual user interface and functionality. It has a default configuration which will be merged with the configuration passed to the picker. The key part of this configuration are the storages, which will be mounted as top level entries on the navigation bar (and on the start screen when you use multiple storages). Each of the storages can have a separate configuration and use other adapters. It reads the storages and adapters from the config and loads the adapter source scripts into the iframe, when they are used by one of the storages - thus unneeded storages don't bloat the size of the app.
 
 Both, app and adapters are [Vue.js](https://vuejs.org) components which allows for a modern and maintainable application structure.
  

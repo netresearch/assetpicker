@@ -27,6 +27,12 @@
                 padding-left:60px;
                 margin-bottom: 30px;
             }
+            .github svg {
+                width:20px;
+                height:20px;
+                margin: -5px 0;
+                fill: currentColor;
+            }
         </style>
         <!--<script src="../dist/js/picker.js"></script>-->
         <script>
@@ -93,7 +99,14 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#features">Features</a></li>
-                    <li><a href="#principles">Principles</a></li>
+                    <li><a href="#usage">Usage</a></li>
+                    <li><a href="https://github.com/netresearch/assetpicker/blob/master/README.md">Manual</a></li>
+                    <li>
+
+                        <a class="github" href="https://github.com/netresearch/assetpicker" target="_blank" title="AssetPicker on GitHub">
+                            <svg aria-hidden="true" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -103,7 +116,7 @@
             <h2>AssetPicker</h2>
             <p>A free, easy to use, cross plattform ready asset or file picker.</p>
             <div class="btn-group">
-                <button class="btn btn-primary" rel="assetpicker" data-name="hiddenInputDefault">Try it and pick an asset</button>
+                <button id="demo" class="btn btn-primary" rel="assetpicker" data-name="hiddenInputDefault">Try it and pick an asset</button>
                 <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="#" rel="assetpicker" data-ext="js,json">JS or JSON files</a></li>
@@ -121,30 +134,37 @@
         <hr>
         <dl>
             <dt>Easy integration</dt>
-            <dd>Just include the tiny picker script (~10kb) from anywhere (f.i. a CDN) and it will care for the rest - until the pick button is clicked no additional sources will be loaded. Also it doesn't require or exclude any third party libraries to work but works in plain javascript.</dd>
+            <dd>Just include the tiny picker script (~10kb) from anywhere (f.i. a <a href="#usage">CDN</a>) and it will care for the rest - until the pick button is clicked no additional sources will be loaded. Also it doesn't require or exclude any third party libraries to work but works in plain javascript. It doesn't need any server backend, so you can easily integrate it into any web application.</dd>
             <dt>Easy usage</dt>
-            <dd>Its modern interface is based on common file selector interfaces like the Windows native</dd>
+            <dd>Its modern interface is based on common file selector interfaces like the Windows native - see the <a href="#demo">demo above</a>.</dd>
             <dt>Cross plattform support</dt>
-            <dd>AssetPicker is designed to work with assets from any source - be it cloud storages like Amazon S3, Google Drive or Dropbox or assets from a custom web application server</dd>
-            <dd>In opposite to other file managers or pickers, AssetPicker is suitable for hierarchical as well as associative file storages and you can use one or many of them.</dd>
+            <dd>AssetPicker is designed to work with assets from any source - be it cloud storages like Amazon S3, Google Drive or Dropbox or assets from a custom web application server. In opposite to other file managers or pickers, AssetPicker is suitable for hierarchical as well as associative file storages and you can use one or many of them.</dd>
+            <dd>Currently <a href="https://github.com/netresearch/assetpicker#adapters" target="_blank">adapters</a> for GitHub and EnterMediaDB are available - feel free to ask for the implementation of missing adapters by opening an <a href="https://github.com/netresearch/assetpicker/issues/new" target="_blank">issue on github</a></dd>
             <dt>Search</dt>
             <dd>AssetPicker can search recursively loaded hierarchical structures or utilize remote search endpoints. The results will be in one place.</dd>
             <dt>Authentication</dt>
-            <dd>Its platform adapters utilize a built in login system to authenticate with remote storages - no need to care about that.</dd>
+            <dd>Its platform adapters utilize a built in login system to authenticate with remote storages - <a href="https://github.com/netresearch/assetpicker#adapters">no need to care about that</a>.</dd>
             <dt>Proxy support</dt>
-            <dd>AssetPicker is directly working with the remote storages and thus requires them to support CORS. Anyway some systems don't do that and so the requests need to proxied - AssetPicker ships with a simple PHP-Proxy, easy to setup </dd>
+            <dd>AssetPicker is directly working with the remote storages and thus requires them to support CORS. Anyway some systems don't do that and so the requests need to proxied - AssetPicker allows to use the <a href="https://github.com/netresearch/assetpicker#config" target="_blank">included simple PHP-Proxy or any other proxy</a> for all or only particular storages.</dd>
             <dt>Customization</dt>
-            <dd>The picker script loads the file browser into an iframe inside a modal - the template and styles of that can be changed by according options. The file browser can be customized by building it on your own.</dd>
+            <dd>The picker and the file browser can be <a href="https://github.com/netresearch/assetpicker#configuration" target="_blank">configured extensively</a>. It's easy to <a href="https://github.com/netresearch/assetpicker#register-your-own-adapter" target="_blank">add your own storage adapters</a> and if you need to <a href="https://github.com/netresearch/assetpicker#customize-the-app" target="_blank">customize the file browser</a> you can do that using npm.</dd>
         </dl>
-        <h4 id="principles">Principles</h4>
+        <h4 id="usage">Usage</h4>
         <hr>
-        <p>The AssetPicker consists of two bundles: The <em>picker</em> and the <em>app</em>. The <em>picker</em> is a lightweight script which is to be included into the application which you want to use the picker. It prepares the stage for the app, for which it creates a customizable modal with an iframe and registers itself for the picker button based on the configured selector. When one of these buttons is clicked, it will load the app into the iframe and establish the communication with it (for which cross window messaging is used which enables you to load the script from any other domain without security problems).</p>
-        <p>The <em>app</em> provides the actual user interface and functionality. It has a default configuration which will be merged with the configuration passed to the picker. The key part of this configuration are the storages, which will be mounted as top level entries on the navigation bar (and on the start screen when you use multiple storages). Each of the storages can have a separate configuration and use other <em>adapters</em>.</p>
-        <p>The <em>adapters</em> abstract the access to remote storages. They can or have to be configured along with the storage configuration by which you can pass f.i. details like user ids, tokens etc. There are some shipped by default but you can also add your own adapters.</p>
-        <h4 id="adapters">Adapters</h4>
-        <hr>
-        <h5 id="github">GitHub</h5>
-        <p>The GitHub adapter utilizes the GitHub API to provide files and folders in a GitHub repository to AssetPicker. For this to work, an GitHub API token </p>
+        <p>Actually it's just including the script from a CDN, instanciating the picker with some storages and have buttons with rel="assetpicker" attribute. However there are a lot more options which you can find in the <a href="https://github.com/netresearch/assetpicker#assetpicker">manual</a></p>
+        <pre>&lt;script src="https://cdn.rawgit.com/netresearch/assetpicker/1.0.0/dist/js/picker.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    new AssetPicker({
+        storages: {
+            github: {
+                adapter: 'github',
+                username: 'netresearch',
+                repository: 'assetpicker'
+            }
+        }
+    });
+&lt;/script&gt;
+&lt;button rel="assetpicker" data-limit="10" data-exts="js,json" data-name="inputname"&gt;Select a JS file&lt;/button&gt;</pre>
     </div>
 
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
