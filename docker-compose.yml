@@ -2,6 +2,7 @@ version: '2'
 services:
   web:
     image: nginx
+    container_name: "assetpicker_web"
     ports:
       - 80:80
     volumes_from:
@@ -10,5 +11,6 @@ services:
       - php
   php:
     build: .
+    container_name: "assetpicker_php"
     volumes:
       - .:/var/www/html

@@ -150,6 +150,9 @@ module.exports = Vue.extend({
                         if (!adapter) {
                             throw 'Missing adapter on storage ' + storage;
                         }
+                        if (this.$options.components.storage.$options.components[adapter]) {
+                            continue;
+                        }
                         if (!this.config.adapters.hasOwnProperty(adapter)) {
                             throw 'Adapter ' + adapter + ' is not configured';
                         }

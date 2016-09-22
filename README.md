@@ -2,10 +2,15 @@
 
 AssetPicker is a free asset or file picker designed to be easily included into web application interfaces. It has a file abstraction layer allowing adapters to connect to any remote storage, be it cloud storages like Amazon S3, Google Drive or Dropbox or assets from a custom web application server. In opposite to other file managers or pickers, AssetPicker is suitable for hierarchical as well as associative file storages.
 
-**Contents**
+## [Try the demo](https://netresearch.github.io/assetpicker)
+
+**Manual**
 * [How it works](#how-it-works)
+* [Browser compatibility](#browser-compatibility)
 * [Installation](#installation)
     * [CDN](#cdn)
+    * [Docker](#docker)
+    * [Composer](#composer)
     * [npm](#npm)
 * [Configuration](#configuration)
     * [config](#config)
@@ -19,13 +24,21 @@ AssetPicker is a free asset or file picker designed to be easily included into w
             * [Authentication](#authentication-1)
             * [Configuration](#configuration-2)
     * [Register your own adapter](#register-your-own-adapter)
-* [Build it for your own](#build-it-for-your-own)
+* [Customize the app](#customize-the-app)
 * [Roadmap](#roadmap)
 
 ## How it works
-AssetPicker consists of two bundles: The picker (`AssetPicker` in `picker.min.js`) and the app (`AssetPickerApp` in `app.min.js`). The picker is a lightweight script without any dependencies that will add it's listeners to elements matching the configured [selector](#options). When one of these was clicked it'll setup a modal from a template, inject the styles for it into the header (both, template and style are [customizable](#options)), loads the app into and iframe in the modal and passes it the [config](#config). The communication with the iframe is done with [cross window messaging](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) so it is CORS aware.
+AssetPicker consists of two bundles: The picker (`AssetPicker` in `picker.js`) and the app (`AssetPickerApp` in `app.js`). The picker is a lightweight script without any dependencies that will add it's listeners to elements matching the configured [selector](#options). When one of these was clicked it'll setup a modal from a template, inject the styles for it into the header (both, template and style are [customizable](#options)), loads the app into and iframe in the modal and passes it the [config](#config). The communication with the iframe is done with [cross window messaging](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) so it is CORS aware.
+
+The app reads the storages and adapters from the config and loads the adapter source scripts into the iframe, when they are used by one of the storages - thus unneeded storages don't bloat the size of the app.
+
+Both, app and adapters are [Vue.js](https://vuejs.org) components which allows for a modern and maintainable application structure.
  
  Unless you want to customize the app itself, the picker will be the only API you'll have to use. 
+
+## Browser compatibility
+
+Modern browsers (IE >= 10) - tested in Chrome 53, Firefox 35 - 47, IE 10 - 11, Edge
 
 ## Installation
 
@@ -34,7 +47,7 @@ AssetPicker consists of two bundles: The picker (`AssetPicker` in `picker.min.js
 The easiest way to integrate AssetPicker is to use include the picker script from a CDN:
  
 ```html
-<script src="https://cdn.rawgit.com/netresearch/assetpicker/1.0.0/dist/js/picker.min.js"></script>
+<script src="https://cdn.rawgit.com/netresearch/assetpicker/1.0.0/dist/js/picker.js"></script>
 
 <script>
     new AssetPicker(config, options);
@@ -47,12 +60,40 @@ It doesn't matter if you include the script in head or at footer - it will regis
 
 If you don't want to use a CDN, you can download the [dist](https://github.com/netresearch/assetpicker/tree/master/dist) directory to a web server and include the `picker-min.js` from there (the other files from dist must be available).
 
+### Docker
+
+The best way to host AssetPicker on your own is to use it with docker or even easier with docker-compose:
+
+```bash
+git clone https://github.com/netresearch/assetpicker.git
+cd assetpicker
+docker-compose up -d
+```
+
+If you want to use the built in proxy, you'll need to run the following once:
+
+```bash
+docker exec -tiu www-data assetpicker_php '/bin/bash'
+composer install
+```
+
+### Composer
+
+You can include AssetPicker into your PHP application easily with composer (but you might need to make it's directory within the vendor directory available by linking it to an adequate public folder):
+
+```bash
+composer require netresearch/assetpicker
+ln -s vendor/netresearch/assetpicker web/assetpicker
+```
+
 ### npm
 
 You can happily install AssetPicker using npm:
 ```bash
 npm install --save assetpicker
 ```
+
+but you'll need to tell it the source of the app (please open an issue or PR if you find a way to workaround this):
 
 ```javascript
 var AssetPicker = require('assetpicker');
@@ -85,7 +126,7 @@ key | type | default | description
 **storages.xyz.label** | string | key of storage | Optional: Label for the storage in navigation bar and search results 
 **storages.xyz.proxy** | bool|object | - | Controls proxy configuration for this storage (true: Use proxy with global configuration, false: disable the proxy - even when enabled for all storages, object: Use proxy with custom configuration)
 **proxy** | object | {} | Global proxy configuration
-**proxy.url** | string | `"proxy.php?to={{url}}"` | Url to the proxy - the string is interpolated by vue, so you can use filters and JS expressions. Use `{{url}}` for a urlencoded version of the target url and `{{url.raw}}` for the unencoded target url
+**proxy.url** | string | `"proxy.php?to={{url}}"` | Url to the proxy - the string is interpolated by vue, so you can use filters and JS expressions. Use `{{url}}` for a urlencoded version of the target url and `{{url.raw}}` for the unencoded target url. The default value resolves to the included PHP proxy (which's dependencies must be installed with composer install before you can use it)
 **proxy.all** | bool | `false` | Whether to enable the proxy for all storages (unless they disable it)
 **language** | string | `"auto"` | Language for the interface - use "auto" to detect the language from the browser. Possible languages are `de` and `en` for now.
 **debug** | boolean | `false` | En-/disables Vue.config.debug
@@ -94,6 +135,9 @@ key | type | default | description
 **picker.limit** | number | `1` | Maximum of assets that can be picked (0 for unlimited)
 **picker.types** | array | `['file']` | Asset types allowed to be picked
 **picker.extensions** | array | `[]` | File extensions allowed to be picked (empty means all)
+**adapters** | object | see [here](src/js/app/config.js#L29) | Sources of the possible adapters - here you can [register your own adapters](#register-your-own-adapter)
+**adapters.xyz.src** | string | - | Required: The URL to the adapter script - relative to the app script (a leading / loads it relative from the modal src origin, use an absolute URL if the adapter source is not on the same origin as the app script or html file)
+**adapers.xyz.name** | string | - | Required: Name of adapter object in global scope 
 
 ### options
 
@@ -101,7 +145,7 @@ key | type | default | description
 --- | --- | --- | ---
 **selector** | string | `'[rel="assetpicker"]'` | CSS selector for the buttons you want to act as picker
 **modal** | object | {} | Options for the modal
-**modal.src** | string | url of the picker script popped by two path parts (f.e. http://example.com/dist when picker script url is http://example.com/dist/js/picker.min.js) | URL to the AssetPicker application
+**modal.src** | string | url of the picker script popped by two path parts (f.e. http://example.com/dist when picker script url is http://example.com/dist/js/picker.js) | URL to the AssetPicker application
 **modal.template** | string | see [here](src/js/picker/components/modal/index.html) | Template for the modal - requires an outer div with an iframe somewhere nested
 **modal.css** | string | see [here](src/js/picker/components/modal/index.css) | CSS injected before any other CSS into head
 **modal.openClassName** | string | `'assetpicker-modal-open'` | Class to add/remove to the modal template outer div on opening/closing
@@ -174,23 +218,68 @@ new AssetPicker({
 
 ### Register your own adapter
 
-Currently you need an npm development environment including browserify to add your own adapters. Once that is accomplished, adding an adapter is easy - see below example for how to hook into AssetPickerApp.
+Adapters are actually vue components which's template will be rendered in the navigation bar. Loading of items is completely controlled by events. Have a look at the [existing adapters](src/js/adapter) to see details.
 
-## Build it for your own
+The standard way to do this, is to create a standalone script, that contains the adapter and reference it in the config. The script is required as standalone because it won't be loaded in
+the same window as where the picker is included but from an iframe.
 
-You'll need a npm app built with browserify to customize the app. AssetPickerApp is using [Vue.js] - so you might consider reading it's [docs](http://vuejs.org/guide/) before.
+The following example shows a basic adapter, loading a hierarchical structure from an endpoint:
+ 
+https://myapp.example.com/myadapter.js
+```javascript
+MyAdapter = {
+    events: {
+        'load-items': function(tree) {
+            this.http.get(this.config.url + '/files/' + tree.item ? tree.item.id : '').then(
+                function(response) {
+                    tree.items = response.data.map(this.createItem);
+                }
+            );
+        }
+    }
+}
+```
+
+https://myapp.example.com/index.html (where the picker is included)
+```javascript
+new AssetPicker({
+    storages: {
+        mystorage: {
+            adapter: 'myadapter',
+            url: 'https://example.com'
+        }
+    },
+    adapters: {
+        myadapter: {
+            // The url doesn't need to be absolute if you host
+            // AssetPicker also on https://myapp.example.com
+            // Then /myadapter.js would be enough
+            src: 'https://myapp.example.com/myadapter.js',
+            name: 'MyAdapter'
+        }
+    }
+});
+```
+
+Also you can add custom adapters when you have installed the App with npm - see below for an example.
+
+## Customize the app
+
+Apart from simply forking this repository, you can also include the app into your project. For this you'll need a npm app built with browserify to customize the app. AssetPickerApp is using [Vue.js] - so you might consider reading it's [docs](http://vuejs.org/guide/) before.
 
 1. Initialize the app
+
     ```bash
     npm init
     npm install --save assetpicker
     ```
+
 2. Customize the AssertPickerApp or it's compontents
     
     src/app.js:
     ```javascript
     var Storage = require('assetpicker/src/js/app/components/storage');
-    Storage.adapters.myadapter = require('./myadapter');
+    Storage.components.myadapter = require('./myadapter');
     
     var config  = require('assetpicker/src/js/app/config');
     config.storages = {
@@ -236,7 +325,7 @@ You'll need a npm app built with browserify to customize the app. AssetPickerApp
     </head>
     <body>
     <div id="app"></div>
-    <script src="node_modules/assetpicker/dist/js/picker.min.js"></script>
+    <script src="node_modules/assetpicker/dist/js/picker.js"></script>
     <script>
        new AssetPicker(null, {
             modal: {

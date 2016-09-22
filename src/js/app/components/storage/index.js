@@ -60,5 +60,7 @@ module.exports = {
                 });
             }
         }
+    },
+    components: {
     }
 };
