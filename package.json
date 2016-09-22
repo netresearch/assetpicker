@@ -1,6 +1,6 @@
 {
   "name": "assetpicker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A free asset or file picker with abstraction layer allowing several adapters like GitHub, EnterMediaDB, Amazon S3, Google Drive, Dropbox etc.",
   "repository": {
     "type": "git",
