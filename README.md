@@ -230,7 +230,7 @@ https://myapp.example.com/myadapter.js
 MyAdapter = {
     events: {
         'load-items': function(tree) {
-            this.http.get(this.config.url + '/files/' + tree.item ? tree.item.id : '').then(
+            this.http.get(this.config.url + '/files/' + (tree.item ? tree.item.id : '')).then(
                 function(response) {
                     tree.items = response.data.map(this.createItem);
                 }
@@ -307,13 +307,13 @@ Apart from simply forking this repository, you can also include the app into you
     <div id="app"></div>
     <script src="dist/js/app.js"></script>
     <script>
-       new AssetPickerApp();
+       new AssetPickerApp({el: '#app'});
     </script>
     </body>
     </html>
     ```
 
-4. Build an HTML page to which the picker should be included:
+4. Build a HTML page to which the picker should be included:
     
     index.html
     ```html
@@ -324,7 +324,6 @@ Apart from simply forking this repository, you can also include the app into you
         <title>AssetPicker</title>
     </head>
     <body>
-    <div id="app"></div>
     <script src="node_modules/assetpicker/dist/js/picker.js"></script>
     <script>
        new AssetPicker(null, {
@@ -333,6 +332,7 @@ Apart from simply forking this repository, you can also include the app into you
             }
        });
     </script>
+    <button rel="assetpicker">Pick an asset</button>
     </body>
     </html>
     ```
