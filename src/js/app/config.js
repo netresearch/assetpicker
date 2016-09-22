@@ -17,7 +17,7 @@ module.exports = {
         all: false
     },
     github: {
-        //token: 'j2332dwedcdj33dx3jm8389xdq'
+        //tokenBla: 'j2332dwedcdj33dx3jm8389xdq'
     },
     pick: {
         limit: 1,
@@ -25,5 +25,15 @@ module.exports = {
         extensions: []
     },
     language: 'auto',
-    debug: false
+    debug: false,
+    adapters: {
+        github: {
+            src: 'adapter/github.js',
+            name: 'AssetPickerAdapterGithub'
+        },
+        entermediadb: {
+            src: 'adapter/entermediadb.js',
+            name: 'AssetPickerAdapterEntermediadb'
+        }
+    }
 };

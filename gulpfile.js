@@ -20,13 +20,13 @@ gulp.task('sass', function() {
         .pipe(livereload());
 });
 
-var bundles = ['app', 'picker'];
+var bundles = ['app', 'picker', 'adapter/entermediadb', 'adapter/github'];
 bundles.forEach(function(bundle) {
     gulp.task('js-' + bundle, function() {
         browserify({
             entries: 'src/js/' + bundle + '/index.js',
             debug: true,
-            standalone: 'AssetPicker' + (bundle !== 'picker' ? bundle[0].toUpperCase() + bundle.substr(1) : '')
+            standalone: 'AssetPicker' + (bundle !== 'picker' ? bundle.replace(/(^|\/)([a-z])/g, function (m) { return (m.length > 1 ? m[1] : m).toUpperCase() }) : '')
         })
             .transform(partialify)
             .bundle()
@@ -34,7 +34,7 @@ bundles.forEach(function(bundle) {
                 console.log(err.toString());
                 this.emit("end");
             })
-            .pipe(source(bundle + '.min.js'))
+            .pipe(source(bundle + '.js'))
             .pipe(buffer())
             .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(uglify())

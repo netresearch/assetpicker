@@ -1,6 +1,6 @@
 var Vue = require('vue');
 
-var Item = require('../../../model/item');
+var Item = require('../model/item');
 
 var extend = require('extend');
 var fecha = require('fecha');
@@ -35,7 +35,7 @@ module.exports = {
         return {
             loginDone: false,
             currentLogin: null,
-            appConfig: require('../../../config')
+            appConfig: require('../config')
         }
     },
     computed: {
@@ -69,7 +69,6 @@ module.exports = {
                 this.$options.http = this.$options.http.call(this);
             }
             var api = {},
-                config = require('../../../config'),
                 base = this.$options.http ? this.$options.http.base : null,
                 request = (function (options) {
                     if (!options.keepUrl) {
@@ -159,6 +158,6 @@ module.exports = {
         }
     },
     components: {
-        login: require('../../login')
+        login: require('../components/login')
     }
 };

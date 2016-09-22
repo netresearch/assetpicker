@@ -1,21 +1,33 @@
-
-var Config = require('../../../../config');
-
-var token = Config.github.token || localStorage.getItem('github_token');
-
 module.exports = {
-    extends: require('../base'),
     http: {
         base: 'https://api.github.com'
     },
+    data: function() {
+        return {
+            // this.appConfig is not yet available here, so have to initialize it on created
+            token: null
+        };
+    },
+    created: function () {
+        this.token = this.appConfig.github.token || localStorage.getItem('github_token')
+    },
+    watch: {
+        token: function (token) {
+            if (token) {
+                localStorage.setItem('github_token', token);
+            } else if (localStorage.getItem('github_token')) {
+                localStorage.removeItem('github_token')
+            }
+        }
+    },
     events: {
         'load-items': function (tree) {
-            if (token) {
+            if (this.token) {
                 this.http.get(
                     'repos/' + this.config.username + '/' + this.config.repository + '/contents/' + (tree.item ? tree.item.id : ''),
                     {
                         headers: {
-                            Authorization: 'token ' + token
+                            Authorization: 'token ' + this.token
                         }
                     }
                 ).then(
@@ -43,8 +55,7 @@ module.exports = {
                         });
                     },
                     (function () {
-                        localStorage.removeItem('github_token');
-                        token = null;
+                        this.token = null;
                         this.$dispatch('load-items', tree);
                     }).bind(this)
                 );
@@ -65,7 +76,7 @@ module.exports = {
                             Authorization: 'Basic ' + btoa(username + ':' + password)
                         }
                     },
-                    createAuthorization = (function () {
+                    createAuthorization = function () {
                         this.http.post(
                             'authorizations',
                             {
@@ -74,15 +85,16 @@ module.exports = {
                                 fingerprint: fingerprint
                             },
                             options
-                        ).then(function (response) {
-                            token = response.data.token;
-                            localStorage.setItem('github_token', token);
-                            if (!token) {
-                                throw 'Could not find expected token';
-                            }
-                            callback(true);
-                        })
-                    }).bind(this);
+                        ).then(
+                            function (response) {
+                                this.token = response.data.token;
+                                if (!this.token) {
+                                    throw 'Could not find expected this.token';
+                                }
+                                callback(true);
+                            }.bind(this)
+                        )
+                    }.bind(this);
 
                 this.http.get('authorizations', options).then(
                     (function(response) {

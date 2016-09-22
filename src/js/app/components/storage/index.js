@@ -60,9 +60,5 @@ module.exports = {
                 });
             }
         }
-    },
-    components: {
-        github: require('./adapter/github'),
-        entermediadb: require('./adapter/entermediadb')
     }
 };

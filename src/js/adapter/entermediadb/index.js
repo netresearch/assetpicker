@@ -1,10 +1,5 @@
-var Item = require('../../../../model/item');
-var Vue = require('vue');
-
-
 module.exports = {
     template: require('./template.html'),
-    extends: require('../base'),
     http: function() {
         var options = {
             base: this.config.url.replace(/\/+$/, '') + '/mediadb/services',

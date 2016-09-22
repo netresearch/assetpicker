@@ -13,7 +13,12 @@ Vue.http.interceptors.push(function(options, next) {
     });
 });
 
-require('./util');
+var scriptURL = (function() {
+    var scripts = document.getElementsByTagName('script');
+    return scripts[scripts.length - 1].src;
+})();
+
+var Util = require('./util');
 require('./components/tree');
 
 var extend = require('extend');
@@ -111,8 +116,10 @@ module.exports = Vue.extend({
             Vue.config.debug = config.debug;
             this.$set('config', config);
             this.$nextTick(function () {
-                this.loaded = true;
-                this.callPicker('_trigger', 'ready');
+                this.loadAdapters().then(function () {
+                    this.loaded = true;
+                    this.callPicker('_trigger', 'ready');
+                });
             });
             return true;
         },
@@ -126,6 +133,47 @@ module.exports = Vue.extend({
         }
     },
     methods: {
+        loadAdapters: function () {
+            return this.$promise(function (resolve, reject) {
+                var baseAdapter = require('./adapter/base'),
+                    loadAdapters = [],
+                    loading = 0,
+                    loaded = function () {
+                        loading--;
+                        if (loading === 0) {
+                            resolve();
+                        }
+                    };
+                for (var storage in this.config.storages) {
+                    if (this.config.storages.hasOwnProperty(storage)) {
+                        var adapter = this.config.storages[storage].adapter;
+                        if (!adapter) {
+                            throw 'Missing adapter on storage ' + storage;
+                        }
+                        if (!this.config.adapters.hasOwnProperty(adapter)) {
+                            throw 'Adapter ' + adapter + ' is not configured';
+                        }
+                        if (loadAdapters.indexOf(adapter) < 0) {
+                            loadAdapters.push(adapter);
+                            loading++;
+                            (function (adapter, src, name) {
+                                if (!src.match(/^(https?:\/\/|\/)/)) {
+                                    src = scriptURL.split('/').slice(0, -1).join('/') + '/' + src;
+                                }
+                                Util.loadScript(src, function () {
+                                    if (!window[name]) {
+                                        reject(name + ' could not be found');
+                                    }
+                                    window[name].extends = baseAdapter;
+                                    this.$options.components.storage.component(adapter, window[name]);
+                                    loaded();
+                                }.bind(this));
+                            }.bind(this))(adapter, this.config.adapters[adapter].src, this.config.adapters[adapter].name);
+                        }
+                    }
+                }
+            });
+        },
         visible: function (item) {
             return item.type !== 'file' || this.picked.isAllowed(item);
         },
