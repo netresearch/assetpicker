@@ -34,6 +34,10 @@ module.exports = {
         entermediadb: {
             src: 'adapter/entermediadb.js',
             name: 'AssetPickerAdapterEntermediadb'
+        },
+        googledrive: {
+            src: 'adapter/googledrive.js',
+            name: 'AssetPickerAdapterGoogledrive'
         }
     }
 };

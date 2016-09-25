@@ -31,14 +31,46 @@ module.exports = {
             required: true
         }
     },
+    stored: {
+        // store a data variable on storage basis:
+        // token: true
+        // store something globally:
+        // token: 'github'
+    },
     data: function() {
-        return {
+        var data = {
             loginDone: false,
             currentLogin: null,
             appConfig: require('../config')
+        };
+        if (!this.$options.watch) {
+            this.$options.watch = {};
         }
+        Object.keys(this.$options.stored).forEach(function(key) {
+            var storageKey;
+            if (this.$options.stored[key] === true) {
+                storageKey = this.storage + '_local_' + key;
+            } else {
+                storageKey = this.$options.stored[key] + '_' + key;
+            }
+            data[key] = localStorage.getItem(storageKey);
+            if (data[key]) {
+                data[key] = JSON.parse(data[key]);
+            }
+            this.$options.watch[key] = function(data) {
+                if (data === null) {
+                    localStorage.removeItem(storageKey)
+                } else {
+                    localStorage.setItem(storageKey, JSON.stringify(data));
+                }
+            };
+        }.bind(this));
+        return data;
     },
     computed: {
+        util: function() {
+            return require('../util');
+        },
         proxy: function () {
             if (this.config.proxy || this.appConfig.proxy.all && this.config.proxy !== false) {
                 return (typeof this.config.proxy === 'object' ? this.config : this.appConfig).proxy;

@@ -138,6 +138,7 @@ module.exports = Vue.extend({
                 var baseAdapter = require('./adapter/base'),
                     loadAdapters = [],
                     loading = 0,
+                    storageComponent = this.$options.components.storage,
                     loaded = function () {
                         loading--;
                         if (loading === 0) {
@@ -150,7 +151,7 @@ module.exports = Vue.extend({
                         if (!adapter) {
                             throw 'Missing adapter on storage ' + storage;
                         }
-                        if (this.$options.components.storage.$options.components[adapter]) {
+                        if (storageComponent.$options && storageComponent.$options.components[adapter]) {
                             continue;
                         }
                         if (!this.config.adapters.hasOwnProperty(adapter)) {
@@ -168,7 +169,7 @@ module.exports = Vue.extend({
                                         reject(name + ' could not be found');
                                     }
                                     window[name].extends = baseAdapter;
-                                    this.$options.components.storage.component(adapter, window[name]);
+                                    storageComponent.component(adapter, window[name]);
                                     loaded();
                                 }.bind(this));
                             }.bind(this))(adapter, this.config.adapters[adapter].src, this.config.adapters[adapter].name);
