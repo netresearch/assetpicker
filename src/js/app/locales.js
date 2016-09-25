@@ -91,6 +91,10 @@ module.exports = {
         entermediadb: {
             en: 'EnterMediaDB on {{config.url}}',
             de: 'EnterMediaDB auf {{config.url}}'
+        },
+        googledrive: {
+            en: 'Google Drive ({{config.email}})',
+            de: 'Google Drive ({{config.email}})'
         }
     },
     stage: {

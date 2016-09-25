@@ -20,7 +20,7 @@ gulp.task('sass', function() {
         .pipe(livereload());
 });
 
-var bundles = ['app', 'picker', 'adapter/entermediadb', 'adapter/github'];
+var bundles = ['app', 'picker', 'adapter/entermediadb', 'adapter/github', 'adapter/googledrive'];
 bundles.forEach(function(bundle) {
     gulp.task('js-' + bundle, function() {
         browserify({
