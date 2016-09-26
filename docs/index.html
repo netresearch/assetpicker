@@ -42,6 +42,17 @@
         <script>
             var onPick = function(pick) {
                 $('#result').jsonViewer(pick).find('> * > li > a').click();
+                var storages = [];
+                if (pick.storage) {
+                    storages.push(pick.storage);
+                } else {
+                    for (var i = 0, l = pick.length; i < l; i++) {
+                        if (storages.indexOf(pick[i].storage) < 0) {
+                            storages.push(pick[i].storage);
+                        }
+                    }
+                }
+                ga('send', 'event', 'Picked', storages.sort().join(','), 'AssetPicker');
             };
             var picker = new AssetPicker({
                 storages: {
@@ -178,6 +189,21 @@
 
         ga('create', 'UA-411352-19', 'auto');
         ga('send', 'pageview');
+    </script>
+
+    <script type="text/javascript">
+        var scrolled = false;
+        (function () {
+            $(window).scroll(function (e) {
+                if (!scrolled) {
+                    ga('send', 'event', 'Interaction', 'scroll', 'AssetPicker', window.scrollY);
+                    scrolled = true;
+                }
+            });
+            $('[rel="assetpicker"]').click(function () {
+                ga('send', 'event', 'OpenPicker', $(this).text(), 'AssetPicker');
+            });
+        })();
     </script>
     </body>
 </html>
