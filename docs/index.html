@@ -188,18 +188,13 @@
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
         ga('create', 'UA-411352-19', 'auto');
+        ga('set', 'page', '/tools/assetpicker/demo');
         ga('send', 'pageview');
     </script>
 
     <script type="text/javascript">
         var scrolled = false;
         (function () {
-            $(window).scroll(function (e) {
-                if (!scrolled) {
-                    ga('send', 'event', 'Interaction', 'scroll', 'AssetPicker', window.scrollY);
-                    scrolled = true;
-                }
-            });
             $('[rel="assetpicker"]').click(function () {
                 ga('send', 'event', 'OpenPicker', $(this).text(), 'AssetPicker');
             });
