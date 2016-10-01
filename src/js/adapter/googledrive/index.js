@@ -2,7 +2,12 @@ var auth2, requests = 0, second;
 
 module.exports = {
     http: {
-        base: 'https://content.googleapis.com/drive/v3'
+        base: 'https://content.googleapis.com/drive/v3',
+        http: {
+            // Google web services by default have a limit of 1000 Requests / 100 seconds
+            // So keep 100ms meantime between all requests
+            throttle: 100
+        }
     },
     created: function () {
         if (this.auth) {
