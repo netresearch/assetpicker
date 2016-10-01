@@ -41,7 +41,8 @@ module.exports = {
         var data = {
             loginDone: false,
             currentLogin: null,
-            appConfig: require('../config')
+            appConfig: require('../config'),
+            _lastRequestTime: null
         };
         if (!this.$options.watch) {
             this.$options.watch = {};
@@ -97,61 +98,79 @@ module.exports = {
             }
         },
         http: function() {
-            if (this.$options.http && typeof  this.$options.http === 'function') {
+            if (typeof this.$options.http === 'function') {
                 this.$options.http = this.$options.http.call(this);
             }
+            if (this.config.http) {
+                extend(true, this.$options.http, this.config.http);
+            }
             var api = {},
-                base = this.$options.http ? this.$options.http.base : null,
                 request = (function (options) {
                     if (!options.keepUrl) {
-                        options.url = this.url(options.url, base);
+                        options.url = this.url(options.url, options.base);
                         options.keepUrl = true;
                     }
                     if (this.proxy && this.proxy.credentials !== options.credentials) {
                         options.credentials = this.proxy.credentials;
                     }
                     return this.$promise(function (resolve, reject) {
-                        this.$http(options).then(
-                            function(response) {
-                                if (response.options.validate) {
-                                    response.reload = function () {
-                                        return request(options).then(resolve, reject);
-                                    };
-                                    response.isValid = function (isValid) {
-                                        if (isValid === false) {
-                                            throw 'Invalid response';
+                        var load = function() {
+                                this.$http(options).then(
+                                    function(response) {
+                                        if (response.options.validate) {
+                                            response.reload = function () {
+                                                return request(options).then(resolve, reject);
+                                            };
+                                            response.isValid = function (isValid) {
+                                                if (isValid === false) {
+                                                    throw 'Invalid response';
+                                                } else {
+                                                    resolve(response);
+                                                }
+                                            };
+                                            response.options.validate.call(this, response, resolve);
                                         } else {
                                             resolve(response);
                                         }
-                                    };
-                                    response.options.validate.call(this, response, resolve);
+                                    }.bind(this),
+                                    reject
+                                );
+                            }.bind(this);
+                        if (options.throttle) {
+                            var throttle = function () {
+                                var now = Date.now();
+                                if (!this._lastRequestTime || now - options.throttle >= this._lastRequestTime) {
+                                    this._lastRequestTime = now;
+                                    load();
                                 } else {
-                                    resolve(response);
+                                    window.setTimeout(throttle, options.throttle - (this._lastRequestTime ? now - this._lastRequestTime : 0));
                                 }
-                            }.bind(this),
-                            reject
-                        );
+                            }.bind(this);
+                            throttle();
+                        } else {
+                            load();
+                        }
                     });
                 }).bind(this);
 
             ['get', 'delete', 'head', 'jsonp'].forEach(function(method) {
                 api[method] = function (url, options) {
-                    options = extend({}, options);
+                    options = extend({}, this.$options.http, options);
                     options.method = method.toUpperCase();
                     options.url = url;
                     return request(options);
-                }
-            });
+                }.bind(this)
+            }.bind(this));
 
             ['post', 'put', 'patch'].forEach(function(method) {
                 api[method] = function (url, data, options) {
-                    options = extend({}, options);
+                    options = extend({}, this.$options.http, options);
                     options.method = method.toUpperCase();
                     options.url = url;
                     options.body = data;
                     return request(options);
-                }
-            });
+                }.bind(this)
+            }.bind(this));
             return api;
         }
     },
