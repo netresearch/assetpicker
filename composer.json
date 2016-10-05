@@ -11,5 +11,10 @@
     "license": "MIT",
     "require": {
         "jenssegers/proxy": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Netresearch\\": "src/php"
+        }
     }
 }

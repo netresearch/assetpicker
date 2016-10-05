@@ -21,29 +21,14 @@ if ((!$loader = includeIfExists(__DIR__ . '/vendor/autoload.php')) && (!$loader 
         'php composer.phar install'.PHP_EOL);
 }
 
-use Symfony\Component\HttpFoundation\Request;
-
-$request = Request::createFromGlobals();
+$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
 try {
     if ($request->query->has('to')) {
         $proxyTo = $request->query->get('to');
         $request->query->remove('to');
-        $proxy = \Proxy\Factory::create()->forward($request);
-        $proxy->addResponseFilter(function(\Symfony\Component\HttpFoundation\Response $response) use ($request) {
-            $response->prepare($request);
-            if ($response->headers->has('transfer-encoding')) {
-                $response->headers->remove('transfer-encoding');
-            }
-            if ($response->isRedirect()) {
-                $response->headers->set(
-                    'location',
-                    $request->getSchemeAndHttpHost() . $request->getBaseUrl() . '?to='
-                    . urlencode($response->headers->get('location'))
-                );
-            }
-        });
-        $proxy->to($proxyTo)->send();
+        $proxy = new \Netresearch\AssetPicker\Proxy();
+        $proxy->forward($request)->to($proxyTo)->send();
     } else {
         throw new Exception('No target provided');
     }
