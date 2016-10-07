@@ -8,6 +8,49 @@ module.exports = {
         storage: String,
         limit: Number
     },
+    data: function() {
+        return {
+            containerClass: null
+        }
+    },
+    events: {
+        'resize': function() {
+            this.updateLayoutClass();
+        }
+    },
+    attached: function() {
+        this.updateLayoutClass();
+    },
+    methods: {
+        updateLayoutClass: function() {
+            var itemMinWidth = this.getItemMinWidth(), availableWidth = this.$el.offsetWidth;
+            if (itemMinWidth) {
+                var availableColumns = Math.floor(availableWidth / itemMinWidth);
+                var itemPercentWidth = Math.round(100 / availableColumns * 1000) / 1000;
+                for (var i = 0, l = this.$children.length; i < l; i++) {
+                    this.$children[i].$el.style.width = itemPercentWidth + '%';
+                }
+            }
+        },
+        getItemMinWidth: function () {
+            if (this.itemWidth === undefined && this.$children.length) {
+                var item = this.$children[0].$el;
+                this.itemMinWidth = null;
+                var css = window.getComputedStyle(item).getPropertyValue('min-width');
+                if (!css || !css.match(/px$/)) {
+                    console.warn('.' + item.className.replace(/ /, '.') + ' is supposed to have a min-width css property in px');
+                    return;
+                }
+                this.itemMinWidth = parseInt(css.replace(/^([0-9]+)px$/, '$1'));
+            }
+            return this.itemMinWidth;
+        }
+    },
+    watch: {
+        items: function() {
+            this.$nextTick(this.updateLayoutClass);
+        }
+    },
     components: {
         item: {
             props: {
@@ -36,14 +79,16 @@ module.exports = {
                     if (item.modified && (!item.created || item.modified > item.created)) {
                         fields.modified = fecha.format(item.modified, this.t('date.full'));
                     }
-                    if (parseInt(item.data.width) && parseInt(item.data.height)) {
-                        fields.dimensions = item.data.width + ' x ' + item.data.height;
-                    }
-                    if (parseInt(item.data.length)) {
-                        fields.length = util.formatTime(item.data.length);
-                    }
-                    if (parseInt(item.data.pages)) {
-                        fields.pages = item.data.pages;
+                    if (item.data) {
+                        if (parseInt(item.data.width) && parseInt(item.data.height)) {
+                            fields.dimensions = item.data.width + ' x ' + item.data.height;
+                        }
+                        if (parseInt(item.data.length)) {
+                            fields.length = util.formatTime(item.data.length);
+                        }
+                        if (parseInt(item.data.pages)) {
+                            fields.pages = item.data.pages;
+                        }
                     }
 
                     var lines = [this.item.name];

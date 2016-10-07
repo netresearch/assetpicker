@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 11 14">
+    <!--<path d="M1 1 L 11 1 L 15 5 L 15 19 L 1 19 Z" stroke="black" stroke-linejoin="round" stroke-width="2" fill="green"/>-->
+    <defs>
+
+    </defs>
+    <path d="
+    M 0 1 L 0 13 A 1, 1, 0, 0, 0, 1, 14 L 10 14 A 1, 1, 0, 0, 0, 11, 13 L 11 4 L 8 4 A 1, 1, 0, 0, 1, 7 3 L 7 0 L 1 0 A 1, 1, 0, 0, 0, 0, 1 Z
+    M 8 0.5 L 8 3 L 10.5 3 Z
+    " ></path>
+</svg>

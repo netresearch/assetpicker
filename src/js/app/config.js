@@ -38,6 +38,10 @@ module.exports = {
         googledrive: {
             src: 'adapter/googledrive.js',
             name: 'AssetPickerAdapterGoogledrive'
+        },
+        dummy: {
+            src: 'adapter/dummy.js',
+            name: 'AssetPickerAdapterDummy'
         }
     }
 };

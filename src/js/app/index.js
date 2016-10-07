@@ -111,6 +111,13 @@ module.exports = Vue.extend({
             this.$dispatch('config-loaded', config);
         }
     },
+    ready: function() {
+        var resizeHandler = function() {
+            this.$broadcast('resize');
+        }.bind(this);
+        window.addEventListener('resize', resizeHandler);
+        this.$refs.handle.$on('move', resizeHandler);
+    },
     events: {
         'config-loaded': function (config) {
             Vue.config.debug = config.debug;

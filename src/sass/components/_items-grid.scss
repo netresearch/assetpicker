@@ -1,57 +1,82 @@
 .items-grid {
-    margin:10px -5px;
-    @include clearfix;
+    margin:15px -15px 15px 0;
     .item {
-        position: relative;
-        width: 96px;
-        max-height: 100px;
-        float: left;
-        padding: 22px 6px 6px 6px;
-        margin:1px 0 0 1px;
-        text-align: center;
+        display: inline-block;
+        min-width:128px;
+        padding-right:15px;
         cursor:default;
-        -webkit-user-select: none; /* webkit (safari, chrome) browsers */
-        -moz-user-select: none; /* mozilla browsers */
-        -khtml-user-select: none; /* webkit (konqueror) browsers */
-        -ms-user-select: none; /* IE10+ */
-        &:hover, &.selected {
+        &:hover .item-inner, &.selected .item-inner {
+            box-shadow: 0 2px 8px 0 rgba(0,0,0,.25);
+        }
+        &.selected .item-inner {
             background: $gray-lighter;
         }
         .glyphicon {
             font-size:32px;
-            &.item-ext::after {
-                font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
-                text-align: left;
-                content: attr(data-ext);
-                left: 5px;
+        }
+        .item-preview {
+            position: relative;
+            margin: 0;
+            width: 100%;
+            height: auto;
+            background: #fff;
+            &:before {
+                display: block;
+                content: "";
+                width: 100%;
+                padding-top: (3 / 4) * 100%;
+            }
+            .file-type {
                 position: absolute;
-                color: #fff;
-                font-size: 8px;
-                text-transform: uppercase;
-                top: 21px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;         /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
-                -o-text-overflow: ellipsis;
-                right:4px;
+                width: auto;
+                height: 42px;
+                left:0;
+                right:0;
+                top:50%;
+                margin: 0;
+                margin-top:-21px;
+                &.folder {
+                    height:33px;
+                    margin-top:-16px;
+                }
+            }
+            .item-thumbnail {
+                position: absolute;
+                left:0;
+                right:0;
+                top:0;
+                bottom:0;
+                background-size:cover;
+                background-position: top center;
+                &.image, &.video {
+                    background-position: center center;
+                }
+            }
+            .item-icon {
+                position: absolute;
+                left:0;
+                right:0;
+                top:0;
+                bottom:0;
+                background-color: #fff;
+                background-repeat: no-repeat;
+                background-size: 48px auto;
+                background-position: center;
             }
         }
-        .item-thumbnail {
-            position: absolute;
-            width:84px;
-            top:6px;
-            left:6px;
-            height:56px;
-            overflow:hidden;
-            background-size:cover;
-            background-position: center;
-        }
-        > div {
+        .item-title {
             width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;         /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
             -o-text-overflow: ellipsis;    /** Opera 9 & 10 **/
+            padding:2px 6px;
+            span, img {
+                float:left;
+                position: relative;
+                top:4px;
+                margin-right:6px;
+            }
         }
     }
 

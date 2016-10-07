@@ -101,16 +101,21 @@ module.exports = {
                     {
                         params: {
                             key: this.config.api_key,
-                            q: '\'' + (tree.item ? tree.item.id : 'root') + '\' in parents'
+                            q: '\'' + (tree.item ? tree.item.id : 'root') + '\' in parents',
+                            fields: 'files,kind'
                         }
                     }
                 ).then(function(response) {
                     console.log(response);
                     tree.items = JSON.parse(response.data).files.map(function(item) {
+                        var type = item.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file';
                         return this.createItem({
                             id: item.id,
                             name: item.name,
-                            type: item.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file',
+                            type: type,
+                            icon: item.iconLink,
+                            iconBig: (type === 'file' && item.iconLink) ? item.iconLink.replace(/\/icon_[0-9]+_([^_]+)_[^\/]+/, '/mediatype/icon_1_$1_x128.png') : undefined,
+                            thumbnail: item.thumbnailLink,
                             data: item
                         });
                     }.bind(this));
