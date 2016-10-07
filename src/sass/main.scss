@@ -25,6 +25,7 @@ $footer-height: $navbar-height + 2;
 
 @import url("https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css");
 @import "mixins";
+@import "components/file-types";
 @import "components/navbar";
 @import "components/tree";
 @import "components/sidebar";
@@ -53,6 +54,7 @@ body {
     position: absolute;
     padding-top: $navbar-height;
     padding-bottom: $footer-height;
+    background: lighten($gray-lighter, 5%);
     left:0;
     top:0;
     width:100%;

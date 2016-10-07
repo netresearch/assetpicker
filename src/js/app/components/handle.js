@@ -12,6 +12,7 @@ module.exports = {
             parent.style.cursor = 'col-resize';
             var drag = function (e) {
                 this.x = e.pageX;
+                this.$dispatch('move');
             }.bind(this);
             var leave = function () {
                 parent.style.cursor = defaultCursor;

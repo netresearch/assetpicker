@@ -23,6 +23,10 @@ module.exports = {
         'select-item': function (item) {
             this.storage = item.storage;
             return true;
+        },
+        'resize': function() {
+            this.invalidateLayout();
+            return true;
         }
     },
     watch: {
@@ -35,14 +39,16 @@ module.exports = {
         },
         'selection.items': function (items) {
             this.storage = items.storage;
-            this.$nextTick(function () {
-                if ((!this.search || this.storage) && items && !items.loading && items.total && items.length < items.total) {
-                    this.$dispatch('items-set');
-                }
-            })
+            this.$nextTick(this.invalidateLayout);
         }
     },
     methods: {
+        invalidateLayout: function() {
+            var items = this.selection.items;
+            if ((!this.search || this.storage) && items && !items.loading && items.total && items.length < items.total) {
+                this.$dispatch('items-set');
+            }
+        },
         loadMore: function () {
             this.$root.$broadcast('load-more-items', this.selection.items);
         },
