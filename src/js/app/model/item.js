@@ -15,15 +15,28 @@ var docTypes = {
     video: ['webm', 'flv', 'avi', 'mov', 'wmv', 'mp4', 'm4v', 'mpg', 'mpeg'],
     code: ['aspx', 'json', 'jsp', 'js', 'htm', 'html', 'php', 'phtml', 'inc', 'go', 'pl', 'asp', 'py', 'rdf', 'xml', 'svg', 'css', 'scss', 'bat', 'sh', 'c', 'h', 'rb', 'cmd', 'wsdl', 'vb', 'xslt', 'hs', 'coffee', 'go', 'yml', 'yaml', 'ini']
 };
-function getClass(extension) {
-    for (var key in docTypes) {
-        if (docTypes.hasOwnProperty(key)) {
-            if (docTypes[key].indexOf(extension) > -1) {
-                return key;
+function MediaType(fileType, extension, mediaType) {
+    if (fileType === 'file') {
+        for (var key in docTypes) {
+            if (docTypes.hasOwnProperty(key)) {
+                if (docTypes[key].indexOf(extension) > -1) {
+                    this.name = key;
+                    break;
+                }
             }
         }
+    } else {
+        this.name = 'folder';
+    }
+    if (mediaType) {
+        this.icon = mediaType.icon;
+        this.iconBig = mediaType.iconBig;
+        this.label = mediaType.label;
     }
 }
+MediaType.prototype.toString = function() {
+    return this.name || '';
+};
 
 module.exports = function (data) {
 >>>>>>> Reworked grid layout
@@ -54,10 +67,8 @@ module.exports = function (data) {
         name: data.name,
         type: data.type,
         extension: ext,
-        class: data.type === 'file' ? getClass(ext) : 'folder',
         thumbnail: data.thumbnail,
-        icon: data.icon,
-        iconBig: data.iconBig,
+        mediaType: new MediaType(data.type, ext, data.mediaType),
         created: data.created,
         modified: data.modified,
         data: data.data

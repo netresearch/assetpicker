@@ -83,20 +83,6 @@ module.exports = {
             de: 'Seiten'
         }
     },
-    adapters: {
-        github: {
-            en: 'Repository {{config.username}}/{{config.repository}} on GitHub',
-            de: 'Repository {{config.username}}/{{config.repository}} auf GitHub'
-        },
-        entermediadb: {
-            en: 'EnterMediaDB on {{config.url}}',
-            de: 'EnterMediaDB auf {{config.url}}'
-        },
-        googledrive: {
-            en: 'Google Drive ({{config.email}})',
-            de: 'Google Drive ({{config.email}})'
-        }
-    },
     stage: {
         nothingFound: {
             en: 'No proper results found',

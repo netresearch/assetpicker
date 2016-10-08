@@ -27,22 +27,10 @@ module.exports = {
     language: 'auto',
     debug: false,
     adapters: {
-        github: {
-            src: 'adapter/github.js',
-            name: 'AssetPickerAdapterGithub'
-        },
-        entermediadb: {
-            src: 'adapter/entermediadb.js',
-            name: 'AssetPickerAdapterEntermediadb'
-        },
-        googledrive: {
-            src: 'adapter/googledrive.js',
-            name: 'AssetPickerAdapterGoogledrive'
-        },
-        dummy: {
-            src: 'adapter/dummy.js',
-            name: 'AssetPickerAdapterDummy'
-        }
+        github: 'adapter/github.js',
+        entermediadb: 'adapter/entermediadb.js',
+        googledrive: 'adapter/googledrive.js',
+        dummy: 'adapter/dummy.js'
     },
     // Way to deliver thumbnails in picked assets:
     // 'url' for the url to the thumbnail

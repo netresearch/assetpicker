@@ -67,7 +67,7 @@ module.exports = {
                 },
                 title: function () {
                     var fields = {}, item = this.item;
-                    fields.type = (item.type === 'file' && item.extension ? item.extension.toUpperCase() + '-' : '') + this.t('types.' + item.type);
+                    fields.type = item.mediaType.label || (item.type === 'file' && item.extension ? item.extension.toUpperCase() + '-' : '') + this.t('types.' + item.type);
                     if (item.id.split('/').pop() === item.name) {
                         fields.path = ('/' + item.id).replace(/^\/+/, '/');
                     } else {

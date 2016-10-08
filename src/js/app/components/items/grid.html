@@ -3,13 +3,13 @@
         <div v-on:click.prevent="select" :title="title" v-on:dblclick.prevent="open" class="item{{selected ? ' selected' : ''}}">
             <div class="item-inner">
                 <div class="item-preview">
-                    <span class="file-type {{item.class}}"></span>
-                    <div v-if="item.iconBig" class="item-icon" v-bind:style="{backgroundImage: 'url(' + item.iconBig + ')'}"></div>
+                    <span class="file-type {{item.mediaType}}"></span>
+                    <div v-if="item.mediaType.iconBig" class="item-icon" v-bind:style="{backgroundImage: 'url(' + item.mediaType.iconBig + ')'}"></div>
                     <div v-if="item.thumbnail" class="item-thumbnail {{item.class}}" v-bind:style="{backgroundImage: 'url(' + item.thumbnail + ')'}"></div>
                 </div>
                 <div class="item-title">
-                    <span v-if="item.type !== 'dir' && !item.icon" class="file-type {{item.class}}"></span>
-                    <img v-if="item.type !== 'dir' && item.icon" v-bind:src="item.icon"/>
+                    <span v-if="item.type !== 'dir' && !item.mediaType.icon" class="file-type {{item.mediaType}}"></span>
+                    <img v-if="item.type !== 'dir' && item.mediaType.icon" v-bind:src="item.mediaType.icon"/>
                     {{item.name}}
                 </div>
             </div>
