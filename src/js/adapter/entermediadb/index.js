@@ -1,4 +1,10 @@
 module.exports = {
+    translations: {
+        description: {
+            en: 'EnterMediaDB on {{config.url}}',
+            de: 'EnterMediaDB auf {{config.url}}'
+        }
+    },
     template: require('./template.html'),
     http: function() {
         var options = {

@@ -1,6 +1,40 @@
 var auth2, requests = 0, second;
 
 module.exports = {
+    translations: {
+        description: {
+            en: 'Google Drive ({{config.email || "Not connected"}})',
+            de: 'Google Drive ({{config.email || "Nicht verbunden"}})'
+        },
+        'document': {
+            en: 'Doc',
+            de: 'Doc'
+        },
+        'spreadsheet': {
+            en: 'Spreadsheet',
+            de: 'Tabelle'
+        },
+        'presentation': {
+            en: 'Presentation',
+            de: 'Präsentation'
+        },
+        'map': {
+            en: 'My Maps',
+            de: 'My Maps'
+        },
+        'form': {
+            en: 'Form',
+            de: 'Formular'
+        },
+        'drawing': {
+            en: 'Drawing',
+            de: 'Zeichnung'
+        },
+        'folder': {
+            en: 'Folder',
+            de: 'Ordner'
+        }
+    },
     http: {
         base: 'https://content.googleapis.com/drive/v3',
         http: {
@@ -52,7 +86,6 @@ module.exports = {
                         button.innerHTML = this.t('login.login');
 
                         auth2.attachClickHandler(button, {}, function(currentUser) {
-                            console.log(currentUser.getAuthResponse());
                             this.$parent.open = open;
                             this.$el.removeChild(div);
                             resolve(currentUser);
@@ -101,7 +134,7 @@ module.exports = {
                     {
                         params: {
                             key: this.config.api_key,
-                            q: '\'' + (tree.item ? tree.item.id : 'root') + '\' in parents',
+                            q: '\'' + (tree.item ? tree.item.id : 'root') + '\' in parents and trashed = false',
                             fields: 'files,kind'
                         }
                     }
@@ -109,12 +142,21 @@ module.exports = {
                     console.log(response);
                     tree.items = JSON.parse(response.data).files.map(function(item) {
                         var type = item.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file';
+                        var typeLabel;
+                        if (item.mimeType.indexOf('/vnd.google-apps.') > 0) {
+                            var googleType = item.mimeType.split('.').pop();
+                            typeLabel = 'Google ' + (this.t(googleType) || googleType[0].toUpperCase() + googleType.substr(1));
+                        }
                         return this.createItem({
                             id: item.id,
                             name: item.name,
                             type: type,
-                            icon: item.iconLink,
-                            iconBig: (type === 'file' && item.iconLink) ? item.iconLink.replace(/\/icon_[0-9]+_([^_]+)_[^\/]+/, '/mediatype/icon_1_$1_x128.png') : undefined,
+                            mediaType: {
+                                icon: item.iconLink,
+                                iconBig: (type === 'file' && item.iconLink) ? item.iconLink.replace(/\/icon_[0-9]+_([^_]+)_[^\/]+/, '/mediatype/icon_1_$1_x128.png') : undefined,
+                                label: typeLabel
+                            },
+                            extension: item.fileExtension,
                             thumbnail: item.thumbnailLink,
                             data: item
                         });

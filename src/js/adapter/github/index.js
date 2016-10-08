@@ -1,4 +1,10 @@
 module.exports = {
+    translations: {
+        description: {
+            en: 'Repository {{config.username}}/{{config.repository}} on GitHub',
+            de: 'Repository {{config.username}}/{{config.repository}} auf GitHub'
+        }
+    },
     http: {
         base: 'https://api.github.com'
     },

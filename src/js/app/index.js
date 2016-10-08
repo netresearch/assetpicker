@@ -4,6 +4,7 @@ Vue.use(require('vue-resource'));
 
 var i18nMixin = require('vue-i18n-mixin');
 i18nMixin.methods.t = i18nMixin.methods.translate;
+delete i18nMixin.methods.translate;
 Vue.mixin(i18nMixin);
 
 Vue.http.interceptors.push(function(options, next) {
@@ -164,10 +165,12 @@ module.exports = Vue.extend({
                         if (!this.config.adapters.hasOwnProperty(adapter)) {
                             throw 'Adapter ' + adapter + ' is not configured';
                         }
+                        this.config.storages[storage].description = this.config.storages[storage].description || null;
                         if (loadAdapters.indexOf(adapter) < 0) {
                             loadAdapters.push(adapter);
                             loading++;
-                            (function (adapter, src, name) {
+                            (function (adapter, src) {
+                                var name = 'AssetPickerAdapter' + adapter[0].toUpperCase() + adapter.substr(1);
                                 if (!src.match(/^(https?:\/\/|\/)/)) {
                                     src = scriptURL.split('/').slice(0, -1).join('/') + '/' + src;
                                 }
@@ -175,11 +178,14 @@ module.exports = Vue.extend({
                                     if (!window[name]) {
                                         reject(name + ' could not be found');
                                     }
-                                    window[name].extends = baseAdapter;
-                                    storageComponent.component(adapter, window[name]);
+                                    var component = window[name];
+                                    this.$options.translations[adapter] = component.translations;
+                                    delete component.translations;
+                                    component.extends = baseAdapter;
+                                    storageComponent.component(adapter, component);
                                     loaded();
                                 }.bind(this));
-                            }.bind(this))(adapter, this.config.adapters[adapter].src, this.config.adapters[adapter].name);
+                            }.bind(this))(adapter, this.config.adapters[adapter]);
                         }
                     }
                 }

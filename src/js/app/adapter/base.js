@@ -176,6 +176,12 @@ module.exports = {
     },
     dateFormat: undefined,
     methods: {
+        t: function(key) {
+            if (key.indexOf('.') < 0) {
+                key = this.config.adapter + '.' + key;
+            }
+            return this.$root.t(key);
+        },
         parseDate: function (date) {
             if (date) {
                 return fecha.parse(date, this.$options.dateFormat);

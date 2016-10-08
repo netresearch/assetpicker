@@ -1,4 +1,10 @@
 module.exports = {
+    translations: {
+        description: {
+            en: 'Dummy adapter',
+            de: 'Dummy-Adapter'
+        }
+    },
     data: function() {
         return {
             lastId: 1
