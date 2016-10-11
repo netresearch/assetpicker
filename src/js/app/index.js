@@ -23,6 +23,8 @@ require('./components/tree');
 
 var extend = require('extend');
 
+var storageComponent = require('./components/storage');
+
 module.exports = Vue.extend({
     template: require('./index.html'),
     data: function () {
@@ -88,7 +90,7 @@ module.exports = Vue.extend({
         }
     },
     components: {
-        storage: require('./components/storage'),
+        storage: storageComponent,
         items: require('./components/items'),
         handle: require('./components/handle')
     },
@@ -154,7 +156,7 @@ module.exports = Vue.extend({
                         if (!adapter) {
                             throw 'Missing adapter on storage ' + storage;
                         }
-                        if (this.$options.components.storage.$options.components[adapter]) {
+                        if (storageComponent.components[adapter]) {
                             continue;
                         }
                         if (!this.config.adapters.hasOwnProperty(adapter)) {
