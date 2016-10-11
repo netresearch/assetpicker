@@ -144,6 +144,10 @@ module.exports = Vue.extend({
                             resolve();
                         }
                     };
+                if (!this.config.storages.length) {
+                    console.error('No storages configured');
+                    resolve();
+                }
                 for (var storage in this.config.storages) {
                     if (this.config.storages.hasOwnProperty(storage)) {
                         var adapter = this.config.storages[storage].adapter;

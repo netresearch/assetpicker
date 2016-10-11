@@ -37,7 +37,7 @@
                 <div v-if="!numStorages">
                     <div class="alert alert-warning" style="margin-top: 15px;">No storages configured</div>
                 </div>
-                <items v-ref:items></items>
+                <items v-else v-ref:items></items>
             </div>
         </div>
         <div id="footer">

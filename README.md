@@ -16,6 +16,9 @@ AssetPicker is a free asset or file picker designed to be easily included into w
     * [config](#config)
     * [options](#options)
     * [Buttons](#buttons)
+* [API](#api)
+    * [Methods](#methods)
+    * [Events](#events)
 * [Adapters](#adapters)
     * [GitHub](#github)
         * [Authentication](#authentication)
@@ -85,6 +88,10 @@ You can include AssetPicker into your PHP application easily with composer (but 
 composer require netresearch/assetpicker
 ln -s vendor/netresearch/assetpicker web/assetpicker
 ```
+
+### Symfony Application
+
+Feel free to use the [AssetPicker Bundle](https://github.com/netresearch/assetpicker-bundle).
 
 ### npm
 
@@ -167,6 +174,32 @@ attribute | description
 **data-types** | Comma separated list of element types allowed to be picked (currently `dir`, `file` and `category` are supported by the adapters) - overrides [`config.picker.extensions`](#config)
 **data-name** | Name of an hidden input element which should be created right before the button with the JSON representation of the picked elements as value
 **data-target** | CSS selector of one or more elements to which the JSON representation of the picked elements will be written - when one of these elements is an input, it's value will be set, otherwise it's innerHTML
+
+## API
+
+The `AssetPicker` provides a basic API including some methods and some events.
+
+### Methods
+
+Method | Description
+`on(String event, Function listener)` | Register an event listener on an [event](#events)
+`register(DomElement element)` | Register an element as AssetPicker button (will get the click event added).
+
+### Events
+
+The picker provides a simple events with some events - the listeners will always be bound to the picker instance and receive arguments depending on the event. Register your events as follows:
+
+```javascript
+var picker = new AssetPicker(config);
+picker.on('pick', function(picked) {
+  console.log(picked, this.element);
+});
+```
+
+event | description
+**pick** | Triggered after assets were picked (and the picker was closed). Listeners receive the picked assets as first argument (single asset when limit is 1 or array of assets otherwise)
+**ready** | Triggered when the picker application was loaded
+**resize** | Triggered when user minimizes or maximizes the application window
 
 ## Adapters
 ### GitHub
@@ -372,7 +405,6 @@ Apart from simply forking this repository, you can also include the app into you
     - Google Drive
     - Amazon S3
     - Dropbox
-- Symfony Bundle
 - github:
     - Two Factor Auth
     - Branch selector

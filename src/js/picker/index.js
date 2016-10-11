@@ -43,7 +43,12 @@ module.exports = require('../shared/util/createClass')({
             this.modal[maximize ? 'addClass' : 'removeClass']('assetpicker-maximized');
         });
 
-        document.addEventListener('DOMContentLoaded', this._init.bind(this));
+        document.addEventListener('DOMContentLoaded', function () {
+            var inputs = document.querySelectorAll(this.options.selector);
+            for (var i = 0, l = inputs.length; i < l; i++) {
+                this.registerElement(inputs[i]);
+            }
+        }.bind(this));
     },
     on: function (event, callback) {
         if (!this._callbacks.hasOwnProperty(event)) {
@@ -66,29 +71,30 @@ module.exports = require('../shared/util/createClass')({
             this._memoryEvents[event] = args;
         }
     },
-    _init: function() {
-        this.modal = new Modal(this.options.modal);
-        this.modal.messaging.registerServer('picker', this);
-        var inputs = document.querySelectorAll(this.options.selector);
-        for (var i = 0, l = inputs.length; i < l; i++) {
-            this._initInput(inputs[i]);
+    register: function (element) {
+        if (element.hasAttribute('data-assetpicker')) {
+            return;
         }
-    },
-    _initInput: function (element) {
+        element.setAttribute('data-assetpicker', 1);
         element.addEventListener('click', function(event) {
             event.preventDefault();
             this.element = element;
+            if (!this.modal) {
+                this.modal = new Modal(this.options.modal);
+                this.modal.messaging.registerServer('picker', this);
+                this.on(
+                    'ready',
+                    function () {
+                        var element = this.element;
+                        this.modal.messaging.call('app.setPickConfig', {
+                            limit: element.hasAttribute('data-limit') ? parseInt(element.getAttribute('data-limit')) : 1,
+                            types: element.hasAttribute('data-types') ? element.getAttribute('data-types').split(',') : ['file'],
+                            extensions: element.hasAttribute('data-ext') ? element.getAttribute('data-ext').split(',') : []
+                        })
+                    }
+                );
+            }
             this.modal.open();
-            this.on(
-                'ready',
-                function () {
-                    this.modal.messaging.call('app.setPickConfig', {
-                        limit: element.hasAttribute('data-limit') ? parseInt(element.getAttribute('data-limit')) : 1,
-                        types: element.hasAttribute('data-types') ? element.getAttribute('data-types').split(',') : ['file'],
-                        extensions: element.hasAttribute('data-ext') ? element.getAttribute('data-ext').split(',') : []
-                    })
-                }
-            );
         }.bind(this));
     },
     getConfig: function() {
