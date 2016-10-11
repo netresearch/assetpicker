@@ -144,7 +144,7 @@ module.exports = Vue.extend({
                             resolve();
                         }
                     };
-                if (!this.config.storages.length) {
+                if (!this.numStorages) {
                     console.error('No storages configured');
                     resolve();
                 }
