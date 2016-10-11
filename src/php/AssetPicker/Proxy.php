@@ -39,7 +39,7 @@ class Proxy extends \Proxy\Proxy
             if ($response->isRedirect()) {
                 $response->headers->set(
                     'location',
-                    $this->request->getSchemeAndHttpHost() . $this->request->getBaseUrl() . '?to='
+                    $this->request->getSchemeAndHttpHost() . $this->request->getBaseUrl() .  $this->request->getPathInfo() . '?to='
                     . urlencode($response->headers->get('location'))
                 );
             }
