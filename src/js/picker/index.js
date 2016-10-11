@@ -46,7 +46,7 @@ module.exports = require('../shared/util/createClass')({
         document.addEventListener('DOMContentLoaded', function () {
             var inputs = document.querySelectorAll(this.options.selector);
             for (var i = 0, l = inputs.length; i < l; i++) {
-                this.registerElement(inputs[i]);
+                this.register(inputs[i]);
             }
         }.bind(this));
     },
