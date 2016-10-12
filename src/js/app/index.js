@@ -141,15 +141,10 @@ module.exports = Vue.extend({
                     loadAdapters = [],
                     loading = 0,
                     loaded = function () {
-                        loading--;
                         if (loading === 0) {
                             resolve();
                         }
                     };
-                if (!this.numStorages) {
-                    console.error('No storages configured');
-                    resolve();
-                }
                 for (var storage in this.config.storages) {
                     if (this.config.storages.hasOwnProperty(storage)) {
                         var adapter = this.config.storages[storage].adapter;
@@ -175,12 +170,14 @@ module.exports = Vue.extend({
                                     }
                                     window[name].extends = baseAdapter;
                                     this.$options.components.storage.component(adapter, window[name]);
+                                    loading--;
                                     loaded();
                                 }.bind(this));
                             }.bind(this))(adapter, this.config.adapters[adapter].src, this.config.adapters[adapter].name);
                         }
                     }
                 }
+                loaded();
             });
         },
         visible: function (item) {
