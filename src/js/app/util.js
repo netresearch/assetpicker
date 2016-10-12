@@ -73,5 +73,26 @@ module.exports = {
 
         // Fire the loading
         head.appendChild(script);
+    },
+    /**
+     * Get image data uri
+     *
+     * @param {string} url
+     * @param {function} callback
+     */
+    getImageDataUri: function (url, callback) {
+        var image = new Image();
+
+        image.onload = function () {
+            var canvas = document.createElement('canvas');
+            canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+            canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+
+            canvas.getContext('2d').drawImage(this, 0, 0);
+
+            callback(canvas.toDataURL('image/png'));
+        };
+
+        image.src = url;
     }
 };

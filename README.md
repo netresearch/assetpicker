@@ -145,6 +145,7 @@ key | type | default | description
 **adapters** | object | see [here](src/js/app/config.js#L29) | Sources of the possible adapters - here you can [register your own adapters](#register-your-own-adapter)
 **adapters.xyz.src** | string | - | Required: The URL to the adapter script - relative to the app script (a leading / loads it relative from the modal src origin, use an absolute URL if the adapter source is not on the same origin as the app script or html file)
 **adapers.xyz.name** | string | - | Required: Name of adapter object in global scope 
+**thumbnails** | string | `"url"` | Way to deliver thumbnails in the resulting asset objects: "url" for the url, "data" for the data-uri (helpfull, when AssetPicker uses the proxy and your page doesn't)
 
 ### options
 

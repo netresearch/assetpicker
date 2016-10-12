@@ -35,5 +35,9 @@ module.exports = {
             src: 'adapter/entermediadb.js',
             name: 'AssetPickerAdapterEntermediadb'
         }
-    }
+    },
+    // Way to deliver thumbnails in picked assets:
+    // 'url' for the url to the thumbnail
+    // 'data' for the image data uri
+    thumbnails: 'url'
 };

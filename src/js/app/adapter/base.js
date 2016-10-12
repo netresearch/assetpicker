@@ -132,7 +132,7 @@ module.exports = {
         },
         createItem: function (data) {
             data.storage = this.storage;
-            return new Item(data);
+            return new Item(data, this.appConfig.thumbnails);
         },
         login: function(authenticate) {
             if (!this.currentLogin) {

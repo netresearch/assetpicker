@@ -1,4 +1,6 @@
-module.exports = function (data) {
+var util = require('../util');
+
+module.exports = function (data, thumbnailConfig) {
     if (typeof data === 'function') {
         data = data();
     }
@@ -8,7 +10,13 @@ module.exports = function (data) {
     if (!data.storage) {
         throw 'Item requires the storage ID';
     }
-    return item = {
+    if (thumbnailConfig === 'data') {
+        util.getImageDataUri(data.thumbnail, function (dataUri) {
+            item.thumbnail = dataUri;
+        });
+        delete data.thumbnail;
+    }
+    var item = {
         id: data.id,
         storage: data.storage,
         query: data.query,
@@ -20,4 +28,5 @@ module.exports = function (data) {
         modified: data.modified,
         data: data.data
     };
+    return item;
 };
