@@ -37,9 +37,13 @@ class Proxy extends \Proxy\Proxy
                 $response->headers->remove('transfer-encoding');
             }
             if ($response->isRedirect()) {
+                $baseUrl = $this->request->getBaseUrl();
+                if (basename($baseUrl) !== basename($this->request->getScriptName())) {
+                    $baseUrl .= $this->request->getPathInfo();
+                }
                 $response->headers->set(
                     'location',
-                    $this->request->getSchemeAndHttpHost() . $this->request->getBaseUrl() .  $this->request->getPathInfo() . '?to='
+                    $this->request->getSchemeAndHttpHost() . $baseUrl . '?to='
                     . urlencode($response->headers->get('location'))
                 );
             }
