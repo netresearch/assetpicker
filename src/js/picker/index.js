@@ -111,7 +111,7 @@ module.exports = require('../shared/util/createClass')({
                 var escaped = area.innerHTML;
                 var targets = document.querySelectorAll(targetSelector);
                 for (var i = 0, l = targets.length; i < l; i++) {
-                    if (targets[i].tagName === 'input') {
+                    if (targets[i].tagName.toLowerCase() === 'input') {
                         targets[i].setAttribute('value', stringified);
                     } else {
                         targets[i].innerHTML = escaped;
