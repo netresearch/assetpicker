@@ -1,8 +1,4 @@
-<<<<<<< e6c522987e030c882f029ef13f528e5e1f3df2b6
 var util = require('../util');
-
-module.exports = function (data, thumbnailConfig) {
-=======
 var docTypes = {
     text: ['txt', 'md', 'rst', 'rtf', 'odt', 'ott'],
     pdf: ['pdf'],
@@ -38,8 +34,7 @@ MediaType.prototype.toString = function() {
     return this.name || '';
 };
 
-module.exports = function (data) {
->>>>>>> Reworked grid layout
+module.exports = function (data, thumbnailConfig) {
     if (typeof data === 'function') {
         data = data();
     }
@@ -49,18 +44,14 @@ module.exports = function (data) {
     if (!data.storage) {
         throw 'Item requires the storage ID';
     }
-<<<<<<< e6c522987e030c882f029ef13f528e5e1f3df2b6
     if (thumbnailConfig === 'data') {
         util.getImageDataUri(data.thumbnail, function (dataUri) {
             item.thumbnail = dataUri;
         });
         delete data.thumbnail;
     }
-    var item = {
-=======
     var ext = data.type === 'file' ? (data.hasOwnProperty('extension') ? data.extension : (data.name.match(/\.([0-9a-z]+)$/i) || []).pop()) : undefined;
-    return item = {
->>>>>>> Reworked grid layout
+    var item = {
         id: data.id,
         storage: data.storage,
         query: data.query,

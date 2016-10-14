@@ -115,13 +115,14 @@ module.exports = Vue.extend({
         }
     },
     ready: function() {
-        var resizeHandler = function() {
+        window.addEventListener('resize', function() {
             this.$broadcast('resize');
-        }.bind(this);
-        window.addEventListener('resize', resizeHandler);
-        this.$refs.handle.$on('move', resizeHandler);
+        });
     },
     events: {
+        'handle-move': function () {
+            this.$broadcast('resize');
+        },
         'config-loaded': function (config) {
             Vue.config.debug = config.debug;
             this.$set('config', config);
@@ -182,8 +183,7 @@ module.exports = Vue.extend({
                                     this.$options.translations[adapter] = component.translations;
                                     delete component.translations;
                                     component.extends = baseAdapter;
-                                    storageComponent.component(adapter, component);
-                                    this.$options.components.storage.component(adapter, window[name]);
+                                    this.$options.components.storage.component(adapter, component);
                                     loading--;
                                     loaded();
                                 }.bind(this));
