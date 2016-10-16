@@ -61,6 +61,23 @@ module.exports = {
                     picked: require('../../model/pick')
                 }
             },
+            mixins: [require('../../mixin/contextmenu')],
+            contextmenu: function() {
+                var items = [], icons = {
+                    open: 'new-window',
+                    download: 'floppy-save'
+                };
+                if (this.item.links) {
+                    for (var key in icons) {
+                        if (this.item.links.hasOwnProperty(key) && this.item.links[key]) {
+                            var html = '<span class="glyphicon glyphicon-' + icons[key] + '"></span> ';
+                            html += this.t('link.' + key);
+                            items.push({label: html, link: this.item.links[key]});
+                        }
+                    }
+                }
+                return items;
+            },
             computed: {
                 selected: function() {
                     return this.picked.contains(this.item);

@@ -83,6 +83,16 @@ module.exports = {
             de: 'Seiten'
         }
     },
+    link: {
+        download: {
+            en: 'Download',
+            de: 'Herunterladen'
+        },
+        open: {
+            en: 'Open',
+            de: 'Öffnen'
+        }
+    },
     stage: {
         nothingFound: {
             en: 'No proper results found',

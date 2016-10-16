@@ -31,6 +31,7 @@ $footer-height: $navbar-height + 2;
 @import "components/sidebar";
 @import "components/items";
 @import "components/loaders";
+@import "components/contextmenu";
 
 body {
     background: transparent;
