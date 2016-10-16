@@ -1,0 +1,23 @@
+#contextmenu {
+  position: absolute;
+  padding:3px 0;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+  a, a:link, a:active, a:visited {
+    display: block;
+    padding:6px 16px;
+    text-align: left;
+    color: $gray;
+    &:hover {
+      text-decoration: none;
+      background: $gray-lighter;
+    }
+    span {
+      float: left;
+      margin-right: 10px;
+      position: relative;
+      top:5px;
+    }
+  }
+}

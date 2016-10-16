@@ -60,6 +60,7 @@ module.exports = function (data, thumbnailConfig) {
         extension: ext,
         thumbnail: data.thumbnail,
         mediaType: new MediaType(data.type, ext, data.mediaType),
+        links: data.links,
         created: data.created,
         modified: data.modified,
         data: data.data

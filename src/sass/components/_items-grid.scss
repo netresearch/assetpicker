@@ -5,7 +5,7 @@
         min-width:128px;
         padding-right:15px;
         cursor:default;
-        &:hover .item-inner, &.selected .item-inner {
+        .item-inner:hover, &.selected .item-inner, &.contextmenu .item-inner {
             // IE fails displaying the svg backgrounds with this effect
             // see the hack at the very bottom
             box-shadow: 0 2px 8px 0 rgba(0,0,0,.25);
@@ -90,7 +90,8 @@
 
 _:-ms-lang(x),
 .items-grid .item:hover .item-inner,
-.items-grid .item.selected .item-inner {
+.items-grid .item.selected .item-inner,
+.items-grid .item.contextmenu .item-inner {
     border:2px solid rgba(0,0,0,.25);
     margin:-2px;
     box-shadow: none;
