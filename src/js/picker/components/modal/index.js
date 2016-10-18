@@ -1,4 +1,5 @@
 var extend = require('extend'),
+    util = require('../../util'),
     insertCss = require('insert-css'),
     transitionEvent = (function() {
         var el = document.createElement('div');
@@ -68,7 +69,13 @@ module.exports = require('../../../shared/util/createClass')({
             return;
         }
         this.messaging.window = this.frame.contentWindow;
-        this.addClass(this.options.openClassName);
+        util.addClass(this.modal, this.options.openClassName);
+    },
+    maximize: function () {
+        util.addClass(this.modal, 'assetpicker-maximized');
+    },
+    minimize: function () {
+        util.removeClass(this.modal, 'assetpicker-maximized');
     },
     _closed: function() {
     },
@@ -82,20 +89,6 @@ module.exports = require('../../../shared/util/createClass')({
         } else {
             this._closed();
         }
-        this.removeClass(this.options.openClassName);
-    },
-    addClass: function(className) {
-        if (this.modal.className.split(' ').indexOf(className) === -1) {
-            this.modal.className += ' ' + className;
-        }
-    },
-    removeClass: function(className) {
-        var classNames = this.modal.className.split(' '), newClassNames = [];
-        for (var i = 0, l = classNames.length; i < l; i++) {
-            if (classNames[i] !== className) {
-                newClassNames.push(classNames[i]);
-            }
-        }
-        this.modal.className = newClassNames.join(' ');
+        util.removeClass(this.modal, this.options.openClassName);
     }
 });

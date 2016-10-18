@@ -1,0 +1,141 @@
+@import "mixins/file-types";
+
+$pane-background: #eee;
+$title-background: lighten($pane-background, 5);
+$color: darken($pane-background, 53);
+
+.assetpicker-ui {
+    margin-bottom: 1em;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 6px;
+}
+.assetpicker-hidden {
+    position: absolute;
+    top:0;
+    left:100%;
+    margin-left:0;
+}
+.assetpicker-ui > * {
+    margin-bottom:-6px;
+}
+.assetpicker-item {
+    vertical-align: middle;
+    box-sizing: content-box;
+    display: inline-block;
+    width: 100px;
+    background: $pane-background;
+    padding:6px;
+    margin-right:-6px;
+}
+.assetpicker-item:last-of-type {
+    margin-right: 6px;
+}
+.assetpicker-item:last-child {
+    margin-right: 0;
+}
+.assetpicker-preview {
+    position: relative;
+    background:#fff;
+    padding-top: 3 / 4 * 100%;
+    div {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        &.assetpicker-ft {
+            height: 42px;
+            width: auto;
+            bottom: auto;
+            top: 50%;
+            margin: 0;
+            margin-top: -21px;
+            &.assetpicker-ft-folder {
+                height: 33px;
+                margin-top: -16px;
+            }
+        }
+        &.assetpicker-tn {
+            background-size:cover;
+            background-position: top center;
+            &.assetpicker-image, &.assetpicker-video {
+                background-position: center center;
+            }
+        }
+        &.assetpicker-icn {
+            background-color: #fff;
+            background-repeat: no-repeat;
+            background-size: 48px auto;
+            background-position: center;
+        }
+    }
+}
+.assetpicker-title {
+    font-size:12px;
+    background: $title-background;
+    padding:3px 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;         /** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
+    -o-text-overflow: ellipsis;    /** Opera 9 & 10 **/
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+    color: $color;
+    span, img {
+        float:left;
+        position: relative;
+        top:4px;
+        margin-right:6px;
+    }
+}
+.assetpicker-del {
+    cursor: pointer;
+    display:block;
+    position: absolute;
+    border-radius: 2px;
+    $width:8;
+    $padding: 3px;
+    background: svg-url('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="#{$width}" height="#{$width}">
+    <line x1="0" y1="0" x2="#{$width}" y2="#{$width}" stroke-width="1.5" stroke="#{$color}"/>
+    <line x1="#{$width}" y1="0" x2="0" y2="#{$width}" stroke-width="1.5" stroke="#{$color}"/>
+    </svg>') $pane-background no-repeat center;
+    opacity: 0;
+    width: $width + (2 * $padding);
+    height: $width + (2 * $padding);
+    right:6px;
+    top:6px;
+    transition: all 0.3s;
+}
+.assetpicker-item:hover .assetpicker-del {
+    opacity: 0.8;
+}
+.assetpicker-item:hover .assetpicker-del:hover {
+    opacity: 1;
+}
+.assetpicker-add {
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    $width:13;
+    $x: $width / 2;
+    $padding: 12px;
+    width: $width + (2 * $padding);
+    height: $width + (2 * $padding);
+    background: svg-url('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="#{$width}" height="#{$width}">
+    <line x1="#{$x}" y1="0" x2="#{$x}" y2="#{$width}" stroke-width="3" stroke="#{$color}"/>
+    <line x1="0" y1="#{$x}" x2="#{$width}" y2="#{$x}" stroke-width="3" stroke="#{$color}"/>
+    </svg>') $pane-background no-repeat center;
+    border:2px solid $pane-background;
+    transition: all 0.3s;
+    margin-top:4px;
+    margin-bottom:-2px;
+}
+.assetpicker-add:hover {
+    background-color: $title-background;
+}
+@include file-types("assetpicker-ft");

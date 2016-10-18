@@ -24,8 +24,9 @@ $navbar-font-size: 16px;
 $footer-height: $navbar-height + 2;
 
 @import url("https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css");
-@import "mixins";
-@import "components/file-types";
+@import "mixins/file-types";
+@include file-types("file-type");
+
 @import "components/navbar";
 @import "components/tree";
 @import "components/sidebar";

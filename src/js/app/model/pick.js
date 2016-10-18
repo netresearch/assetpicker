@@ -3,7 +3,7 @@ var config = require('../config');
 
 pick.isAllowed = function (item) {
     var conf = config.pick;
-    return conf.types.indexOf(item.type) > -1 && (!conf.extensions || !conf.extensions.length || conf.extensions.indexOf(item.extension) > -1);
+    return (!conf.types || !conf.types.length || conf.types.indexOf(item.type)) > -1 && (!conf.extensions || !conf.extensions.length || conf.extensions.indexOf(item.extension) > -1);
 };
 pick.contains = function (item) {
     for (var i = 0, l = pick.length; i < l; i++) {

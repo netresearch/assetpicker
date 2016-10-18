@@ -27,11 +27,28 @@
                 padding-left:60px;
                 margin-bottom: 30px;
             }
+            #options-toggle {
+                position: relative;
+            }
+            #options {
+                position: relative;
+                background: #fff;
+                margin:-20px -30px;
+                padding:20px 30px;
+            }
+            #options .close {
+                position: absolute;
+                right:17px;
+                top:13px;
+            }
             .github svg {
                 width:20px;
                 height:20px;
                 margin: -5px 0;
                 fill: currentColor;
+            }
+            .checkbox-inline {
+                padding-left: 25px;
             }
         </style>
         <!--<script src="../dist/js/picker.js"></script>-->
@@ -41,30 +58,40 @@
 
         <script>
             var onPick = function(pick) {
-                $('#result').jsonViewer(pick).find('> * > li > a').click();
-                var storages = [];
-                if (pick.storage) {
-                    storages.push(pick.storage);
+                if (pick === undefined) {
+                    $('#result').html('undefined');
                 } else {
-                    for (var i = 0, l = pick.length; i < l; i++) {
-                        if (storages.indexOf(pick[i].storage) < 0) {
-                            storages.push(pick[i].storage);
+                    $('#result').jsonViewer(pick).find('> * > li > a').click();
+                    var storages = [];
+                    if (pick.storage) {
+                        storages.push(pick.storage);
+                    } else {
+                        for (var i = 0, l = pick.length; i < l; i++) {
+                            if (storages.indexOf(pick[i].storage) < 0) {
+                                storages.push(pick[i].storage);
+                            }
                         }
                     }
+                    ga('send', 'event', 'AssetPicker', 'picked from ' + storages.sort().join(', '), $(this.element).text());
                 }
-                ga('send', 'event', 'AssetPicker', 'picked from ' + storages.sort().join(', '), $(this.element).text());
             };
             var picker = new AssetPicker({
                 storages: {
+                    drive: {
+                        label: 'Google Drive',
+                        adapter: 'googledrive',
+                        client_id: '1089707867089-fovpv0odd22126iqr9ek679rhr5er3kn.apps.googleusercontent.com',
+                        api_key: 'AIzaSyAwyz6VOWF2nBWeCVw0r2IlYFZcvsV1h5c'
+                    },
                     assetpicker: {
-                        label: 'AssetPicker',
+                        label: 'GitHub',
                         adapter: 'github',
                         username: 'netresearch',
                         repository: 'assetpicker',
                         loginHint: 'Login with your GitHub account (<a href="https://github.com/netresearch/assetpicker#authentication" target="_blank">won\'t be stored anywhere</a>)'
                     },
                     entermediaDB: {
-                        label: 'EnterMediaDB Demo',
+                        label: 'EnterMediaDB',
                         adapter: 'entermediadb',
                         url: 'http://em9.entermediadb.org/openinstitute',
                         proxy: true,
@@ -77,18 +104,6 @@
                 }
             });
             picker.on('pick', onPick);
-            var picker2 = new AssetPicker({
-                title: 'Another Storage',
-                storages: {
-                    kite: {
-                        label: 'Kite',
-                        adapter: 'github',
-                        username: 'netresearch',
-                        repository: 'kite'
-                    }
-                }
-            }, {selector: '[rel="assetpicker2"]'});
-            picker2.on('pick', onPick);
         </script>
     </head>
     <body>
@@ -125,18 +140,112 @@
         <div class="jumbotron">
             <h2>AssetPicker</h2>
             <p>A free, easy to use, cross plattform ready asset or file picker.</p>
-            <div class="btn-group">
-                <button id="demo" class="btn btn-primary" rel="assetpicker" data-name="hiddenInputDefault">Try it and pick an asset</button>
-                <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#" rel="assetpicker" data-ext="js,json">JS or JSON files</a></li>
-                    <li><a href="#" rel="assetpicker" data-ext="jpg,jpeg,gif,png">Images</a></li>
-                    <li><a href="#" rel="assetpicker" data-limit="0">Multiple files</a></li>
-                    <li><a href="#" rel="assetpicker" data-limit="2">Max 2 files</a></li>
-                    <li><a href="#" rel="assetpicker" data-types="dir">Folder</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#" rel="assetpicker2" data-name="hiddenInputOther">Use another storage</a></li>
-                </ul>
+            <p>
+                <button rel="assetpicker" class="btn btn-primary" id="demo-button">Try it and pick an asset</button>
+            </p>
+            <a role="button" id="options-toggle" data-toggle="collapse" href="#options" aria-expanded="false" aria-controls="options">Customize Options</a>
+            <div id="options" class="collapse-zzz">
+                <a class="close" data-toggle="collapse" href="#options"><span aria-hidden="true">&times;</span></a>
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>Button options</legend>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-lg-3 control-label">Limit</div>
+                                    <div class="col-lg-9">
+                                        <div class="input-group">
+                                            <input name="limit" style="display: inline-block" type="number" class="form-control" min="0" value="1">
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-question-sign" data-toggle="popover" title="Asset limit"
+                                                      data-content="Controls if selecting multiple and how many assets is allowed - use 0 for no limit
+                                                      <dl>
+                                                        <dt>HTML-Attribute</dt><dd><code>data-limit</code> (Integer number)</dd>
+                                                        <dt>Config</dt><dd><code>pick.limit</code> (Integer number)</dd>
+                                                      </dl>
+                                                        ">
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-3 control-label">Extensions</div>
+                                    <div class="col-lg-9">
+                                        <div class="input-group ">
+                                            <input name="ext" style="display: inline-block" class="form-control" value="" placeholder="any">
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-question-sign" data-toggle="popover" title="Allowed extensions"
+                                                      data-content="File extensions allowed to be selected
+                                                          <dl>
+                                                            <dt>HTML-Attribute</dt><dd><code>data-ext</code> (Comma separated list of extensions or empty string for all)</dd>
+                                                            <dt>Config</dt><dd><code>pick.extensions</code> (Array with allowed extensions as elements or empty array for all)</dd>
+                                                          </dl>"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-3 control-label">Types</div>
+                                    <div class="col-lg-9">
+                                        <div class="input-group">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" checked name="types-file" value="1"> file
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="types-dir" value="1"> dir
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="types-category" value="1"> category
+                                            </label>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-question-sign" data-toggle="popover" title="Type limit"
+                                                      data-content="Asset or record types allowed to be selected - if an adapter provides additional types, those are available as well ('category' f.i. is only provided by EnterMediaDB)
+                                                      <dl>
+                                                        <dt>HTML-Attribute</dt><dd><code>data-types</code> (Comma separated list of types or empty string for all)</dd>
+                                                        <dt>Config</dt><dd><code>pick.types</code> (Array with allowed types as elements or empty array for all)</dd>
+                                                      </dl>"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-3 control-label">UI</div>
+                                    <div class="col-lg-9">
+                                        <div class="input-group">
+                                            <label class="checkbox-inline">
+                                                <input name="ui" value="1" type="checkbox" checked>
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="ro" value="1"> Read Only
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" checked name="unique"> Unique
+                                            </label>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-question-sign" data-toggle="popover" title="User Interface for picked assets"
+                                                      data-content="Show the picked assets in a User Interface
+                                                      <dl>
+                                                        <dt>HTML-Attributes</dt>
+                                                            <dd><code>data-ui</code> - enable the UI (Boolean)</dd>
+                                                            <dd><code>data-ro</code> - no interactions possible (Boolean)</dd>
+                                                            <dd><code>value</code> - Picked assets to display (String - JSON encoded result from last pick, set automatically on buttons)</dd>
+                                                        <dt>Options</dt>
+                                                            <dd><code>ui.enabled</code> - enable the UI (Boolean)</dd>
+                                                            <dd><code>ui.readonly</code> - no interactions possible (Boolean)</dd>
+                                                            <dd><code>ui.unique</code> - avoid doubly picked assets (Boolean)</dd>
+                                                      </dl>"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <pre></pre>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
         </div>
         <pre id="result">Pick an asset to see the result</pre>
@@ -206,6 +315,178 @@
         $('[rel="assetpicker"]').click(function () {
             ga('send', 'event', 'AssetPicker', 'opened', $(this).text());
         });
+        (function () {
+            var $optionsForm = $('#options > form').submit(function (e) {
+                    e.preventDefault();
+                }),
+                $defaultsForm = $optionsForm.clone().insertAfter($optionsForm),
+                $optionsCode = $optionsForm.find('pre'),
+                $defaultsCode = $defaultsForm.find('pre'),
+                defaultConfig = $.extend({}, picker.getConfig());
+
+            $defaultsForm.find('legend').text('Instance options');
+            var storageCheckboxes = '';
+            $.each(defaultConfig.storages, function (key, config) {
+                storageCheckboxes += '<div class="checkbox"><label><input type="checkbox" name="storages-' + key.toLowerCase() + '" checked> ' + config.label + '</label></div>';
+            });
+            $defaultsForm.find('.form-group:last-of-type').after(
+                    $('<div class="form-group"><div class="col-lg-3 control-label">Storages</div><div class="col-lg-9">' + storageCheckboxes + '</div></div>')
+            );
+
+            var getFormValues = function ($form) {
+                    var values = {};
+                    $.each($form.serializeArray(), function (index, value) {
+                        var name = value.name;
+                        if (name.indexOf('-') > -1) {
+                            var parts = name.split('-');
+                            name = parts[0];
+                            value = (values.hasOwnProperty(name) ? values[name] + ',' : '') + parts[1];
+                        } else {
+                            value = value.value;
+                        }
+                        values[name] = value.replace(/[^0-9a-z,]/, '');
+                    });
+                    return values;
+                },
+                options = getFormValues($optionsForm),
+                defaults = getFormValues($defaultsForm),
+                appDefaults = defaults,
+                renderButtonCode = function () {
+                    var code = '<button rel="assetpicker"';
+                    $.each(['limit', 'types', 'ext'], function (i, key) {
+                        if (options[key] !== defaults[key]) {
+                            code += "\n        data-" + key + '="' + (options[key] || '') + '"';
+                        }
+                    });
+                    $.each(['ui', 'unique', 'ro'], function (i, key) {
+                        if (options[key] && !defaults[key]) {
+                            code += "\n        data-" + key;
+                        } else if (!options[key] && defaults[key]) {
+                            code += "\n        data-" + key + '="false"';
+                        }
+                    });
+                    code += "\n        "+'name="assets">Pick ' + (options.limit === '1' ? 'an asset' : 'assets') + '</button>';
+                    $optionsCode.text(code);
+                },
+                updateDemoButton = function () {
+                    var button = $('#demo-button')[0];
+                    $.each(['limit', 'types', 'ext'], function (i, key) {
+                        button.setAttribute('data-' + key, options[key] || '');
+                    });
+                    var ui = picker.getUi(button);
+
+                    var pickConfig = picker._getPickConfig(button);
+                    console.log(pickConfig);
+                    var picked = [];
+                    for (var i = 0, l = ui.picked.length; i < l; i++) {
+                        var contains = false;
+                        if (!!options.unique && !ui.config.unique) {
+                            for (var j = 0; j < picked.length; j++) {
+                                if (picked[j].storage === ui.picked[i].storage && picked[j].id === ui.picked[i].id) {
+                                    contains = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!contains
+                            && (!pickConfig.extensions.length || pickConfig.extensions.indexOf(ui.picked[i].extension) > -1)
+                            && (!pickConfig.types.length || pickConfig.types.indexOf(ui.picked[i].mediaType.name || 'file') > -1)) {
+                            picked.push(ui.picked[i]);
+                        }
+                    }
+                    console.log(picked, picked.slice(0, pickConfig.limit));
+                    ui.picked = picked.slice(0, pickConfig.limit);
+
+                    ui.config.readonly = !!options.ro;
+                    ui.config.unique = !!options.unique;
+                    if (!options.ui) {
+                        if (ui.container) {
+                            ui.container.parentNode.insertBefore(button, ui.container);
+                            $(button).removeClass('assetpicker-hidden');
+                            ui.container.parentNode.removeChild(ui.container);
+                            delete ui.container;
+                        }
+                    } else {
+                        ui.render();
+                    }
+                },
+                renderPickerCode = function () {
+                    var config = {storages: {}};
+                    if (defaults.storages) {
+                        var allowedStorages = defaults.storages.split(',');
+                        $.each(defaultConfig.storages, function (key, storageConf) {
+                            if (allowedStorages.indexOf(key.toLowerCase()) > -1) {
+                                config.storages[key] = storageConf;
+                                if (storageConf.proxy && !config.proxy) {
+                                    config.proxy = defaultConfig.proxy;
+                                }
+                            }
+                        });
+                    }
+                    var configs = [config];
+                    if (defaults.ext !== '') {
+                        configs.unshift({pick: {extensions: defaults.ext.split(',')}});
+                    }
+                    if (defaults.types !== 'file') {
+                        configs.unshift({pick: {types: defaults.types ? defaults.types.split(',') : []}});
+                    }
+                    if (defaults.limit !== '1') {
+                        configs.unshift({pick: {limit: parseInt(defaults.limit)}});
+                    }
+                    configs.unshift(true);
+
+                    config = $.extend.apply({}, configs);
+                    var arguments = [config];
+                    var ui = {};
+                    if (!defaults.ui) {
+                        ui.enabled = false;
+                    }
+                    if (defaults.ro) {
+                        ui.readonly = true;
+                    }
+                    if (!defaults.unique) {
+                        ui.unique = false;
+                    }
+                    if (Object.keys(ui).length) {
+                        arguments.push({ui: ui});
+                    }
+                    var $code = $defaultsCode, code = $code[0];
+                    $code.jsonViewer(arguments);
+                    var firstToggle = code.querySelector('a');
+                    firstToggle.nextSibling.nodeValue = 'new AssetPicker(';
+                    firstToggle.nextSibling.nextSibling.nextSibling.nodeValue = ')';
+                    firstToggle.parentNode.removeChild(firstToggle);
+                    $code.find('> ol:first-of-type > li:first-of-type > ul:first-of-type > li > a:not(:contains(pick))').click();
+                };
+            renderButtonCode();
+            renderPickerCode();
+
+            $optionsForm.find('input').on('keyup change', function () {
+                options = getFormValues($optionsForm);
+                renderButtonCode();
+                updateDemoButton();
+            });
+            var selectedStorages = Object.keys(defaultConfig.storages).join(',');
+            $defaultsForm.find('input').on('keyup change', function () {
+                defaults = getFormValues($defaultsForm);
+                renderButtonCode();
+                renderPickerCode();
+                if (defaults.storages !== selectedStorages) {
+                    selectedStorages = defaults.storages;
+                    var storages = {};
+                    if (defaults.storages) {
+                        var allowedStorages = defaults.storages.split(',');
+                        $.each(defaultConfig.storages, function (key, storageConf) {
+                            if (allowedStorages.indexOf(key.toLowerCase()) > -1) {
+                                storages[key] = storageConf;
+                            }
+                        });
+                    }
+                    picker.setConfig($.extend(defaultConfig, {storages: storages}));
+                }
+            });
+        })();
+        $('[data-toggle="popover"]').popover({trigger: 'hover', container: 'body', placement: 'auto', html: true});
     </script>
     </body>
 </html>
