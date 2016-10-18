@@ -24,7 +24,17 @@ module.exports = require('../../../shared/util/createClass')({
         this.propagate = false;
         this.picker = picker;
         this.element = element;
-        this.picked = element.hasAttribute('value') ? JSON.parse(element.getAttribute('value')) || [] : [];
+        var value = element.hasAttribute('value') ? element.getAttribute('value') : undefined;
+        if (value) {
+            try {
+                this.picked = JSON.parse(value);
+            } catch (e) {
+                this.picked = [];
+                console.error('Error while parsing value of %s', element);
+            }
+        } else {
+            this.picked =[];
+        }
         if (this.picked.constructor !== Array) {
             this.picked = [this.picked];
         }
