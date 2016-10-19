@@ -140,23 +140,23 @@ ul.tree, ul.tree ul {
   padding: 0;
   margin: 0; }
 
-#sidebar > div {
+#sidebar > div > div {
   background: #eeeeee;
   padding: 0 15px; }
-  #sidebar > div .storage {
+  #sidebar > div > div .storage {
     margin: 16px 0; }
-    #sidebar > div .storage > li > .item {
+    #sidebar > div > div .storage > li > .item {
       font-size: 13px;
       color: #666;
       font-weight: bold;
       margin-bottom: 6px; }
-      #sidebar > div .storage > li > .item > .glyphicon {
+      #sidebar > div > div .storage > li > .item > .glyphicon {
         position: relative;
         left: -2px;
         margin-left: 2px; }
-    #sidebar > div .storage > li > .storage-filters {
+    #sidebar > div > div .storage > li > .storage-filters {
       padding-left: 6px; }
-  #sidebar > div .panel {
+  #sidebar > div > div .panel {
     margin-top: 1em;
     margin-left: -14px; }
 
@@ -336,12 +336,18 @@ body {
     #main > div > div {
       width: 100%;
       height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
       position: relative; }
+      #main > div > div > div {
+        overflow-x: hidden;
+        overflow-y: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0; }
     #main > div#sidebar {
       width: 250px; }
-    #main > div#stage > div {
+    #main > div#stage > div > div {
       padding: 0 15px 0 12px; }
     #main > div.handle {
       height: 100%;

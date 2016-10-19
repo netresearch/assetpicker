@@ -29,15 +29,19 @@
         <div id="main">
             <div id="sidebar" :style="{width: $refs.handle.x + 'px'}">
                 <div>
-                    <storage v-for="(id, storage) in config.storages" :open="$root.numStorages === 1" :id="id" :storage="storage"></storage>
+                    <div>
+                        <storage v-for="(id, storage) in config.storages" :open="$root.numStorages === 1" :id="id" :storage="storage"></storage>
+                    </div>
                 </div>
             </div>
             <handle class="handle" v-ref:handle></handle>
             <div id="stage">
-                <div v-if="!numStorages">
-                    <div class="alert alert-warning" style="margin-top: 15px;">No storages configured</div>
+                <div>
+                    <div v-if="!numStorages">
+                        <div class="alert alert-warning" style="margin-top: 15px;">No storages configured</div>
+                    </div>
+                    <items v-else v-ref:items></items>
                 </div>
-                <items v-else v-ref:items></items>
             </div>
         </div>
         <div id="footer">
