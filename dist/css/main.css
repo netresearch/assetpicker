@@ -233,6 +233,13 @@ ul.tree, ul.tree ul {
   .items-container .items-grid .item:last-child {
     margin-right: 0; }
 
+.items-container _:-ms-lang(x),
+.items-container .items-grid .item:hover .item-inner,
+.items-container .items-grid .item.selected .item-inner {
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  margin: -2px;
+  box-shadow: none; }
+
 .items-container .feedback {
   position: absolute;
   top: 50%;

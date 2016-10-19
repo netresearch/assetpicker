@@ -15,7 +15,12 @@ gulp.task('html', function() {
 
 gulp.task('sass', function() {
     return gulp.src('./src/sass/**/*.scss')
-        .pipe(sass.sync().on('error', sass.logError))
+        .pipe(sass({functions: {
+            'base64Encode($string)': function (string) {
+                var encoded = new Buffer(string.getValue()).toString('base64');
+                return new sass.compiler.types.String(encoded);
+            }
+        }}).on('error', sass.logError))
         .pipe(gulp.dest('./dist/css'))
         .pipe(livereload());
 });
