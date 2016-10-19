@@ -30,11 +30,14 @@ module.exports = {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
+            var items = this.$options.contextmenu.call(this);
+            if (!items.length) {
+                return;
+            }
             currentItem = this.$el;
             currentItem.className = (currentItem.className ? currentItem.className + ' ' : '') + 'contextmenu';
             menu = this.$root.$el.appendChild(document.createElement('div'));
             menu.id = 'contextmenu';
-            var items = this.$options.contextmenu.call(this);
             items.forEach(function(item) {
                 var a = menu.appendChild(document.createElement('a'));
                 a.innerHTML = item.label;

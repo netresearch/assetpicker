@@ -167,7 +167,7 @@ ul.tree, ul.tree ul {
     min-width: 128px;
     padding-right: 15px;
     cursor: default; }
-    .items-container .items-grid .item:hover .item-inner, .items-container .items-grid .item.selected .item-inner {
+    .items-container .items-grid .item .item-inner:hover, .items-container .items-grid .item.selected .item-inner, .items-container .items-grid .item.contextmenu .item-inner {
       box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25); }
     .items-container .items-grid .item.selected .item-inner {
       background: #eeeeee; }
@@ -235,7 +235,8 @@ ul.tree, ul.tree ul {
 
 .items-container _:-ms-lang(x),
 .items-container .items-grid .item:hover .item-inner,
-.items-container .items-grid .item.selected .item-inner {
+.items-container .items-grid .item.selected .item-inner,
+.items-container .items-grid .item.contextmenu .item-inner {
   border: 2px solid rgba(0, 0, 0, 0.25);
   margin: -2px;
   box-shadow: none; }
@@ -310,6 +311,26 @@ ul.tree, ul.tree ul {
     left: 120%; }
   to {
     left: 100%; } }
+
+#contextmenu {
+  position: absolute;
+  padding: 3px 0;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); }
+  #contextmenu a, #contextmenu a:link, #contextmenu a:active, #contextmenu a:visited {
+    display: block;
+    padding: 6px 16px;
+    text-align: left;
+    color: #666; }
+    #contextmenu a:hover, #contextmenu a:link:hover, #contextmenu a:active:hover, #contextmenu a:visited:hover {
+      text-decoration: none;
+      background: #eeeeee; }
+    #contextmenu a span, #contextmenu a:link span, #contextmenu a:active span, #contextmenu a:visited span {
+      float: left;
+      margin-right: 10px;
+      position: relative;
+      top: 5px; }
 
 body {
   background: transparent; }
