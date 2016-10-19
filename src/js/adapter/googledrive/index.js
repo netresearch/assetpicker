@@ -1,4 +1,4 @@
-var auth2, requests = 0, second;
+var auth2, numInstances;
 
 module.exports = {
     translations: {
@@ -33,6 +33,10 @@ module.exports = {
         'folder': {
             en: 'Folder',
             de: 'Ordner'
+        },
+        'script': {
+            en: 'App Script',
+            de: 'App Script'
         }
     },
     http: {
@@ -44,9 +48,13 @@ module.exports = {
         }
     },
     created: function () {
+        if (this.config.hosted_domain && numInstances) {
+            require('vue').console.warn('hosted_domain is a global option for Google Auth - can not have multiple storages based on that');
+        }
         if (this.auth) {
             this.config.email = this.auth.email;
         }
+        numInstances++;
     },
     stored: {
         auth: true
@@ -59,10 +67,14 @@ module.exports = {
                 } else {
                     this.util.loadScript('https://apis.google.com/js/platform.js', function() {
                         gapi.load('auth2', function() {
-                            gapi.auth2.init({
+                            var options = {
                                 client_id: this.config.client_id,
                                 scope: 'https://www.googleapis.com/auth/drive.readonly'
-                            }).then(function(a) {
+                            };
+                            if (this.config.hosted_domain) {
+                                options.hosted_domain = this.config.hosted_domain;
+                            }
+                            gapi.auth2.init(options).then(function(a) {
                                 auth2 = a;
                                 resolve();
                             });
@@ -139,7 +151,6 @@ module.exports = {
                         }
                     }
                 ).then(function(response) {
-                    console.log(response);
                     tree.items = JSON.parse(response.data).files.map(function(item) {
                         var type = item.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file';
                         var typeLabel;
@@ -161,7 +172,6 @@ module.exports = {
                             data: item
                         });
                     }.bind(this));
-                    console.log(tree.items);
                 });
             }.bind(this));
         }
