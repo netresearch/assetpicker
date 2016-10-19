@@ -151,31 +151,33 @@ module.exports = {
                         }
                     }
                 ).then(function(response) {
-                    tree.items = JSON.parse(response.data).files.map(function(item) {
-                        var type = item.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file';
-                        var typeLabel, googleType;
-                        if (item.mimeType.indexOf('/vnd.google-apps.') > 0) {
-                            googleType = item.mimeType.split('.').pop();
-                            typeLabel = 'Google ' + (this.t(googleType) || googleType[0].toUpperCase() + googleType.substr(1));
-                        }
-                        return this.createItem({
-                            id: item.id,
-                            name: item.name,
-                            type: type,
-                            mediaType: {
-                                icon: item.iconLink,
-                                iconBig: (type === 'file' && item.iconLink) ? item.iconLink.replace(/\/icon_[0-9]+_([^_]+)_[^\/]+/, '/mediatype/icon_1_$1_x128.png') : undefined,
-                                label: typeLabel
-                            },
-                            links: {
-                                download: item.webContentLink,
-                                open: item.webViewLink
-                            },
-                            extension: item.fileExtension,
-                            thumbnail: item.thumbnailLink,
-                            data: item
-                        });
-                    }.bind(this));
+                    tree.items = this.sortItems(
+                        JSON.parse(response.data).files.map(function(item) {
+                            var type = item.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file';
+                            var typeLabel, googleType;
+                            if (item.mimeType.indexOf('/vnd.google-apps.') > 0) {
+                                googleType = item.mimeType.split('.').pop();
+                                typeLabel = 'Google ' + (this.t(googleType) || googleType[0].toUpperCase() + googleType.substr(1));
+                            }
+                            return this.createItem({
+                                id: item.id,
+                                name: item.name,
+                                type: type,
+                                mediaType: {
+                                    icon: item.iconLink,
+                                    iconBig: (type === 'file' && item.iconLink) ? item.iconLink.replace(/\/icon_[0-9]+_([^_]+)_[^\/]+/, '/mediatype/icon_1_$1_x128.png') : undefined,
+                                    label: typeLabel
+                                },
+                                links: {
+                                    download: item.webContentLink,
+                                    open: item.webViewLink
+                                },
+                                extension: item.fileExtension,
+                                thumbnail: item.thumbnailLink,
+                                data: item
+                            });
+                        }.bind(this))
+                    );
                 });
             }.bind(this));
         }

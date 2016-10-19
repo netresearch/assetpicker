@@ -182,6 +182,21 @@ module.exports = {
             }
             return this.$root.t(key);
         },
+        sortItems: function (items) {
+            return items.sort(function (a, b) {
+                if (a.type === 'dir' && b.type !== 'dir') {
+                    return -1;
+                } else if (a.type !== 'dir' && b.type === 'dir') {
+                    return 1;
+                }
+                var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+                if (nameA < nameB)
+                    return -1;
+                if (nameA > nameB)
+                    return 1;
+                return 0;
+            });
+        },
         parseDate: function (date) {
             if (date) {
                 return fecha.parse(date, this.$options.dateFormat);
