@@ -118,6 +118,7 @@ module.exports = {
                     result.pages = parseInt(response.data.response.pages);
                     result.items.total = parseInt(response.data.response.totalhits);
                     result.items.loading = false;
+                    var emshareUrl = this.config.url.replace(/\/+$/, '') + '/emshare';
                     response.data.results.forEach((function (asset) {
                         var item = this.createItem({
                             id: asset.id,
@@ -133,6 +134,10 @@ module.exports = {
                                 encodeURI(asset.sourcepath) + '/thumb.jpg',
                                 this.config.url
                             ),
+                            links: {
+                                open: emshareUrl + '/views/modules/asset/editor/viewer/index.html?assetid=' + asset.id,
+                                download: emshareUrl + '/views/activity/downloadassets.html?assetid=' + asset.id
+                            },
                             data: asset
                         });
                         result.items.push(item);

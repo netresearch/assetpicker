@@ -43,7 +43,10 @@ module.exports = {
                                 id: file.path.replace(/^\/+/, ''),
                                 name: file.name,
                                 type: file.type,
-                                data: file
+                                data: file,
+                                links: {
+                                    open: file.html_url
+                                }
                             });
                         }).bind(this));
                         tree.items = items.sort(function (a, b) {
