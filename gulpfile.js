@@ -137,7 +137,7 @@ gulp.task('release', function (cb) {
                                 'README.md',
                                 fs.readFileSync('README.md').toString().replace(new RegExp(tag.replace(/\./, '\\.'), 'g'), nextTag)
                             );
-                            git('commit -m "Bumped version to' + nextTag + '" package.json README.md', function () {
+                            git('commit -m "Bumped version to ' + nextTag + '" package.json README.md', function () {
                                 git('log ' + tag + '..HEAD --format="- %s"', function (log) {
                                     fs.writeFileSync('.commit-msg', 'Tagging ' + nextTag + ":\n" + log);
                                     git('tag -a ' + nextTag + ' -F .commit-msg', function () {
