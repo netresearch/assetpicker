@@ -57,6 +57,9 @@ module.exports = require('../shared/util/createClass')({
             }
         }.bind(this));
     },
+    getOrigin: function () {
+        return document.location.origin;
+    },
     getDistUrl: function () {
         return this.options.distUrl;
     },

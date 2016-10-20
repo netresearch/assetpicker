@@ -106,11 +106,8 @@ module.exports = Vue.extend({
         }
         if (this.$options.messaging) {
             this.$options.messaging.registerServer('app', this);
-            this.callPicker('getDistUrl').then(function (distUrl) {
-                var matches = distUrl.match(/^https?:\/\/[^\/]+/);
-                if (matches) {
-                    this.$options.messaging.origin = matches[0];
-                }
+            this.callPicker('getOrigin').then(function (origin) {
+                this.$options.messaging.origin = origin;
                 this.callPicker('getConfig').then(function(overrideConfig) {
                     extend(true, config, overrideConfig);
                     this.$dispatch('config-loaded', config);
