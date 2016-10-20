@@ -20,12 +20,15 @@ AssetPicker is a free asset or file picker designed to be easily included into w
     * [Methods](#methods)
     * [Events](#events)
 * [Adapters](#adapters)
-    * [GitHub](#github)
+    * [Google Drive](#googledrive)
         * [Authentication](#authentication)
         * [Configuration](#configuration-1)
-    * [EnterMediaDB](#entermediadb)
+    * [GitHub](#github)
         * [Authentication](#authentication-1)
         * [Configuration](#configuration-2)
+    * [EnterMediaDB](#entermediadb)
+        * [Authentication](#authentication-2)
+        * [Configuration](#configuration-3)
     * [Register your own adapter](#register-your-own-adapter)
 * [Customize the app](#customize-the-app)
 * [Roadmap](#roadmap)
@@ -50,7 +53,7 @@ Modern browsers (IE >= 10) - tested in Chrome 53, Firefox 35 - 47, IE 10 - 11, E
 The easiest way to integrate AssetPicker is to use include the picker script from a CDN:
  
 ```html
-<script src="https://cdn.rawgit.com/netresearch/assetpicker/1.0.0/dist/js/picker.js"></script>
+<script src="https://cdn.rawgit.com/netresearch/assetpicker/1.3.2/dist/js/picker.js"></script>
 
 <script>
     new AssetPicker(config, options);
@@ -123,6 +126,8 @@ The `AssetPicker` constructor takes two arguments: `config` (required) and `opti
 new AssetPicker(config); /* or */ new AssetPicker(config, options);
 ```
 
+Feel free to play around with some of the options on the [demo page](https://netresearch.github.io/assetpicker/#options). 
+
 ### config
 
 key | type | default | description
@@ -152,11 +157,15 @@ key | type | default | description
 key | type | default | description
 --- | --- | --- | ---
 **selector** | string | `'[rel="assetpicker"]'` | CSS selector for the buttons you want to act as picker
+**distUrl** | string | url of the picker script popped by two path parts (f.e. http://example.com/dist when picker script url is http://example.com/dist/js/picker.js) | Base URL of the AssetPicker dist directory
 **modal** | object | {} | Options for the modal
-**modal.src** | string | url of the picker script popped by two path parts (f.e. http://example.com/dist when picker script url is http://example.com/dist/js/picker.js) | URL to the AssetPicker application
+**modal.src** | string | `distUrl + '/index.html'` | URL to the AssetPicker application
 **modal.template** | string | see [here](src/js/picker/components/modal/index.html) | Template for the modal - requires an outer div with an iframe somewhere nested
 **modal.css** | string | see [here](src/js/picker/components/modal/index.css) | CSS injected before any other CSS into head
 **modal.openClassName** | string | `'assetpicker-modal-open'` | Class to add/remove to the modal template outer div on opening/closing
+**ui.enabled** | bool | `true` | Whether to show a user interface for the selected assets
+**ui.readonly** | bool | `false` | Whether to show add and delete buttons on the user interface
+**ui.unique** | bool | `true` | Whether the UI should filter out duplicate assets after selection
 
 ### Buttons
 Data attributes on the buttons can control what may be picked and what should happen after something was picked.
@@ -173,8 +182,9 @@ attribute | description
 **data-limit** | Number of elements allowed to be picked (0 for no limit) - overrides [`config.picker.limit`](#config)
 **data-exts** | Comma separated list of file extensions allowed to be picked (empty for any) - overrides [`config.picker.extensions`](#config)
 **data-types** | Comma separated list of element types allowed to be picked (currently `dir`, `file` and `category` are supported by the adapters) - overrides [`config.picker.extensions`](#config)
-**data-name** | Name of an hidden input element which should be created right before the button with the JSON representation of the picked elements as value
-**data-target** | CSS selector of one or more elements to which the JSON representation of the picked elements will be written - when one of these elements is an input, it's value will be set, otherwise it's innerHTML
+**data-ui** | Overrides [`options.ui.enabled`](#options) (`<button ... data-ui>` or `<button ... data-ui="false">`)
+**data-ro** | Overrides [`options.ui.readonly`](#options) (`<button ... data-ro>` or `<button ... data-ro="false">`)
+**data-unique** | Overrides [`options.ui.readonly`](#options) (`<button ... data-unique>` or `<button ... data-unique="false">`)
 
 ## API
 
@@ -182,13 +192,14 @@ The `AssetPicker` provides a basic API including some methods and some events.
 
 ### Methods
 
-Method | Description
+method | description
+--- | ---
 `on(String event, Function listener)` | Register an event listener on an [event](#events)
 `register(DomElement element)` | Register an element as AssetPicker button (will get the click event added).
 
 ### Events
 
-The picker provides a simple events with some events - the listeners will always be bound to the picker instance and receive arguments depending on the event. Register your events as follows:
+The picker provides a simple events API with some events - the listeners will always be bound to the picker instance and receive arguments depending on the event. Register your events as follows:
 
 ```javascript
 var picker = new AssetPicker(config);
@@ -198,11 +209,42 @@ picker.on('pick', function(picked) {
 ```
 
 event | description
+--- | ---
 **pick** | Triggered after assets were picked (and the picker was closed). Listeners receive the picked assets as first argument (single asset when limit is 1 or array of assets otherwise)
 **ready** | Triggered when the picker application was loaded
 **resize** | Triggered when user minimizes or maximizes the application window
 
 ## Adapters
+### Google Drive
+The Google Drive adapter utilizes the Google API to retrieve assets from the users drive account, which he will have to pick when he has multiple accounts. For this to work you'll need to register your project on [Google API Console](https://console.developers.google.com) and activate the Drive API for it. After that you'll need to create an API key and an OAuth client ID in the credentials area of the project.
+
+#### Authentication
+The Google Drive adapter uses [Google Sign-In for Web](https://developers.google.com/identity/sign-in/web/) - this means that your users will have to authenticate with Google and authorize AssetPicker in a pop up window. AssetPicker will then receive a short-lived token to access the API for the user - no further information will be stored by AssetPicker. Thus it will likely occur that AssetPicker will have to reopen this window when the token expired - as pop up blockers will likely block automatic pop ups your users will have to click a button manually to do that until we found a better solution.
+
+#### Configuration
+```javascript
+new AssetPicker({
+    storages: {
+        drive: {
+            adapter: 'googledrive',
+            // OAuth client id from API console, required
+            client_id: 'xxx',
+            // API key from API console, required
+            api_key: 'xxx',
+            // Google Apps Domain to which users must belong, optional
+            hosted_domain: 'mycompany.com',
+            // Requests to Google APIs are limited and AssetPicker requires some
+            // of them to show the doc tree - use this to force start new requests
+            // at least this amount of milliseconds after the last ones
+            // (defaults for Google Drive adapter is 100), optional
+            http: {
+              throttle: 250
+            }
+        }
+    }
+});
+```
+
 ### GitHub
 The GitHub adapter utilizes the GitHub API to provide files and folders in a GitHub repository to AssetPicker. For this to work, you either need an GitHub API token or the user will need a GitHub account.
  
@@ -261,7 +303,7 @@ The following example shows a basic adapter, loading a hierarchical structure fr
  
 https://myapp.example.com/myadapter.js
 ```javascript
-MyAdapter = {
+AssetPickerAdapterMine = {
     events: {
         'load-items': function(tree) {
             this.http.get(this.config.url + '/files/' + (tree.item ? tree.item.id : '')).then(
@@ -279,18 +321,12 @@ https://myapp.example.com/index.html (where the picker is included)
 new AssetPicker({
     storages: {
         mystorage: {
-            adapter: 'myadapter',
+            adapter: 'mine',
             url: 'https://example.com'
         }
     },
     adapters: {
-        myadapter: {
-            // The url doesn't need to be absolute if you host
-            // AssetPicker also on https://myapp.example.com
-            // Then /myadapter.js would be enough
-            src: 'https://myapp.example.com/myadapter.js',
-            name: 'MyAdapter'
-        }
+        mine: 'https://myapp.example.com/myadapter.js'
     }
 });
 ```
@@ -403,9 +439,11 @@ Apart from simply forking this repository, you can also include the app into you
 
 ## Roadmap
 - Adapters
-    - Google Drive
     - Amazon S3
     - Dropbox
+- Google Drive
+    - IE compatibility
+    - Reauthentication without user interaction required
 - github:
     - Two Factor Auth
     - Branch selector

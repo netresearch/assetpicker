@@ -18,28 +18,42 @@
                 max-width:860px;
             }
             .jumbotron {
-                margin: 0;
+                border-bottom-left-radius: 4px;
+                border-bottom-right-radius: 4px;
             }
-            #result {
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
-                border-width: 1px 0 0;
-                padding-left:60px;
-                margin-bottom: 30px;
-            }
-            #options-toggle {
+            #options-container-toggle {
                 position: relative;
             }
-            #options {
+            #options-container {
                 position: relative;
                 background: #fff;
                 margin:-20px -30px;
                 padding:20px 30px;
             }
-            #options .close {
+            #options-container .close {
                 position: absolute;
                 right:17px;
                 top:13px;
+            }
+            #options-container legend .glyphicon {
+                font-size: 13px;
+                position: relative;
+                top:-1px;
+            }
+            #options-container legend .glyphicon-triangle-right {
+                display:none;
+            }
+            #options-container legend.closed {
+                border-bottom: none;
+            }
+            #options-container legend.closed .glyphicon-triangle-bottom {
+                display:none;
+            }
+            #options-container legend.closed .glyphicon-triangle-right {
+                display:inline-block;
+            }
+            #options-container legend.closed + div {
+                display: none;
             }
             .github svg {
                 width:20px;
@@ -49,6 +63,9 @@
             }
             .checkbox-inline {
                 padding-left: 25px;
+            }
+            .features dt {
+                margin-top:1em;
             }
         </style>
         <!--<script src="../dist/js/picker.js"></script>-->
@@ -143,12 +160,16 @@
             <p>
                 <button rel="assetpicker" class="btn btn-primary" id="demo-button">Try it and pick an asset</button>
             </p>
-            <a role="button" id="options-toggle" data-toggle="collapse" href="#options" aria-expanded="false" aria-controls="options">Customize Options</a>
-            <div id="options" class="collapse-zzz">
-                <a class="close" data-toggle="collapse" href="#options"><span aria-hidden="true">&times;</span></a>
+            <a role="button" id="options-toggle" data-toggle="collapse" href="#options-container" aria-expanded="false" aria-controls="options">Customize options / See results</a>
+            <div id="options-container" class="collapse">
+                <a class="close" data-toggle="collapse" href="#options-container"><span aria-hidden="true">&times;</span></a>
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend>Button options</legend>
+                        <legend>
+                            <span class="glyphicon glyphicon glyphicon-triangle-right"></span>
+                            <span class="glyphicon glyphicon glyphicon-triangle-bottom"></span>
+                            <span class="legend">Button options</span>
+                        </legend>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -173,7 +194,7 @@
                                     <div class="col-lg-3 control-label">Extensions</div>
                                     <div class="col-lg-9">
                                         <div class="input-group ">
-                                            <input name="ext" style="display: inline-block" class="form-control" value="" placeholder="any">
+                                            <input name="ext" type="text" style="display: inline-block" class="form-control" value="" placeholder="any">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-question-sign" data-toggle="popover" title="Allowed extensions"
                                                       data-content="File extensions allowed to be selected
@@ -246,25 +267,26 @@
                         </div>
                     </fieldset>
                 </form>
+                <legend>Result</legend>
+                <pre id="result">Pick an asset to see the result</pre>
             </div>
         </div>
-        <pre id="result">Pick an asset to see the result</pre>
         <h4 id="features">Features</h4>
         <hr>
-        <dl>
+        <dl class="features">
             <dt>Easy integration</dt>
-            <dd>Just include the tiny picker script (~10kb) from anywhere (f.i. a <a href="#usage">CDN</a>) and it will care for the rest - until the pick button is clicked no additional sources will be loaded. Also it doesn't require or exclude any third party libraries to work but works in plain javascript. It doesn't need any server backend, so you can easily integrate it into any web application (for Symfony Applications there's also a tiny bundle <a href="https://github.com/netresearch/assetpicker-bundle" target="_blank">available</a>).</dd>
+            <dd>Just include the tiny picker script (~15kb) from anywhere (f.i. a <a href="#usage">CDN</a>) and it will care for the rest - until the pick button is clicked no additional sources will be loaded. Also it doesn't require or exclude any third party libraries to work but works in plain javascript. It doesn't need any server backend, so you can easily integrate it into any web application (for Symfony Applications there's also a tiny bundle <a href="https://github.com/netresearch/assetpicker-bundle" target="_blank">available</a>).</dd>
             <dt>Easy usage</dt>
             <dd>Its modern interface is based on common file selector interfaces like the Windows native - see the <a href="#demo">demo above</a>.</dd>
             <dt>Cross plattform support</dt>
             <dd>AssetPicker is designed to work with assets from any source - be it cloud storages like Amazon S3, Google Drive or Dropbox or assets from a custom web application server. In opposite to other file managers or pickers, AssetPicker is suitable for hierarchical as well as associative file storages and you can use one or many of them.</dd>
-            <dd>Currently <a href="https://github.com/netresearch/assetpicker#adapters" target="_blank">adapters</a> for GitHub and EnterMediaDB are available - feel free to ask for the implementation of missing adapters by opening an <a href="https://github.com/netresearch/assetpicker/issues/new" target="_blank">issue on github</a></dd>
+            <dd>Currently <a href="https://github.com/netresearch/assetpicker#adapters" target="_blank">adapters</a> for Google Drive, GitHub and EnterMediaDB are available - feel free to ask for the implementation of missing adapters by opening an <a href="https://github.com/netresearch/assetpicker/issues/new" target="_blank">issue on github</a></dd>
             <dt>Search</dt>
             <dd>AssetPicker can search recursively loaded hierarchical structures or utilize remote search endpoints. The results will be in one place.</dd>
             <dt>Authentication</dt>
             <dd>Its platform adapters utilize a built in login system to authenticate with remote storages - <a href="https://github.com/netresearch/assetpicker#adapters">no need to care about that</a>.</dd>
             <dt>Proxy support</dt>
-            <dd>AssetPicker is directly working with the remote storages and thus requires them to support CORS. Anyway some systems don't do that and so the requests need to proxied - AssetPicker allows to use the <a href="https://github.com/netresearch/assetpicker#config" target="_blank">included simple PHP-Proxy or any other proxy</a> for all or only particular storages.</dd>
+            <dd>AssetPicker is directly working with the remote storages and thus requires them to support CORS. Anyway some systems don't do that and so the requests need to be proxied - AssetPicker allows to use the <a href="https://github.com/netresearch/assetpicker#config" target="_blank">included simple PHP-Proxy or any other proxy</a> or another proxy for all or only particular storages.</dd>
             <dt>Customization</dt>
             <dd>The picker and the file browser can be <a href="https://github.com/netresearch/assetpicker#configuration" target="_blank">configured extensively</a>. It's easy to <a href="https://github.com/netresearch/assetpicker#register-your-own-adapter" target="_blank">add your own storage adapters</a> and if you need to <a href="https://github.com/netresearch/assetpicker#customize-the-app" target="_blank">customize the file browser</a> you can do that using npm.</dd>
         </dl>
@@ -316,7 +338,8 @@
             ga('send', 'event', 'AssetPicker', 'opened', $(this).text());
         });
         (function () {
-            var $optionsForm = $('#options > form').submit(function (e) {
+            var $options = $('#options-container'),
+                $optionsForm = $options.find('form').submit(function (e) {
                     e.preventDefault();
                 }),
                 $defaultsForm = $optionsForm.clone().insertAfter($optionsForm),
@@ -324,14 +347,38 @@
                 $defaultsCode = $defaultsForm.find('pre'),
                 defaultConfig = $.extend({}, picker.getConfig());
 
-            $defaultsForm.find('legend').text('Instance options');
+            $defaultsForm.find('legend > .legend').text('Default options');
             var storageCheckboxes = '';
+            var availableStorages = {};
             $.each(defaultConfig.storages, function (key, config) {
+                availableStorages[key] = config;
                 storageCheckboxes += '<div class="checkbox"><label><input type="checkbox" name="storages-' + key.toLowerCase() + '" checked> ' + config.label + '</label></div>';
             });
             $defaultsForm.find('.form-group:last-of-type').after(
                     $('<div class="form-group"><div class="col-lg-3 control-label">Storages</div><div class="col-lg-9">' + storageCheckboxes + '</div></div>')
             );
+
+            $.each([$optionsForm, $defaultsForm], function (i, $form) {
+                var $legend = $form.find('legend'),
+                    toggle = function () {
+                        $legend.toggleClass('closed');
+                    };
+                $form.find('legend').click(toggle);
+                if (i > 0) {
+                    toggle();
+                }
+            });
+
+            $options.on('shown.bs.collapse', function () {
+                document.location.hash = '#options';
+                ga('send', 'pageview', '/tools/assetpicker/demo/options')
+            });
+            $options.on('hidden.bs.collapse', function () {
+                document.location.hash = '';
+            });
+            if (document.location.hash === '#options') {
+                $options.collapse('show');
+            }
 
             var getFormValues = function ($form) {
                     var values = {};
@@ -376,7 +423,6 @@
                     var ui = picker.getUi(button);
 
                     var pickConfig = picker._getPickConfig(button);
-                    console.log(pickConfig);
                     var picked = [];
                     for (var i = 0, l = ui.picked.length; i < l; i++) {
                         var contains = false;
@@ -414,7 +460,7 @@
                     var config = {storages: {}};
                     if (defaults.storages) {
                         var allowedStorages = defaults.storages.split(',');
-                        $.each(defaultConfig.storages, function (key, storageConf) {
+                        $.each(availableStorages, function (key, storageConf) {
                             if (allowedStorages.indexOf(key.toLowerCase()) > -1) {
                                 config.storages[key] = storageConf;
                                 if (storageConf.proxy && !config.proxy) {
@@ -461,12 +507,11 @@
             renderButtonCode();
             renderPickerCode();
 
-            $optionsForm.find('input').on('keyup change', function () {
+            $optionsForm.find('input').on('change', function () {
                 options = getFormValues($optionsForm);
                 renderButtonCode();
-                updateDemoButton();
             });
-            var selectedStorages = Object.keys(defaultConfig.storages).join(',');
+            var selectedStorages = defaults.storages;
             $defaultsForm.find('input').on('keyup change', function () {
                 defaults = getFormValues($defaultsForm);
                 renderButtonCode();
@@ -476,7 +521,7 @@
                     var storages = {};
                     if (defaults.storages) {
                         var allowedStorages = defaults.storages.split(',');
-                        $.each(defaultConfig.storages, function (key, storageConf) {
+                        $.each(availableStorages, function (key, storageConf) {
                             if (allowedStorages.indexOf(key.toLowerCase()) > -1) {
                                 storages[key] = storageConf;
                             }
@@ -485,8 +530,14 @@
                     picker.setConfig($.extend(defaultConfig, {storages: storages}));
                 }
             });
+            $optionsForm.find('input[type="text"],input[type="number"]').tooltip({placement: 'bottom', title: 'Press enter to apply', trigger: 'manual'}).on('keyup', function (e) {
+                $(this).tooltip(e.keyCode === 13 ? 'hide' : 'show');
+                if (e.keyCode === 13) {
+                    $(this).blur();
+                }
+            });
         })();
-        $('[data-toggle="popover"]').popover({trigger: 'hover', container: 'body', placement: 'auto', html: true});
+        $('[data-toggle="popover"]').popover({trigger: 'hover', container: 'body', placement: 'right', html: true});
     </script>
     </body>
 </html>
