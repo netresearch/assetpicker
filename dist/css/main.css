@@ -109,7 +109,8 @@ ul.tree li {
     top: 7px;
     z-index: 2;
     font-size: 9px;
-    margin-right: 2px; }
+    margin-right: 2px;
+    cursor: default; }
     ul.tree li > .glyphicon:hover {
       color: #000; }
   ul.tree li .item {
@@ -148,7 +149,7 @@ ul.tree, ul.tree ul {
     #sidebar > div > div .storage > li > .item {
       font-size: 13px;
       color: #666;
-      font-weight: bold;
+      font-weight: 500;
       margin-bottom: 6px; }
       #sidebar > div > div .storage > li > .item > .glyphicon {
         position: relative;

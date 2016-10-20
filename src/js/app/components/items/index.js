@@ -9,14 +9,18 @@ module.exports = {
     },
     data: function () {
         var selection = require('../../model/selection');
-        var storages = require('../../config').storages;
-        var keys = Object.keys(storages);
+        var config = require('../../config');
+        var keys = Object.keys(config.storages);
         return {
             selection: selection,
             storage: keys.length > 1 ? null : keys[0],
-            storages: storages,
-            numStorages: keys.length,
+            config: config,
             picked: require('../../model/pick')
+        }
+    },
+    calculated: {
+        numStorages: function () {
+            return Object.keys(this.config.storages).length;
         }
     },
     events: {
@@ -40,12 +44,20 @@ module.exports = {
         'selection.items': function (items) {
             this.storage = items.storage;
             this.$nextTick(this.invalidateLayout);
+        },
+        'config.storages': function (storages) {
+            var keys = Object.keys(storages);
+            if (this.selection.search || this.storage && keys.indexOf(this.storage) === -1) {
+                this.$nextTick(function () {
+                    this.$root.$broadcast('select-item', {storage: keys.length === 1 ? keys[0] : undefined})
+                });
+            }
         }
     },
     methods: {
         invalidateLayout: function() {
             var items = this.selection.items;
-            if ((!this.search || this.storage) && items && !items.loading && items.total && items.length < items.total) {
+            if ((!this.selection.search || this.storage) && items && !items.loading && items.total && items.length < items.total) {
                 this.$dispatch('items-set');
             }
         },
