@@ -53,7 +53,7 @@ Modern browsers (IE >= 10) - tested in Chrome 53, Firefox 35 - 47, IE 10 - 11, E
 The easiest way to integrate AssetPicker is to use include the picker script from a CDN:
  
 ```html
-<script src="https://cdn.rawgit.com/netresearch/assetpicker/1.3.3/dist/js/picker.js"></script>
+<script src="https://cdn.rawgit.com/netresearch/assetpicker/1.3.4/dist/js/picker.js"></script>
 
 <script>
     new AssetPicker(config, options);
