@@ -67,6 +67,9 @@
             .features dt {
                 margin-top:1em;
             }
+            #result {
+                padding-left:24px;
+            }
         </style>
         <!--<script src="../dist/js/picker.js"></script>-->
         <script>
@@ -436,11 +439,10 @@
                         }
                         if (!contains
                             && (!pickConfig.extensions.length || pickConfig.extensions.indexOf(ui.picked[i].extension) > -1)
-                            && (!pickConfig.types.length || pickConfig.types.indexOf(ui.picked[i].mediaType.name || 'file') > -1)) {
+                            && (!pickConfig.types.length || pickConfig.types.indexOf(ui.picked[i].type) > -1)) {
                             picked.push(ui.picked[i]);
                         }
                     }
-                    console.log(picked, picked.slice(0, pickConfig.limit));
                     ui.picked = picked.slice(0, pickConfig.limit);
 
                     ui.config.readonly = !!options.ro;
@@ -510,6 +512,7 @@
             $optionsForm.find('input').on('change', function () {
                 options = getFormValues($optionsForm);
                 renderButtonCode();
+                updateDemoButton();
             });
             var selectedStorages = defaults.storages;
             $defaultsForm.find('input').on('keyup change', function () {
