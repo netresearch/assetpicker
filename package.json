@@ -30,7 +30,7 @@
   "devDependencies": {
     "browserify": "^11.2.0",
     "core-js": "^2.4.1",
-    "eslint": "^1.7.3",
+    "eslint": "^7.7.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-livereload": "^3.8.1",
