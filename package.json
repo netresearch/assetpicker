@@ -34,7 +34,7 @@
     "eslint": "^7.7.0",
     "gulp": "^4.0.0",
     "gulp-concat": "^2.6.0",
-    "gulp-livereload": "^3.8.1",
+    "gulp-livereload": "^4.0.2",
     "gulp-sass": "^5.0.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^3.0.0",
