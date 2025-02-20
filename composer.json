@@ -10,7 +10,7 @@
     ],
     "license": "MIT",
     "require": {
-        "jenssegers/proxy": "^2.2"
+        "jenssegers/proxy": "^3.0"
     },
     "autoload": {
         "psr-4": {
