@@ -16,5 +16,10 @@
         "psr-4": {
             "Netresearch\\": "src/php"
         }
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.33"
+        }
     }
 }
