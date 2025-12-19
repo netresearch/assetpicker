@@ -20,18 +20,28 @@ var params;
 
 window.getParams = function () {
     if (params === undefined) {
-        params = {};
+        // Use Object.create(null) to prevent prototype pollution attacks
+        // This creates an object with no prototype chain
+        params = Object.create(null);
         var query = window.location.search.substring(1);
         var vars = query.split('&');
         for (var i = 0; i < vars.length; i++) {
             var pair = vars[i].split('=');
-            params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+            var key = decodeURIComponent(pair[0]);
+            // Additional safety: skip dangerous property names
+            if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+                continue;
+            }
+            // Use a prefix for user-controlled keys to prevent property injection
+            // This ensures user input cannot override built-in object properties
+            params['$' + key] = decodeURIComponent(pair[1]);
         }
     }
     return params;
 };
 window.getParam = function (name) {
-    return window.getParams()[name];
+    // Access with the same prefix used during storage
+    return window.getParams()['$' + name];
 };
 
 module.exports = {
