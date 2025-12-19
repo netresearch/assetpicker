@@ -32,13 +32,16 @@ window.getParams = function () {
             if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
                 continue;
             }
-            params[key] = decodeURIComponent(pair[1]);
+            // Use a prefix for user-controlled keys to prevent property injection
+            // This ensures user input cannot override built-in object properties
+            params['$' + key] = decodeURIComponent(pair[1]);
         }
     }
     return params;
 };
 window.getParam = function (name) {
-    return window.getParams()[name];
+    // Access with the same prefix used during storage
+    return window.getParams()['$' + name];
 };
 
 module.exports = {
