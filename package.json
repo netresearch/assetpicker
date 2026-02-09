@@ -31,7 +31,7 @@
   "devDependencies": {
     "browserify": "^17.0.0",
     "core-js": "^3.22.7",
-    "eslint": "^9.0.0",
+    "eslint": "^10.0.0",
     "gulp": "^5.0.0",
     "gulp-concat": "^2.6.0",
     "gulp-livereload": "^4.0.2",
@@ -40,7 +40,9 @@
     "gulp-uglify": "^3.0.0",
     "jsdom": "^28.0.0",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^2.0.0"
+    "vinyl-source-stream": "^2.0.0",
+    "@eslint/js": "^10.0.0",
+    "globals": "^17.0.0"
   },
   "browserify": {
     "transform": [
