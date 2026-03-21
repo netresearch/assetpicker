@@ -335,7 +335,7 @@ Also you can add custom adapters when you have installed the App with npm - see 
 
 ## Customize the app
 
-Apart from simply forking this repository, you can also include the app into your project. For this you'll need a npm app built with browserify to customize the app. AssetPickerApp is using [Vue.js] - so you might consider reading it's [docs](http://vuejs.org/guide/) before.
+Apart from simply forking this repository, you can also include the app into your project. For this you'll need a npm app built with esbuild (or any bundler) to customize the app. AssetPickerApp is using [Vue.js] - so you might consider reading it's [docs](http://vuejs.org/guide/) before.
 
 1. Initialize the app
 
@@ -407,34 +407,30 @@ Apart from simply forking this repository, you can also include the app into you
     </html>
     ```
 
-5. Setup gulp or any other build tool
+5. Bundle with esbuild
 
     ```
-    npm install -g gulp
-    npm install -S browserify vinyl-source-stream
+    npm install -D esbuild
     ```
-    
-    gulp.js
-    ```
-    var gulp = require('gulp');
-    var browserify = require('browserify');
-    var source = require('vinyl-source-stream');
-    
-    gulp.task('js', function () {
-        var b = browserify({
-            entries: './src/app.js',
-            standalone: 'AssetPickerApp',
-            debug: true
-        });
-    
-        return b.bundle()
-            .pipe(source('app.js'))
-            .pipe(gulp.dest('./dist/js/'));
+
+    build.mjs
+    ```javascript
+    import * as esbuild from 'esbuild';
+
+    await esbuild.build({
+        entryPoints: ['./src/app.js'],
+        bundle: true,
+        outfile: './dist/js/app.js',
+        globalName: 'AssetPickerApp',
+        format: 'iife',
+        sourcemap: true,
+        minify: true,
+        loader: { '.html': 'text', '.css': 'text' },
     });
     ```
-    
+
     ```
-    gulp js
+    node build.mjs
     ```
 
 ## Roadmap

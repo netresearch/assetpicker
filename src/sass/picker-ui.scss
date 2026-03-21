@@ -99,10 +99,7 @@ $color: darken($pane-background, 53);
     border-radius: 2px;
     $width:8;
     $padding: 3px;
-    background: svg-url('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="#{$width}" height="#{$width}">
-    <line x1="0" y1="0" x2="#{$width}" y2="#{$width}" stroke-width="1.5" stroke="#{$color}"/>
-    <line x1="#{$width}" y1="0" x2="0" y2="#{$width}" stroke-width="1.5" stroke="#{$color}"/>
-    </svg>') $pane-background no-repeat center;
+    background: svg-url('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="#{$width}" height="#{$width}"> <line x1="0" y1="0" x2="#{$width}" y2="#{$width}" stroke-width="1.5" stroke="#{$color}"/> <line x1="#{$width}" y1="0" x2="0" y2="#{$width}" stroke-width="1.5" stroke="#{$color}"/> </svg>') $pane-background no-repeat center;
     opacity: 0;
     width: $width + (2 * $padding);
     height: $width + (2 * $padding);
@@ -126,10 +123,7 @@ $color: darken($pane-background, 53);
     $padding: 12px;
     width: $width + (2 * $padding);
     height: $width + (2 * $padding);
-    background: svg-url('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="#{$width}" height="#{$width}">
-    <line x1="#{$x}" y1="0" x2="#{$x}" y2="#{$width}" stroke-width="3" stroke="#{$color}"/>
-    <line x1="0" y1="#{$x}" x2="#{$width}" y2="#{$x}" stroke-width="3" stroke="#{$color}"/>
-    </svg>') $pane-background no-repeat center;
+    background: svg-url('<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="#{$width}" height="#{$width}"> <line x1="#{$x}" y1="0" x2="#{$x}" y2="#{$width}" stroke-width="3" stroke="#{$color}"/> <line x1="0" y1="#{$x}" x2="#{$width}" y2="#{$x}" stroke-width="3" stroke="#{$color}"/> </svg>') $pane-background no-repeat center;
     border:2px solid $pane-background;
     transition: all 0.3s;
     margin-top:4px;
