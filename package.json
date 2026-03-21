@@ -21,37 +21,24 @@
     "extend": "^3.0.0",
     "fecha": "^4.2.3",
     "insert-css": "^2.0.0",
-    "partialify": "^3.1.5",
     "vue": "^3.2.30",
     "vue-i18n-mixin": "^0.1.0",
     "vue-infinite-scroll": "^2.0.0",
-    "vue-resource": "^1.5.3",
-    "@snyk/protect": "latest"
+    "vue-resource": "^1.5.3"
   },
   "devDependencies": {
-    "browserify": "^17.0.0",
-    "core-js": "^3.22.7",
+    "@eslint/js": "^10.0.0",
+    "esbuild": "^0.27.4",
     "eslint": "^10.0.0",
+    "globals": "^17.0.0",
     "gulp": "^5.0.0",
-    "gulp-concat": "^2.6.0",
     "gulp-livereload": "^4.0.2",
     "gulp-sass": "^6.0.0",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-uglify": "^3.0.0",
     "jsdom": "^29.0.0",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^2.0.0",
-    "@eslint/js": "^10.0.0",
-    "globals": "^17.0.0"
-  },
-  "browserify": {
-    "transform": [
-      "partialify"
-    ]
+    "sass": "^1.98.0"
   },
   "scripts": {
-    "prepublish": "npm run snyk-protect",
-    "snyk-protect": "snyk-protect"
-  },
-  "snyk": true
+    "build": "gulp compile",
+    "watch": "gulp watch"
+  }
 }
