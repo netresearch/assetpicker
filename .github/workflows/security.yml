@@ -8,11 +8,11 @@ on:
 
 jobs:
   node-audit:
-    uses: netresearch/.github/.github/workflows/node-audit.yml@719efa1363a09402610a5e515f668eff54ec4e23 # main
+    uses: netresearch/.github/.github/workflows/node-audit.yml@ac02398d6b2413d9677ec97763b4c8173b605695 # main
     with:
       package-manager: npm
       audit-level: high
 
   gitleaks:
-    uses: netresearch/.github/.github/workflows/gitleaks.yml@719efa1363a09402610a5e515f668eff54ec4e23 # main
+    uses: netresearch/.github/.github/workflows/gitleaks.yml@ac02398d6b2413d9677ec97763b4c8173b605695 # main
     secrets: inherit
