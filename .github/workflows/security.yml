@@ -10,5 +10,5 @@ jobs:
   node-audit:
     uses: netresearch/.github/.github/workflows/node-audit.yml@main
     with:
-      package-manager: npm
+      package-manager: bun
       audit-level: high
