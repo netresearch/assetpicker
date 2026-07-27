@@ -74,7 +74,7 @@
 
 .assetpicker-title {
   font-size: 12px;
-  background: rgb(250.75, 250.75, 250.75);
+  background: rgb(98.3333333333%, 98.3333333333%, 98.3333333333%);
   padding: 3px 6px;
   white-space: nowrap;
   overflow: hidden;
@@ -85,7 +85,7 @@
   -webkit-user-select: none;
   user-select: none;
   cursor: default;
-  color: rgb(102.85, 102.85, 102.85);
+  color: rgb(40.3333333333%, 40.3333333333%, 40.3333333333%);
 }
 .assetpicker-title span, .assetpicker-title img {
   float: left;
@@ -99,7 +99,7 @@
   display: block;
   position: absolute;
   border-radius: 2px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='8' height='8'%3E %3Cline x1='0' y1='0' x2='8' y2='8' stroke-width='1.5' stroke='rgb(102.85, 102.85, 102.85)'/%3E %3Cline x1='8' y1='0' x2='0' y2='8' stroke-width='1.5' stroke='rgb(102.85, 102.85, 102.85)'/%3E %3C/svg%3E") #eee no-repeat center;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='8' height='8'%3E %3Cline x1='0' y1='0' x2='8' y2='8' stroke-width='1.5' stroke='rgb(40.3333333333%25, 40.3333333333%25, 40.3333333333%25)'/%3E %3Cline x1='8' y1='0' x2='0' y2='8' stroke-width='1.5' stroke='rgb(40.3333333333%25, 40.3333333333%25, 40.3333333333%25)'/%3E %3C/svg%3E") #eee no-repeat center;
   opacity: 0;
   width: 14px;
   height: 14px;
@@ -123,7 +123,7 @@
   cursor: pointer;
   width: 37px;
   height: 37px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='13' height='13'%3E %3Cline x1='6.5' y1='0' x2='6.5' y2='13' stroke-width='3' stroke='rgb(102.85, 102.85, 102.85)'/%3E %3Cline x1='0' y1='6.5' x2='13' y2='6.5' stroke-width='3' stroke='rgb(102.85, 102.85, 102.85)'/%3E %3C/svg%3E") #eee no-repeat center;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='13' height='13'%3E %3Cline x1='6.5' y1='0' x2='6.5' y2='13' stroke-width='3' stroke='rgb(40.3333333333%25, 40.3333333333%25, 40.3333333333%25)'/%3E %3Cline x1='0' y1='6.5' x2='13' y2='6.5' stroke-width='3' stroke='rgb(40.3333333333%25, 40.3333333333%25, 40.3333333333%25)'/%3E %3C/svg%3E") #eee no-repeat center;
   border: 2px solid #eee;
   transition: all 0.3s;
   margin-top: 4px;
@@ -131,7 +131,7 @@
 }
 
 .assetpicker-add:hover {
-  background-color: rgb(250.75, 250.75, 250.75);
+  background-color: rgb(98.3333333333%, 98.3333333333%, 98.3333333333%);
 }
 
 .assetpicker-ft {
