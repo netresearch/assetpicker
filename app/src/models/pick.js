@@ -54,8 +54,10 @@ export class Pick {
       this.remove(candidate);
     }
     const { limit } = this.config.pick;
-    while (limit && this.items.length >= limit) {
-      this.items.shift();
+    if (limit) {
+      while (this.items.length >= limit) {
+        this.items.shift();
+      }
     }
     this.items.push(item);
   }

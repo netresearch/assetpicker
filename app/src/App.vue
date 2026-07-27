@@ -47,6 +47,7 @@ onMounted(() => {
         type="search"
         class="ap-search"
         :placeholder="t('header.search')"
+        :aria-label="t('header.search')"
         @input="onSearchInput"
       />
       <button type="button" class="ap-icon" :title="t(store.ui.maximized ? 'header.minimize' : 'header.maximize')" @click="picker.toggleMaximize()">⤢</button>
