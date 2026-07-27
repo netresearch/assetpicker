@@ -18,7 +18,7 @@ body { margin: 0; }
 }
 .tree-toggle.loading { opacity: 0.4; }
 .tree-label { cursor: pointer; }
-.tree-label.selected { color: #2980b9; }
+.tree-label.selected { color: #257880; }
 .tree-icon { margin: 0 0.15rem; }
 
 /* Stage: item grid */
@@ -39,7 +39,7 @@ body { margin: 0; }
 }
 .item:hover { border-color: #bbb; }
 .item.selected {
-  border-color: #3498db;
+  border-color: #2f99a4;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
 }
 .item-preview {
