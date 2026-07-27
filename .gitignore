@@ -29,3 +29,7 @@ vendor
 # PHPUnit
 .phpunit.cache
 .phpunit.result.cache
+
+# Vue 3 rewrite (transitional build output + test coverage)
+dist-vue3
+coverage
