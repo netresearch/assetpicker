@@ -1,10 +1,16 @@
 import { createDummyAdapter } from './dummy.js';
+import { createGithubAdapter } from './github.js';
+import { createGoogledriveAdapter } from './googledrive.js';
+import { createEntermediadbAdapter } from './entermediadb.js';
 
-// Adapter registry. Built-ins are registered here; external adapters
-// (github/googledrive/entermediadb) register themselves when their bundle
-// loads, mirroring the legacy dynamic-registration mechanism.
+// Adapter registry. Each entry maps a storage's `adapter` type to a factory
+// implementing the contract: { key, label, list(item)->{items,total},
+// search(word)->{items,total} }.
 const FACTORIES = {
   dummy: createDummyAdapter,
+  github: createGithubAdapter,
+  googledrive: createGoogledriveAdapter,
+  entermediadb: createEntermediadbAdapter,
 };
 
 export function registerAdapter(type, factory) {

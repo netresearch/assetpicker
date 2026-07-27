@@ -21,6 +21,7 @@ export function createPicker(config, { onFinish } = {}) {
       store.ui.loading += delta;
     },
     thumbnails: config.thumbnails,
+    config,
   };
   for (const [key, storage] of Object.entries(config.storages || {})) {
     adapters[key] = createAdapter(storage.adapter, { key, ...storage }, ctx);
