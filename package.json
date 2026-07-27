@@ -21,13 +21,18 @@
     "extend": "^3.0.2",
     "fecha": "^4.2.3",
     "insert-css": "^2.0.0",
+    "mitt": "^3.0.1",
     "vue": "^3.5.40",
+    "vue-i18n": "^11.4.8",
     "vue-i18n-mixin": "^0.1.0",
     "vue-infinite-scroll": "^2.0.2",
     "vue-resource": "^1.5.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vitest/coverage-v8": "^4.1.10",
+    "@vue/test-utils": "^2.4.11",
     "esbuild": "^0.28.1",
     "eslint": "^10.8.0",
     "globals": "^17.8.0",
@@ -35,11 +40,17 @@
     "gulp-livereload": "^4.0.2",
     "gulp-sass": "^6.0.1",
     "jsdom": "^30.0.0",
-    "sass": "^1.102.0"
+    "sass": "^1.102.0",
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10"
   },
   "scripts": {
     "build": "gulp compile",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "dev:vue3": "vite",
+    "build:vue3": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "overrides": {
     "brace-expansion": "^5.0.8",
