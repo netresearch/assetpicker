@@ -25,10 +25,10 @@ $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
 try {
     if ($request->query->has('to')) {
-        $proxyTo = $request->query->get('to');
+        $proxyTo = (string) $request->query->get('to');
         $request->query->remove('to');
         $proxy = new \Netresearch\AssetPicker\Proxy();
-        $proxy->forward($request)->to($proxyTo)->send();
+        $proxy->forward($request, $proxyTo)->send();
     } else {
         throw new Exception('No target provided');
     }
