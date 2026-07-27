@@ -18,27 +18,31 @@
   },
   "dependencies": {
     "escape-string-regexp": "^5.0.0",
-    "extend": "^3.0.0",
+    "extend": "^3.0.2",
     "fecha": "^4.2.3",
     "insert-css": "^2.0.0",
-    "vue": "^3.2.30",
+    "vue": "^3.5.40",
     "vue-i18n-mixin": "^0.1.0",
-    "vue-infinite-scroll": "^2.0.0",
+    "vue-infinite-scroll": "^2.0.2",
     "vue-resource": "^1.5.3"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.0",
-    "esbuild": "^0.28.0",
-    "eslint": "^10.0.0",
-    "globals": "^17.0.0",
-    "gulp": "^5.0.0",
+    "@eslint/js": "^10.0.1",
+    "esbuild": "^0.28.1",
+    "eslint": "^10.8.0",
+    "globals": "^17.8.0",
+    "gulp": "^5.0.1",
     "gulp-livereload": "^4.0.2",
-    "gulp-sass": "^6.0.0",
-    "jsdom": "^29.0.0",
-    "sass": "^1.98.0"
+    "gulp-sass": "^6.0.1",
+    "jsdom": "^30.0.0",
+    "sass": "^1.102.0"
   },
   "scripts": {
     "build": "gulp compile",
     "watch": "gulp watch"
+  },
+  "overrides": {
+    "brace-expansion": "^5.0.8",
+    "immutable": "^5.1.9"
   }
 }

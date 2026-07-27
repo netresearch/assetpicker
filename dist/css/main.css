@@ -81,10 +81,10 @@
   width: 18px;
   height: 24px;
   padding: 0;
-  border-color: rgb(178.1538461538, 218.6538461538, 250.8461538462);
+  border-color: rgb(69.8642533937%, 85.7466063348%, 98.371040724%);
 }
 .navbar .navbar-window-icons a:before {
-  border-color: rgb(178.1538461538, 218.6538461538, 250.8461538462);
+  border-color: rgb(69.8642533937%, 85.7466063348%, 98.371040724%);
 }
 .navbar .navbar-window-icons a:hover {
   border-color: #fff;
@@ -175,7 +175,7 @@ ul.tree, ul.tree ul {
 }
 
 #sidebar > div > div {
-  background: rgb(238.425, 238.425, 238.425);
+  background: rgb(93.5%, 93.5%, 93.5%);
   padding: 0 15px;
 }
 #sidebar > div > div .storage {
@@ -213,7 +213,7 @@ ul.tree, ul.tree ul {
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25);
 }
 .items-container .items-grid .item.selected .item-inner {
-  background: rgb(238.425, 238.425, 238.425);
+  background: rgb(93.5%, 93.5%, 93.5%);
 }
 .items-container .items-grid .item .glyphicon {
   font-size: 32px;
@@ -332,7 +332,7 @@ ul.tree, ul.tree ul {
   cursor: default;
 }
 .items-container .storage:hover, .items-container .storage.selected {
-  background: rgb(238.425, 238.425, 238.425);
+  background: rgb(93.5%, 93.5%, 93.5%);
 }
 
 .loader-progress {
@@ -340,7 +340,7 @@ ul.tree, ul.tree ul {
   width: 100%;
   position: relative;
   overflow: hidden;
-  background-color: rgb(105.5769230769, 184.3269230769, 246.9230769231);
+  background-color: rgb(41.4027149321%, 72.2850678733%, 96.8325791855%);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -356,7 +356,7 @@ ul.tree, ul.tree ul {
   left: -200px;
   width: 200px;
   height: 4px;
-  background-color: rgb(12.8461538462, 138.0961538462, 237.6538461538);
+  background-color: rgb(5.0377073906%, 54.1553544495%, 93.197586727%);
   animation: loader-progress 2s linear infinite;
 }
 
@@ -396,7 +396,7 @@ ul.tree, ul.tree ul {
 }
 #contextmenu a:hover, #contextmenu a:link:hover, #contextmenu a:active:hover, #contextmenu a:visited:hover {
   text-decoration: none;
-  background: rgb(238.425, 238.425, 238.425);
+  background: rgb(93.5%, 93.5%, 93.5%);
 }
 #contextmenu a span, #contextmenu a:link span, #contextmenu a:active span, #contextmenu a:visited span {
   float: left;
@@ -428,7 +428,7 @@ body {
   position: absolute;
   padding-top: 48px;
   padding-bottom: 50px;
-  background: rgb(251.175, 251.175, 251.175);
+  background: rgb(98.5%, 98.5%, 98.5%);
   left: 0;
   top: 0;
   width: 100%;
@@ -463,15 +463,15 @@ body {
 #main > div.handle {
   height: 100%;
   width: 3px;
-  border-left: 1px solid rgb(225.675, 225.675, 225.675);
+  border-left: 1px solid rgb(88.5%, 88.5%, 88.5%);
   cursor: col-resize;
 }
 
 #footer {
   position: absolute;
   height: 50px;
-  background: rgb(251.175, 251.175, 251.175);
-  border-top: 1px solid rgb(225.675, 225.675, 225.675);
+  background: rgb(98.5%, 98.5%, 98.5%);
+  border-top: 1px solid rgb(88.5%, 88.5%, 88.5%);
   bottom: 0;
   width: 100%;
   padding: 10px 15px;
