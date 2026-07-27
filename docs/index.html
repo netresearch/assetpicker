@@ -3,62 +3,150 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AssetPicker</title>
+    <title>AssetPicker — by Netresearch</title>
+    <link rel="icon" type="image/svg+xml" href="./netresearch-logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      :root { color-scheme: light; }
+      /* Netresearch brand tokens (netresearch-branding-skill) */
+      :root {
+        color-scheme: light;
+        --color-primary: #2f99a4;
+        --color-primary-dark: #257880;
+        --color-accent: #ff4d00;
+        --color-text: #585961;
+        --color-text-strong: #25272d;
+        --color-bg: #ffffff;
+        --color-bg-alt: #f5f5f5;
+        --color-border: #e5e5e5;
+        --font-headline: 'Raleway', system-ui, sans-serif;
+        --font-body: 'Open Sans', system-ui, sans-serif;
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+      }
       * { box-sizing: border-box; }
       body {
         margin: 0;
-        font-family: system-ui, -apple-system, sans-serif;
-        color: #222;
+        font-family: var(--font-body);
+        font-size: 16px;
         line-height: 1.6;
-        background: #fafbfc;
+        color: var(--color-text);
+        background: var(--color-bg);
       }
+      h1, h2, h3 { font-family: var(--font-headline); font-weight: 700; line-height: 1.2; color: var(--color-text-strong); }
+      a { color: var(--color-primary); }
+
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: var(--color-bg);
+        box-shadow: var(--shadow-sm);
+      }
+      .navbar-inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+      .brand img { height: 40px; width: auto; display: block; }
+      .brand-name { font-family: var(--font-headline); font-weight: 700; font-size: 20px; color: var(--color-text-strong); }
+      .brand-name .accent { color: var(--color-primary); }
+      .navbar-spacer { flex: 1; }
+      .navbar-by { font-size: 14px; color: var(--color-text); }
+      .navbar-by a { font-weight: 600; text-decoration: none; }
+
       .hero {
-        background: linear-gradient(135deg, #2c3e50, #3498db);
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
         color: #fff;
-        padding: 3rem 1.5rem 2.5rem;
+        padding: 72px 24px 64px;
         text-align: center;
       }
-      .hero h1 { margin: 0 0 0.5rem; font-size: 2.4rem; }
-      .hero p { max-width: 640px; margin: 0 auto 1.5rem; opacity: 0.95; }
-      .cta {
-        font: inherit;
+      .hero h1 { color: #fff; font-size: 44px; margin: 0 0 16px; }
+      .hero p { max-width: 640px; margin: 0 auto 28px; font-size: 20px; opacity: 0.96; }
+      .btn-primary {
+        font-family: var(--font-headline);
         font-weight: 600;
-        padding: 0.7rem 1.6rem;
+        font-size: 16px;
+        padding: 13px 34px;
         border: 0;
-        border-radius: 6px;
-        background: #fff;
-        color: #2c3e50;
+        border-radius: 4px;
         cursor: pointer;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        transition: all 0.25s ease;
+        background: #fff;
+        color: var(--color-primary-dark);
+        box-shadow: var(--shadow-md);
       }
-      .cta:hover { background: #eef4fb; }
+      .btn-primary:hover { background: #eef7f8; transform: translateY(-1px); }
       .result {
         max-width: 640px;
-        margin: 1.25rem auto 0;
-        padding: 0.75rem 1rem;
+        margin: 22px auto 0;
+        padding: 12px 16px;
         background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.4);
         border-radius: 6px;
         text-align: left;
       }
-      .result img { height: 40px; vertical-align: middle; border-radius: 3px; margin-left: 0.5rem; }
-      main { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-      section { margin-bottom: 2rem; }
-      h2 { font-size: 1.3rem; border-bottom: 1px solid #e2e6ea; padding-bottom: 0.3rem; }
-      .features { list-style: none; padding: 0; display: grid; gap: 0.6rem; }
-      .features li { padding-left: 1.4rem; position: relative; }
-      .features li::before { content: '✓'; position: absolute; left: 0; color: #27ae60; font-weight: 700; }
-      code { background: #eef1f4; padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.9em; }
-      footer { text-align: center; color: #889; padding: 1.5rem; font-size: 0.9rem; }
-      footer a { color: #3498db; }
+      .result img { height: 40px; vertical-align: middle; border-radius: 3px; margin-left: 8px; }
+
+      main { max-width: 960px; margin: 0 auto; padding: 56px 24px; }
+      .section-title { text-align: center; font-size: 30px; margin: 0 0 8px; }
+      .section-sub { text-align: center; color: var(--color-text); max-width: 640px; margin: 0 auto 36px; }
+      .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+      .card {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+        transition: box-shadow 0.25s ease, transform 0.25s ease;
+      }
+      .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+      .card .icon { font-size: 26px; }
+      .card h3 { margin: 10px 0 6px; font-size: 18px; }
+      .card p { margin: 0; font-size: 15px; }
+
+      .steps { counter-reset: step; max-width: 720px; margin: 0 auto; padding: 0; list-style: none; }
+      .steps li { position: relative; padding: 8px 0 8px 48px; }
+      .steps li::before {
+        counter-increment: step;
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: 6px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        color: #fff;
+        font-family: var(--font-headline);
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      code { background: var(--color-bg-alt); padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+
+      .section-alt { background: var(--color-bg-alt); }
+      .about { max-width: 960px; margin: 0 auto; padding: 56px 24px; }
+      .about p { max-width: 720px; }
+
+      .footer { background: var(--color-text-strong); color: #cfd0d4; text-align: center; padding: 28px 24px; font-size: 14px; }
+      .footer a { color: #fff; text-decoration: none; }
+      .footer .fine { color: #9a9ba2; margin-top: 6px; }
 
       /* Picker modal */
       .overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.55);
+        background: rgba(37, 39, 45, 0.6);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -72,57 +160,87 @@
         background: #fff;
         border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
       }
       #picker-mount { height: 100%; }
     </style>
-    <script type="module" crossorigin src="./assets/index-BYxHHwTD.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-Z0mMYLS1.css">
+    <script type="module" crossorigin src="./assets/index-BSQ0xxFs.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BJlaEqD-.css">
   </head>
   <body>
+    <nav class="navbar">
+      <div class="navbar-inner">
+        <a class="brand" href="https://www.netresearch.de" target="_blank" rel="noopener">
+          <img src="./netresearch-logo.svg" alt="Netresearch" />
+          <span class="brand-name">Asset<span class="accent">Picker</span></span>
+        </a>
+        <span class="navbar-spacer"></span>
+        <span class="navbar-by">by <a href="https://www.netresearch.de" target="_blank" rel="noopener">Netresearch</a></span>
+      </div>
+    </nav>
+
     <header class="hero">
       <h1>AssetPicker</h1>
       <p>
         A free, cross-platform asset &amp; file picker you embed in your web app. Open it in a modal, let users
         browse a storage — GitHub, Google Drive, EnterMediaDB or your own adapter — and get the picked asset back.
       </p>
-      <button id="try-it" class="cta" type="button">Try it — pick an asset</button>
+      <button id="try-it" class="btn-primary" type="button">Try it — pick an asset</button>
       <div id="result" class="result" hidden></div>
     </header>
 
     <main>
-      <section>
-        <h2>How it works</h2>
-        <ol>
-          <li>Add a button to your app and open the picker (this demo does it above).</li>
-          <li>The user browses a storage — the sidebar tree is folder navigation; single-click a folder to open it.</li>
-          <li>Click a file to select it, then press <strong>Select</strong> — the chosen asset is returned to your app.</li>
-        </ol>
-      </section>
-
-      <section>
-        <h2>Features</h2>
-        <ul class="features">
-          <li><strong>Easy integration</strong> — mount it anywhere and get a callback with the picked asset.</li>
-          <li><strong>Multiple storages</strong> — GitHub, Google Drive, EnterMediaDB, or a custom adapter.</li>
-          <li><strong>Search</strong> across all configured storages at once.</li>
-          <li><strong>Authentication &amp; proxy</strong> support for private and CORS-restricted sources.</li>
-          <li><strong>Configurable</strong> — pick limit and allowed types / extensions.</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>About this demo</h2>
-        <p>
-          It uses the built-in <code>dummy</code> adapter (random folders and files, no login). Click
-          <em>Try it</em>, open a storage, single-click folders to browse, click a file to select it, then
-          <strong>Select</strong>. The picked asset appears at the top.
-        </p>
-      </section>
+      <h2 class="section-title">How it works</h2>
+      <p class="section-sub">The picker opens on top of your app; the sidebar tree is the folder navigation of a storage.</p>
+      <ol class="steps">
+        <li>Add a button to your app and open the picker (this demo does it above).</li>
+        <li>The user browses a storage — single-click a folder to open it.</li>
+        <li>Click a file to select it, then press <strong>Select</strong> — the chosen asset is returned to your app.</li>
+      </ol>
     </main>
 
-    <footer>
-      <a href="https://github.com/netresearch/assetpicker">netresearch/assetpicker</a> · MIT
+    <section class="section-alt">
+      <div class="about">
+        <h2 class="section-title">Features</h2>
+        <div class="cards">
+          <div class="card">
+            <div class="icon">🔌</div>
+            <h3>Easy integration</h3>
+            <p>Mount it anywhere and get a callback with the picked asset.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🗂️</div>
+            <h3>Multiple storages</h3>
+            <p>GitHub, Google Drive, EnterMediaDB — or your own adapter.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🔍</div>
+            <h3>Search</h3>
+            <p>Search across all configured storages at once.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🔐</div>
+            <h3>Auth &amp; proxy</h3>
+            <p>Authentication and proxy support for private, CORS-restricted sources.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <h2 class="section-title">About this demo</h2>
+      <p class="section-sub">
+        Uses the built-in <code>dummy</code> adapter (random folders and files, no login). Click
+        <em>Try it</em>, open a storage, single-click folders to browse, click a file to select it, then
+        <strong>Select</strong>. The picked asset appears at the top.
+      </p>
+    </main>
+
+    <footer class="footer">
+      <div>
+        <a href="https://github.com/netresearch/assetpicker">github.com/netresearch/assetpicker</a> · MIT License
+      </div>
+      <div class="fine">© Netresearch DTT GmbH · <a href="https://www.netresearch.de">netresearch.de</a></div>
     </footer>
 
     <div id="picker-overlay" class="overlay" hidden>

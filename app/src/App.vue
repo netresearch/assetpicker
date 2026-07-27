@@ -91,7 +91,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  background: #2c3e50;
+  background: linear-gradient(135deg, #2f99a4 0%, #257880 100%);
   color: #fff;
   position: relative;
 }
@@ -103,7 +103,7 @@ onMounted(() => {
 .ap-search {
   margin-left: auto;
   padding: 0.25rem 0.5rem;
-  border: 1px solid #456;
+  border: 1px solid rgba(255,255,255,0.35);
   border-radius: 4px;
 }
 .ap-icon {
@@ -119,7 +119,7 @@ onMounted(() => {
   bottom: 0;
   height: 2px;
   width: 100%;
-  background: linear-gradient(90deg, transparent, #3498db, transparent);
+  background: linear-gradient(90deg, transparent, #2f99a4, transparent);
   opacity: 0;
   transition: opacity 0.2s;
 }
@@ -169,8 +169,8 @@ onMounted(() => {
   cursor: pointer;
 }
 .ap-btn-primary {
-  background: #3498db;
-  border-color: #2980b9;
+  background: #2f99a4;
+  border-color: #257880;
   color: #fff;
 }
 .ap-btn:disabled {
