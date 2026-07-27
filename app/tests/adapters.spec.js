@@ -59,6 +59,16 @@ describe('googledrive adapter', () => {
     expect(url).toContain('/drive/v3/files?');
     expect(init.headers.Authorization).toBe('Bearer tok');
   });
+
+  it('fully escapes backslash and quote in the search query', async () => {
+    const fetch = vi.fn().mockResolvedValue(jsonResponse({ files: [] }));
+    const adapter = createGoogledriveAdapter({ key: 'gd', access_token: 't' }, { fetch });
+
+    await adapter.search("a'b\\c");
+
+    const q = new URL(`https://x/${fetch.mock.calls[0][0]}`).searchParams.get('q');
+    expect(q).toContain("a\\'b\\\\c");
+  });
 });
 
 describe('entermediadb adapter', () => {

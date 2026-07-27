@@ -4,6 +4,12 @@ import { loadScript } from '../util/load-script.js';
 
 const FOLDER_MIME = 'application/vnd.google-apps.folder';
 
+// Escape a value for a Drive API query string literal: backslash first (so it
+// cannot re-enable the quote escape), then the single quote.
+function escapeDriveValue(value) {
+  return String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
 /**
  * Google Drive adapter — lists files via the Drive v3 REST API.
  *
@@ -91,7 +97,7 @@ export function createGoogledriveAdapter(storage, ctx = {}) {
       return query(`'${parent}' in parents and trashed = false`);
     },
     search(word) {
-      return query(`name contains '${String(word).replace(/'/g, "\\'")}' and trashed = false`);
+      return query(`name contains '${escapeDriveValue(word)}' and trashed = false`);
     },
   };
 }
