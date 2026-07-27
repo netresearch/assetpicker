@@ -1,0 +1,19 @@
+services:
+  web:
+    image: nginx
+    container_name: assetpicker_web
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+
+  php:
+    image: assetpicker-php:latest
+    build:
+      context: .
+    container_name: assetpicker_php
+    volumes:
+      - .:/var/www/html
