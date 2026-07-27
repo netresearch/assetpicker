@@ -25,3 +25,7 @@ coverage
 node_modules
 
 vendor
+
+# PHPUnit
+.phpunit.cache
+.phpunit.result.cache
