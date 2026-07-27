@@ -34,13 +34,11 @@ function onSubmit() {
         <div v-if="failure" class="alert alert-danger" role="alert">{{ t('login.failure') }}</div>
         <div class="form-group">
           <label for="ap-login-username">{{ t('login.username') }}</label>
-          <input id="ap-login-username" v-model="username" type="text" class="form-control" :placeholder="t('login.username')" />
+          <input id="ap-login-username" v-model="username" type="text" class="form-control" autocomplete="username" :placeholder="t('login.username')" />
         </div>
         <div class="form-group">
-          <!-- Chrome cannot read the password from JS inside iframes; this decoy input suppresses autocomplete. -->
-          <input type="password" style="position: absolute; left: -200px; width: 150px; top: 0" tabindex="-1" aria-hidden="true" />
           <label for="ap-login-password">{{ t('login.password') }}</label>
-          <input id="ap-login-password" v-model="password" type="password" class="form-control" :placeholder="t('login.password')" />
+          <input id="ap-login-password" v-model="password" type="password" class="form-control" autocomplete="current-password" :placeholder="t('login.password')" />
         </div>
         <button type="submit" class="btn btn-default">{{ t('login.login') }}</button>
       </form>

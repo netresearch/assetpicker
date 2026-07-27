@@ -12,8 +12,8 @@ function mountForm(props = {}) {
 describe('LoginForm', () => {
   it('emits submit with the entered credentials', async () => {
     const wrapper = mountForm();
-    await wrapper.find('#loginUsername, input[type="text"]').setValue('admin');
-    await wrapper.findAll('input[type="password"]')[1].setValue('secret');
+    await wrapper.find('#ap-login-username').setValue('admin');
+    await wrapper.find('#ap-login-password').setValue('secret');
     await wrapper.find('form').trigger('submit');
 
     expect(wrapper.emitted('submit')?.[0]).toEqual(['admin', 'secret']);
