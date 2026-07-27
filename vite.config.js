@@ -6,9 +6,14 @@ import vue from '@vitejs/plugin-vue';
 // the migration reaches parity (then the legacy build is removed).
 export default defineConfig({
   root: 'app',
+  // Relative base so the built demo works at the GitHub Pages sub-path
+  // (netresearch.github.io/assetpicker/) same-origin — no CDN, no document.write.
+  base: './',
   plugins: [vue()],
   build: {
-    outDir: '../dist-vue3',
+    // Build straight into the Pages source (main:/docs) so merging ships a
+    // working, self-contained demo.
+    outDir: '../docs',
     emptyOutDir: true,
   },
   test: {
