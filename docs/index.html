@@ -4,10 +4,130 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AssetPicker</title>
-    <script type="module" crossorigin src="./assets/index-BpStqFGJ.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BBcKIlck.css">
+    <style>
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+        color: #222;
+        line-height: 1.6;
+        background: #fafbfc;
+      }
+      .hero {
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: #fff;
+        padding: 3rem 1.5rem 2.5rem;
+        text-align: center;
+      }
+      .hero h1 { margin: 0 0 0.5rem; font-size: 2.4rem; }
+      .hero p { max-width: 640px; margin: 0 auto 1.5rem; opacity: 0.95; }
+      .cta {
+        font: inherit;
+        font-weight: 600;
+        padding: 0.7rem 1.6rem;
+        border: 0;
+        border-radius: 6px;
+        background: #fff;
+        color: #2c3e50;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      }
+      .cta:hover { background: #eef4fb; }
+      .result {
+        max-width: 640px;
+        margin: 1.25rem auto 0;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 6px;
+        text-align: left;
+      }
+      .result img { height: 40px; vertical-align: middle; border-radius: 3px; margin-left: 0.5rem; }
+      main { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+      section { margin-bottom: 2rem; }
+      h2 { font-size: 1.3rem; border-bottom: 1px solid #e2e6ea; padding-bottom: 0.3rem; }
+      .features { list-style: none; padding: 0; display: grid; gap: 0.6rem; }
+      .features li { padding-left: 1.4rem; position: relative; }
+      .features li::before { content: '✓'; position: absolute; left: 0; color: #27ae60; font-weight: 700; }
+      code { background: #eef1f4; padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.9em; }
+      footer { text-align: center; color: #889; padding: 1.5rem; font-size: 0.9rem; }
+      footer a { color: #3498db; }
+
+      /* Picker modal */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2vh 2vw;
+        z-index: 1000;
+      }
+      .overlay[hidden] { display: none; }
+      .modal {
+        width: min(1000px, 96vw);
+        height: min(680px, 92vh);
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.35);
+      }
+      #picker-mount { height: 100%; }
+    </style>
+    <script type="module" crossorigin src="./assets/index-BYxHHwTD.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Z0mMYLS1.css">
   </head>
   <body>
-    <div id="app"></div>
+    <header class="hero">
+      <h1>AssetPicker</h1>
+      <p>
+        A free, cross-platform asset &amp; file picker you embed in your web app. Open it in a modal, let users
+        browse a storage — GitHub, Google Drive, EnterMediaDB or your own adapter — and get the picked asset back.
+      </p>
+      <button id="try-it" class="cta" type="button">Try it — pick an asset</button>
+      <div id="result" class="result" hidden></div>
+    </header>
+
+    <main>
+      <section>
+        <h2>How it works</h2>
+        <ol>
+          <li>Add a button to your app and open the picker (this demo does it above).</li>
+          <li>The user browses a storage — the sidebar tree is folder navigation; single-click a folder to open it.</li>
+          <li>Click a file to select it, then press <strong>Select</strong> — the chosen asset is returned to your app.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Features</h2>
+        <ul class="features">
+          <li><strong>Easy integration</strong> — mount it anywhere and get a callback with the picked asset.</li>
+          <li><strong>Multiple storages</strong> — GitHub, Google Drive, EnterMediaDB, or a custom adapter.</li>
+          <li><strong>Search</strong> across all configured storages at once.</li>
+          <li><strong>Authentication &amp; proxy</strong> support for private and CORS-restricted sources.</li>
+          <li><strong>Configurable</strong> — pick limit and allowed types / extensions.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>About this demo</h2>
+        <p>
+          It uses the built-in <code>dummy</code> adapter (random folders and files, no login). Click
+          <em>Try it</em>, open a storage, single-click folders to browse, click a file to select it, then
+          <strong>Select</strong>. The picked asset appears at the top.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <a href="https://github.com/netresearch/assetpicker">netresearch/assetpicker</a> · MIT
+    </footer>
+
+    <div id="picker-overlay" class="overlay" hidden>
+      <div class="modal"><div id="picker-mount"></div></div>
+    </div>
+
   </body>
 </html>

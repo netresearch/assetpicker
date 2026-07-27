@@ -81,9 +81,10 @@ onMounted(() => {
 .assetpicker {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   font-family: system-ui, sans-serif;
   color: #222;
+  background: #fff;
 }
 .ap-navbar {
   display: flex;
