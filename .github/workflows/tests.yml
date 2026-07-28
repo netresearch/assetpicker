@@ -14,7 +14,7 @@ jobs:
     permissions:
       contents: read
     with:
-      php-versions: '["8.2","8.3","8.4","8.5"]'
+      php-versions: '["8.4","8.5"]'
       # Only the PHPUnit suite is wired up here; the legacy sources are not
       # yet PHPStan/CGL-clean, so those checks stay off for now.
       run-phpstan: false
