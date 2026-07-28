@@ -3,6 +3,12 @@ import App from './App.vue';
 import { createAppI18n } from './i18n/index.js';
 import './style.css';
 
+// Public API for consumers (see README): mount the picker, register custom
+// adapters, and build items / an HTTP client inside an adapter.
+export { registerAdapter } from './adapters/index.js';
+export { createItem } from './models/item.js';
+export { createHttpClient } from './http/client.js';
+
 /**
  * Mount an AssetPicker into a host element. This is the API a consuming app
  * uses: open it (e.g. in a modal), get `onFinish(result, cancelled)` back.
