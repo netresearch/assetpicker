@@ -1,0 +1,15 @@
+# Shapes the auto-generated release notes (gh release create --generate-notes).
+# Without this, the 2.0.0 notes are a ~100-entry dump dominated by dependency
+# bot PRs. The authored narrative lives in CHANGELOG.md and in the release
+# description; this only keeps the generated PR list readable.
+changelog:
+  exclude:
+    authors:
+      - dependabot
+      - dependabot[bot]
+      - renovate
+      - renovate[bot]
+  categories:
+    - title: Changes
+      labels:
+        - '*'

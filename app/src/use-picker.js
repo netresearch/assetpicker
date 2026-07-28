@@ -1,5 +1,6 @@
 import { createAppStore } from './store.js';
 import { createAdapter } from './adapters/index.js';
+import { resolveConfig } from './config.js';
 
 export const PICKER = Symbol('assetpicker.controller');
 
@@ -10,10 +11,13 @@ const escapeRegExp = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
  * components call. Replaces the Vue 1 orchestration in app/index.js (config
  * loading, adapter registration, $dispatch/$broadcast selection flow).
  *
- * @param {object} config resolved picker configuration
+ * @param {object} callerConfig picker configuration; may be partial — the
+ *   documented defaults are merged in here, since the models read options like
+ *   `config.pick.types` unguarded.
  * @param {{ onFinish?: (result: any, cancelled: boolean) => void }} [hooks]
  */
-export function createPicker(config, { onFinish } = {}) {
+export function createPicker(callerConfig, { onFinish } = {}) {
+  const config = resolveConfig(callerConfig);
   const store = createAppStore(config);
   const adapters = {};
   const ctx = {
