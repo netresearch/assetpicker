@@ -1,6 +1,7 @@
 {
     "name": "netresearch/assetpicker",
-    "description": "A free asset or file picker with abstraction layer allowing several adapters like GitHub, EnterMediaDB, Amazon S3, Google Drive, Dropbox etc.",
+    "description": "Embeddable Vue 3 asset & file picker with a pluggable storage-adapter layer — GitHub, Google Drive, EnterMediaDB, or your own.",
+    "keywords": ["asset-picker", "file-picker", "media-library", "vue", "github", "google-drive", "entermediadb"],
     "type": "library",
     "authors": [
         {
