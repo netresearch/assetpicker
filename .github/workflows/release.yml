@@ -1,0 +1,48 @@
+name: Release
+
+# Creates the GitHub Release object for a pushed bare-semver tag.
+#
+# Composer publishing does NOT happen here: Packagist has its own active push
+# webhook on this repository and picks the tag up independently of, and before,
+# this workflow. The tag push is the irreversible act, not this run.
+#
+# npm publishing stays off. The unscoped npm name `assetpicker` is not ours to
+# publish to, and the package ships sources (no library build), so there is
+# nothing to publish. `publish-npm` defaults to TRUE in the reusable — the
+# explicit `false` below is load-bearing, do not drop it.
+
+on:
+  push:
+    tags:
+      # Matches this repository's bare-semver tags (1.3.4, 2.0.0). GitHub tag
+      # filters are globs, not regex: `.` is literal, `*` matches any run of
+      # characters — so prereleases like 2.0.0-rc.1 match too and are marked
+      # via `prerelease: auto`. A v-prefixed tag does not match.
+      - '[0-9]*.[0-9]*.[0-9]*'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  release:
+    uses: netresearch/.github/.github/workflows/node-release.yml@main
+    # The reusable statically validates the union of both its jobs' scopes, so
+    # all three are required even with both publish flags false — omitting one
+    # ends the run in startup_failure before any job logs.
+    permissions:
+      contents: write
+      id-token: write
+      packages: write
+    with:
+      # This repository uses bun, but nothing is installed or built for a
+      # release that publishes no package; both commands are skipped.
+      package-manager: npm
+      install-cmd: ''
+      build-cmd: ''
+      # Fails the run if the tag and package.json version disagree.
+      version-source: manifest-verified
+      publish-npm: false
+      publish-github-packages: false
+      create-github-release: true
+      prerelease: auto
+    # No secrets are forwarded; none are required with publish-npm: false.
