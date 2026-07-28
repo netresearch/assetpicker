@@ -1,0 +1,39 @@
+name: Deploy Pages
+
+# Builds the Vite demo (app/) in CI and deploys it to GitHub Pages via the
+# shared netresearch reusables — the built site is no longer committed to the
+# repo (docs/ is gitignored). `enablement: true` switches the repo's Pages
+# source from the old branch (main:/docs) to "GitHub Actions" on the first run.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    uses: netresearch/.github/.github/workflows/pages-build.yml@main
+    permissions:
+      contents: read
+    with:
+      setup-node: true
+      node-version: "24"
+      artifact-path: dist
+      pre-build-command: npm install --no-audit --no-fund
+      build-command: npm run build
+
+  deploy:
+    needs: build
+    uses: netresearch/.github/.github/workflows/pages-deploy.yml@main
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+    with:
+      enablement: true
