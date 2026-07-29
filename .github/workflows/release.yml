@@ -20,6 +20,15 @@ on:
       # via `prerelease: auto`. A v-prefixed tag does not match.
       - '[0-9]*.[0-9]*.[0-9]*'
   workflow_dispatch:
+    inputs:
+      # `create-github-release: true` needs a tag. Dispatching from a branch
+      # with this empty ends the run in the reusable's input validation, so a
+      # re-run of a failed tag-push release has to name the tag here.
+      tag:
+        description: 'Existing tag to release (e.g. 2.0.0). Leave empty only when dispatching on a tag ref.'
+        type: string
+        required: false
+        default: ''
 
 permissions: {}
 
@@ -39,6 +48,8 @@ jobs:
       package-manager: npm
       install-cmd: ''
       build-cmd: ''
+      # Empty on a tag push, where the reusable falls back to the ref.
+      tag: ${{ inputs.tag || '' }}
       # Fails the run if the tag and package.json version disagree.
       version-source: manifest-verified
       publish-npm: false
