@@ -182,16 +182,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v8.1.1",
+            "version": "v8.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "d41e9778eed03c64b095532c6d414e92e3c520d9"
+                "reference": "0cfdf7f9b58c92736c78e9ec2b49e48979c386be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/d41e9778eed03c64b095532c6d414e92e3c520d9",
-                "reference": "d41e9778eed03c64b095532c6d414e92e3c520d9",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/0cfdf7f9b58c92736c78e9ec2b49e48979c386be",
+                "reference": "0cfdf7f9b58c92736c78e9ec2b49e48979c386be",
                 "shasum": ""
             },
             "require": {
@@ -255,7 +255,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v8.1.1"
+                "source": "https://github.com/symfony/http-client/tree/v8.1.2"
             },
             "funding": [
                 {
@@ -275,7 +275,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-16T12:55:20+00:00"
+            "time": "2026-07-29T07:22:54+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -361,16 +361,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v8.1.1",
+            "version": "v8.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "6a168c8fcee806b57ac020244da14293d1f9a883"
+                "reference": "9943adbf5a64e2951a8d9eb0485310d55624f0e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/6a168c8fcee806b57ac020244da14293d1f9a883",
-                "reference": "6a168c8fcee806b57ac020244da14293d1f9a883",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/9943adbf5a64e2951a8d9eb0485310d55624f0e8",
+                "reference": "9943adbf5a64e2951a8d9eb0485310d55624f0e8",
                 "shasum": ""
             },
             "require": {
@@ -418,7 +418,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v8.1.1"
+                "source": "https://github.com/symfony/http-foundation/tree/v8.1.2"
             },
             "funding": [
                 {
@@ -438,7 +438,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-12T08:43:41+00:00"
+            "time": "2026-07-29T07:22:54+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
