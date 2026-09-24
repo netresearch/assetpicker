@@ -5,6 +5,32 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2026-09-24
+
+### Security
+
+- The PHP proxy forwarded the host application's credentials to the target
+  and passed the target's cookies back. `Proxy::forward()` copied every
+  request header except `Host` and the hop-by-hop headers, so the
+  application's `Cookie`, `Authorization` and the `PHP_AUTH_USER` /
+  `PHP_AUTH_PW` / `PHP_AUTH_DIGEST` headers derived from HTTP authentication
+  reached whatever URL `to` named, and a `Set-Cookie` from the target was
+  stored for the application's domain. These request headers are no longer
+  forwarded and `Set-Cookie` is removed from the response. This applies to
+  the standalone `proxy.php` as well. A storage that needs a session cookie
+  or an `Authorization` header cannot be used through the proxy.
+
+### Fixed
+
+- The loading indicator never showed for the `github`, `googledrive` and
+  `entermediadb` adapters: they passed the loading callback to
+  `createHttpClient()` as `onLoading`, while the client reads
+  `onLoadingChange`.
+- The README documented `storages.<id>.proxy` and `proxy.all` as routing
+  storages through the PHP proxy and recommended `proxy: true` for
+  EnterMediaDB. The built-in adapters of 2.0.x do not apply these options;
+  the README now says so and describes how EnterMediaDB can be reached.
+
 ## [2.0.0] - 2026-09-24
 
 First release since 1.3.4 (2016-10-20). The picker was rebuilt on Vue 3 and
@@ -132,4 +158,5 @@ There is no in-place upgrade path from 1.3.4; read BREAKING first.
 - 110 automated Renovate/Dependabot updates across the range (Vue 3.5.40,
   ESLint 10, Vite 8, Vitest 4, jsdom 30, and transitive bumps).
 
+[2.0.1]: https://github.com/netresearch/assetpicker/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/netresearch/assetpicker/compare/1.3.4...2.0.0

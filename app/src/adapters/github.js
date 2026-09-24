@@ -22,7 +22,7 @@ export function createGithubAdapter(storage, ctx = {}) {
   }
   const http = createHttpClient({
     defaults: { base: 'https://api.github.com', headers },
-    onLoading: ctx.onLoading,
+    onLoadingChange: ctx.onLoading,
     fetch: ctx.fetch,
   });
   const contentsPath = `repos/${storage.username}/${storage.repository}/contents`;

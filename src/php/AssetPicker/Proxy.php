@@ -45,6 +45,24 @@ class Proxy
         'upgrade',
     ];
 
+    /**
+     * Request headers carrying the host application's credentials. The proxy
+     * runs on the application's domain, so the browser sends them with every
+     * request to it; they must not reach the target. PHP_AUTH_USER,
+     * PHP_AUTH_PW and PHP_AUTH_DIGEST appear as headers because
+     * {@see \Symfony\Component\HttpFoundation\ServerBag::getHeaders()} derives
+     * them from HTTP authentication.
+     *
+     * @var list<string>
+     */
+    private const CREDENTIAL_HEADERS = [
+        'cookie',
+        'authorization',
+        'php-auth-user',
+        'php-auth-pw',
+        'php-auth-digest',
+    ];
+
     private readonly HttpClientInterface $client;
 
     public function __construct(?HttpClientInterface $client = null)
@@ -74,6 +92,10 @@ class Proxy
             }
         }
 
+        // Cookies set by the target would be stored for the application's
+        // domain, not the target's.
+        $response->headers->remove('set-cookie');
+
         $response->prepare($request);
         $response->headers->remove('transfer-encoding');
 
@@ -85,8 +107,9 @@ class Proxy
     }
 
     /**
-     * Copy request headers to forward, dropping hop-by-hop and Host (the
-     * outgoing Host is derived from the target URL by the HTTP client).
+     * Copy request headers to forward, dropping hop-by-hop, the application's
+     * credentials and Host (the outgoing Host is derived from the target URL
+     * by the HTTP client).
      *
      * @return array<string, list<string>>
      */
@@ -95,7 +118,11 @@ class Proxy
         $headers = [];
         foreach ($request->headers->all() as $name => $values) {
             $lower = strtolower((string) $name);
-            if ($lower !== 'host' && !in_array($lower, self::HOP_BY_HOP, true)) {
+            if (
+                $lower !== 'host'
+                && !in_array($lower, self::HOP_BY_HOP, true)
+                && !in_array($lower, self::CREDENTIAL_HEADERS, true)
+            ) {
                 $headers[(string) $name] = $values;
             }
         }

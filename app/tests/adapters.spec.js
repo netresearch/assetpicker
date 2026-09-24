@@ -15,6 +15,23 @@ function jsonResponse(data) {
   };
 }
 
+describe.each([
+  ['github', () => createGithubAdapter, { key: 'gh', username: 'a', repository: 'b' }, []],
+  ['googledrive', () => createGoogledriveAdapter, { key: 'gd', access_token: 't' }, { files: [] }],
+  ['entermediadb', () => createEntermediadbAdapter, { key: 'em', url: 'https://emdb.test' }, { results: [] }],
+])('%s adapter loading indicator', (name, factory, storage, payload) => {
+  it('reports each request to ctx.onLoading (+1 before, -1 after)', async () => {
+    const fetch = vi.fn().mockResolvedValue(jsonResponse(payload));
+    const onLoading = vi.fn();
+    const adapter = factory()(storage, { fetch, onLoading });
+
+    await adapter.list();
+
+    expect(fetch).toHaveBeenCalledOnce();
+    expect(onLoading.mock.calls).toEqual([[1], [-1]]);
+  });
+});
+
 describe('github adapter', () => {
   it('maps the contents API to sorted items and sends the Bearer token', async () => {
     const fetch = vi.fn().mockResolvedValue(

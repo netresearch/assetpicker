@@ -26,7 +26,7 @@ export function createEntermediadbAdapter(storage, ctx = {}) {
   const emshare = `${root}/emshare`;
   const http = createHttpClient({
     defaults: { base: `${root}/mediadb/services`, credentials: 'include' },
-    onLoading: ctx.onLoading,
+    onLoadingChange: ctx.onLoading,
     fetch: ctx.fetch,
   });
 
