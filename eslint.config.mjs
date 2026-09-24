@@ -1,52 +1,43 @@
 import js from "@eslint/js";
+import pluginVue from "eslint-plugin-vue";
 import globals from "globals";
 
 export default [
-  js.configs.recommended,
   {
-    files: ["src/**/*.js"],
+    ignores: ["dist/**", "node_modules/**", "coverage/**", "vendor/**"],
+  },
+  js.configs.recommended,
+  // "essential" = the plugin's error-prevention rules only. The stylistic
+  // tiers ("strongly-recommended", "recommended") are left out: the project
+  // has no formatter and does not enforce template layout.
+  ...pluginVue.configs["flat/essential"],
+  {
+    files: ["app/**/*.{js,vue}"],
     languageOptions: {
-      ecmaVersion: 2020,
-      sourceType: "commonjs",
+      ecmaVersion: "latest",
+      sourceType: "module",
       globals: {
         ...globals.browser,
-        ...globals.commonjs,
       },
-    },
-    rules: {
-      // Downgrade to warnings for legacy code patterns.
-      // These should be addressed over time but are pre-existing issues.
-      "no-undef": "warn",
-      "no-unused-vars": ["warn", { args: "none", caughtErrors: "none" }],
-      "no-prototype-builtins": "warn",
-      "no-useless-escape": "warn",
-      "no-empty": ["warn", { allowEmptyCatch: true }],
-      "no-shadow-restricted-names": "warn",
     },
   },
   {
-    files: ["src/js/adapter/googledrive/**/*.js"],
+    // vite.config.js sets `test.globals: true`, so the specs use
+    // describe/it/expect/vi without importing them.
+    files: ["app/tests/**/*.js"],
     languageOptions: {
       globals: {
-        gapi: "readonly",
+        ...globals.vitest,
+        ...globals.node,
       },
     },
   },
   {
-    files: ["gulpfile.js"],
+    files: ["*.{js,mjs}"],
     languageOptions: {
-      ecmaVersion: 2020,
-      sourceType: "commonjs",
       globals: {
         ...globals.node,
       },
     },
-    rules: {
-      "no-undef": "warn",
-      "no-unused-vars": ["warn", { args: "none" }],
-    },
-  },
-  {
-    ignores: ["dist/**", "node_modules/**"],
   },
 ];
