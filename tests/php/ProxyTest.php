@@ -105,6 +105,74 @@ final class ProxyTest extends TestCase
         self::assertSame($proxyUrl . '?to=' . urlencode($target), $response->headers->get('location'));
     }
 
+    /**
+     * @return iterable<string, array{string, list<string>}>
+     */
+    public static function applicationCredentials(): iterable
+    {
+        yield 'basic authentication' => [
+            'Basic ' . base64_encode('app-user:app-password'),
+            ['cookie', 'authorization', 'php-auth-user', 'php-auth-pw'],
+        ];
+        yield 'digest authentication' => [
+            'Digest username="app-user", realm="app", nonce="n", uri="/proxy.php", response="r"',
+            ['cookie', 'authorization', 'php-auth-digest'],
+        ];
+    }
+
+    /**
+     * @param list<string> $credentialHeaders headers the incoming request carries
+     */
+    #[DataProvider('applicationCredentials')]
+    public function testDoesNotForwardTheApplicationsCookiesAndCredentials(string $authorization, array $credentialHeaders): void
+    {
+        $forwarded = null;
+        $client = new MockHttpClient(static function (string $method, string $url, array $options) use (&$forwarded): MockResponse {
+            $forwarded = $options['normalized_headers'];
+
+            return new MockResponse('{}', ['http_code' => 200]);
+        });
+        $proxy = new Proxy($client);
+        $request = Request::create('https://host.test/proxy.php', 'GET', server: [
+            'HTTP_COOKIE' => 'PHPSESSID=app-session',
+            'HTTP_AUTHORIZATION' => $authorization,
+            'HTTP_ACCEPT' => 'application/json',
+            'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+        ]);
+        foreach ($credentialHeaders as $name) {
+            self::assertTrue($request->headers->has($name), 'precondition: the request carries ' . $name);
+        }
+
+        $proxy->forward($request, 'https://em.example.org/app/a.json');
+
+        self::assertIsArray($forwarded);
+        self::assertSame(['accept: application/json'], $forwarded['accept'] ?? null);
+        self::assertSame(['x-requested-with: XMLHttpRequest'], $forwarded['x-requested-with'] ?? null);
+        foreach ($credentialHeaders as $name) {
+            self::assertArrayNotHasKey($name, $forwarded, $name . ' must not reach the target');
+        }
+    }
+
+    public function testDoesNotPassTheTargetsCookiesBackToTheBrowser(): void
+    {
+        $client = new MockHttpClient(new MockResponse('IMAGE-BYTES', [
+            'http_code' => 200,
+            'response_headers' => [
+                'content-type' => 'image/png',
+                'set-cookie' => 'EMSESSION=target-session; path=/',
+                'x-upstream' => 'kept',
+            ],
+        ]));
+        $proxy = new Proxy($client);
+
+        $response = $proxy->forward(Request::create('https://host.test/proxy.php', 'GET'), 'https://em.example.org/app/a.png');
+
+        self::assertSame('image/png', $response->headers->get('content-type'));
+        self::assertSame('kept', $response->headers->get('x-upstream'));
+        self::assertNull($response->headers->get('set-cookie'));
+        self::assertSame([], $response->headers->getCookies());
+    }
+
     public function testDoesNotFollowRedirects(): void
     {
         // Two responses: if the proxy followed the redirect it would consume

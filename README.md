@@ -160,6 +160,8 @@ registerAdapter('mysource', (storage, ctx) => ({
 composer install
 ```
 
+The proxy runs on your application's domain, so the browser sends your application's cookies and HTTP authentication along. The proxy does not forward them: `Cookie`, `Authorization` and the `PHP_AUTH_*` headers are removed from the forwarded request, and `Set-Cookie` from the upstream response. A storage that needs a session cookie or an `Authorization` header therefore cannot be used through the proxy.
+
 A container setup is provided — build the image with Docker Bake and run it with Compose:
 
 ```bash
