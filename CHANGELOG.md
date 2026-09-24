@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2026-07-28
+## [2.0.0] - 2026-09-24
 
 First release since 1.3.4 (2016-10-20). The picker was rebuilt on Vue 3 and
 both published surfaces — the npm entry point and the PHP proxy — changed.
@@ -113,6 +113,10 @@ There is no in-place upgrade path from 1.3.4; read BREAKING first.
   click.
 - The demo pointed at rawgit.com, shut down in 2019; the demo is now
   same-origin and served from the Pages build.
+- The PHP proxy rewrote an upstream redirect to the front controller instead
+  of the proxy route when the front controller is part of the URL
+  (`/index.php/assetpicker` became `/index.php?to=…`). The rewritten
+  `Location` is now the base URL plus the path info.
 
 ### Security
 
