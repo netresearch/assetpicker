@@ -5,6 +5,24 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Security
+
+- The PHP proxy forwarded to any URL given in `to`, so any visitor could
+  make the server request internal hosts: loopback, private networks,
+  link-local addresses such as the cloud metadata endpoint
+  `169.254.169.254`, and internal DNS names. `new Proxy()` without an HTTP
+  client, and therefore `proxy.php`, now wraps its client in Symfony's
+  `NoPrivateNetworkHttpClient`, which refuses targets on the addresses in
+  `IpUtils::PRIVATE_SUBNETS` and hosts that do not resolve. A refused
+  target is answered with `403 Forbidden` and is not requested. Redirects
+  are still not followed by the proxy; the browser follows them through the
+  proxy again, where the redirect target is checked. A client passed to
+  `new Proxy($client)` is used unchanged: wrap it in
+  `NoPrivateNetworkHttpClient` yourself (see README). Storages on an
+  internal host now need an allow list on that wrapper.
+
 ## [2.0.1] - 2026-09-24
 
 ### Security
@@ -158,5 +176,6 @@ There is no in-place upgrade path from 1.3.4; read BREAKING first.
 - 110 automated Renovate/Dependabot updates across the range (Vue 3.5.40,
   ESLint 10, Vite 8, Vitest 4, jsdom 30, and transitive bumps).
 
+[Unreleased]: https://github.com/netresearch/assetpicker/compare/2.0.1...HEAD
 [2.0.1]: https://github.com/netresearch/assetpicker/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/netresearch/assetpicker/compare/1.3.4...2.0.0

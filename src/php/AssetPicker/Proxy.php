@@ -15,8 +15,10 @@ declare(strict_types=1);
 namespace Netresearch\AssetPicker;
 
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\NoPrivateNetworkHttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -65,28 +67,47 @@ class Proxy
 
     private readonly HttpClientInterface $client;
 
+    /**
+     * Without $client, requests to private, loopback, link-local and other
+     * non-public addresses are refused ({@see NoPrivateNetworkHttpClient}).
+     * A client passed in is used as is: wrap it in NoPrivateNetworkHttpClient
+     * unless the proxy is meant to reach internal hosts.
+     */
     public function __construct(?HttpClientInterface $client = null)
     {
         // Do not follow redirects: they are rewritten in forward() so the
-        // client re-requests the target through this proxy.
-        $this->client = $client ?? HttpClient::create(['max_redirects' => 0]);
+        // client re-requests the target through this proxy, where the
+        // target is checked again.
+        $this->client = $client ?? new NoPrivateNetworkHttpClient(HttpClient::create(['max_redirects' => 0]));
     }
 
     /**
      * Forward the given request to the target URL and build the response.
+     *
+     * A target the HTTP client refuses because of its address is answered
+     * with 403 Forbidden; other transport errors are thrown.
      */
     public function forward(Request $request, string $target): Response
     {
-        $upstream = $this->client->request($request->getMethod(), $target, [
-            'headers' => $this->forwardableHeaders($request),
-            'body' => $request->getContent(),
-            'max_redirects' => 0,
-        ]);
+        try {
+            $upstream = $this->client->request($request->getMethod(), $target, [
+                'headers' => $this->forwardableHeaders($request),
+                'body' => $request->getContent(),
+                'max_redirects' => 0,
+            ]);
 
-        // Pass false everywhere so 3xx/4xx/5xx do not raise exceptions.
-        $response = new Response($upstream->getContent(false), $upstream->getStatusCode());
+            // Pass false everywhere so 3xx/4xx/5xx do not raise exceptions.
+            $response = new Response($upstream->getContent(false), $upstream->getStatusCode());
+            $upstreamHeaders = $upstream->getHeaders(false);
+        } catch (TransportExceptionInterface $e) {
+            if (!self::isBlockedTarget($e)) {
+                throw $e;
+            }
 
-        foreach ($upstream->getHeaders(false) as $name => $values) {
+            return new Response('Target not allowed', Response::HTTP_FORBIDDEN, ['content-type' => 'text/plain']);
+        }
+
+        foreach ($upstreamHeaders as $name => $values) {
             if (!in_array(strtolower($name), self::HOP_BY_HOP, true)) {
                 $response->headers->set($name, $values);
             }
@@ -104,6 +125,17 @@ class Proxy
         }
 
         return $response;
+    }
+
+    /**
+     * Whether the exception is NoPrivateNetworkHttpClient refusing the target
+     * (`Host "…" is blocked for "…".` before the request, `IP "…" is blocked
+     * for "…".` once connected). It throws a plain TransportException, so the
+     * message is the only way to tell the refusal from a network error.
+     */
+    private static function isBlockedTarget(TransportExceptionInterface $e): bool
+    {
+        return str_contains($e->getMessage(), '" is blocked for "');
     }
 
     /**

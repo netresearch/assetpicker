@@ -162,6 +162,20 @@ composer install
 
 The proxy runs on your application's domain, so the browser sends your application's cookies and HTTP authentication along. The proxy does not forward them: `Cookie`, `Authorization` and the `PHP_AUTH_*` headers are removed from the forwarded request, and `Set-Cookie` from the upstream response. A storage that needs a session cookie or an `Authorization` header therefore cannot be used through the proxy.
 
+The proxy forwards to the URL in its `to` parameter, which any visitor can set. It therefore refuses targets on private, loopback, link-local and other non-public addresses (`127.0.0.0/8`, `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `169.254.0.0/16` including cloud metadata endpoints, `::1`, `fc00::/7`, `fe80::/10` and the rest of `Symfony\Component\HttpFoundation\IpUtils::PRIVATE_SUBNETS`), and hosts whose name does not resolve. The check uses `Symfony\Component\HttpClient\NoPrivateNetworkHttpClient`: it resolves the host name itself, sends the request to the address it checked, and checks the address the connection actually used. A refused target is answered with `403 Forbidden` and the body `Target not allowed`; nothing is sent to it. Redirects are not followed by the proxy: the browser follows them through the proxy again, where the redirect target is checked like any other target.
+
+This applies to `proxy.php` and to `new Proxy()` without an HTTP client. A client you pass to `new Proxy($client)` is used as is, so wrap it yourself:
+
+```php
+use Netresearch\AssetPicker\Proxy;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\NoPrivateNetworkHttpClient;
+
+$proxy = new Proxy(new NoPrivateNetworkHttpClient(HttpClient::create()));
+```
+
+If a storage is on an internal host, pass its addresses as the allow list (`symfony/http-client` 8.1 or later), `new NoPrivateNetworkHttpClient($client, allowList: ['10.1.2.3'])`, rather than dropping the wrapper; every other internal address stays refused. The proxy still reaches every public host; restrict access to `proxy.php` in your web server if that is not wanted.
+
 A container setup is provided — build the image with Docker Bake and run it with Compose:
 
 ```bash
