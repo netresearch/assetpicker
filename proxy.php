@@ -33,6 +33,9 @@ try {
         throw new Exception('No target provided');
     }
 } catch (\Exception $e) {
+    // The exception, with its trace, goes to the server's error log, not to
+    // the visitor.
+    error_log((string) $e);
     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-    echo $e;
+    echo 'Proxy error';
 }
