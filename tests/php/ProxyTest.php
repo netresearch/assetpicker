@@ -202,19 +202,19 @@ final class ProxyTest extends TestCase
      */
     public static function privateTargets(): iterable
     {
-        yield 'loopback' => ['http://127.0.0.1/admin'];
-        yield 'loopback IPv6' => ['http://[::1]/admin'];
-        yield 'localhost' => ['http://localhost/admin'];
-        yield 'RFC 1918 10/8' => ['http://10.0.0.1/'];
-        yield 'RFC 1918 172.16/12' => ['http://172.16.0.1/'];
-        yield 'RFC 1918 192.168/16' => ['http://192.168.1.1/'];
-        yield 'link-local, cloud metadata' => ['http://169.254.169.254/latest/meta-data/'];
-        yield 'link-local IPv6' => ['http://[fe80::1]/'];
-        yield 'carrier-grade NAT' => ['http://100.64.0.1/'];
-        yield 'unique local IPv6' => ['http://[fd00::1]/'];
+        yield 'loopback' => ['https://127.0.0.1/admin'];
+        yield 'loopback IPv6' => ['https://[::1]/admin'];
+        yield 'localhost' => ['https://localhost/admin'];
+        yield 'RFC 1918 10/8' => ['https://10.0.0.1/'];
+        yield 'RFC 1918 172.16/12' => ['https://172.16.0.1/'];
+        yield 'RFC 1918 192.168/16' => ['https://192.168.1.1/'];
+        yield 'link-local, cloud metadata' => ['https://169.254.169.254/latest/meta-data/'];
+        yield 'link-local IPv6' => ['https://[fe80::1]/'];
+        yield 'carrier-grade NAT' => ['https://100.64.0.1/'];
+        yield 'unique local IPv6' => ['https://[fd00::1]/'];
         // .invalid never resolves (RFC 6761); an address that cannot be
         // checked is refused.
-        yield 'unresolvable host' => ['http://assetpicker.invalid/'];
+        yield 'unresolvable host' => ['https://assetpicker.invalid/'];
     }
 
     /**
@@ -226,8 +226,8 @@ final class ProxyTest extends TestCase
      */
     public static function privateTargetsWithoutListener(): iterable
     {
-        yield 'loopback' => ['http://127.0.0.1:1/'];
-        yield 'loopback IPv6' => ['http://[::1]:1/'];
+        yield 'loopback' => ['https://127.0.0.1:1/'];
+        yield 'loopback IPv6' => ['https://[::1]:1/'];
     }
 
     #[DataProvider('privateTargetsWithoutListener')]
@@ -311,11 +311,11 @@ final class ProxyTest extends TestCase
 
     public function testRefusesARedirectFromAPublicTargetToAPrivateAddress(): void
     {
-        $private = 'http://169.254.169.254/latest/meta-data/';
+        $private = 'https://169.254.169.254/latest/meta-data/';
         $requested = [];
         $proxy = new Proxy(new NoPrivateNetworkHttpClient(new MockHttpClient(
             static function (string $method, string $url) use (&$requested, $private): MockResponse {
-                $requested[] = $url;
+                $requested[] = $method . ' ' . $url;
 
                 return new MockResponse('', ['http_code' => 302, 'response_headers' => ['location' => $private]]);
             },
@@ -333,7 +333,7 @@ final class ProxyTest extends TestCase
         // ... where the redirect target is checked like any other target.
         $followed = $proxy->forward(Request::create('https://host.test/proxy.php', 'GET'), $private);
         self::assertSame(403, $followed->getStatusCode());
-        self::assertSame([self::PUBLIC_TARGET], $requested, 'the private redirect target must not be requested');
+        self::assertSame(['GET ' . self::PUBLIC_TARGET], $requested, 'the private redirect target must not be requested');
     }
 
     public function testThrowsTransportErrorsThatAreNotARefusal(): void
