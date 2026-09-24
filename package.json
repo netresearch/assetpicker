@@ -1,6 +1,6 @@
 {
   "name": "assetpicker",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Embeddable Vue 3 asset & file picker with a pluggable storage-adapter layer — GitHub, Google Drive, EnterMediaDB, or your own.",
   "keywords": [
     "asset-picker",
