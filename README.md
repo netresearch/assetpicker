@@ -75,12 +75,12 @@ const picker = createAssetPickerApp({
 | `storages` | object | – | The available storages. Each entry is passed to its adapter. |
 | `storages.<id>.adapter` | string | – | **Required.** Adapter name (`dummy`, `github`, `googledrive`, `entermediadb`, or a registered custom one). |
 | `storages.<id>.label` | string | id | Label in the sidebar / search results. |
-| `storages.<id>.proxy` | bool \| object | – | Per-storage proxy: `true` = use global proxy, `false` = disable, object = custom. |
+| `storages.<id>.proxy` | bool \| object | – | Not applied in 2.0.x: the built-in adapters do not route requests through the proxy. A custom adapter receives it as `storage.proxy`. |
 | `pick.limit` | number | `1` | Max assets that can be picked (`0` = unlimited). |
 | `pick.types` | string[] | `['file']` | Asset types allowed to be picked (`file`, `dir`, `category`). |
 | `pick.extensions` | string[] | `[]` | Allowed file extensions (empty = all). |
-| `proxy.url` | string | `"proxy.php?to={{url}}"` | Proxy URL template; `{{url}}` = URL-encoded target, `{{url.raw}}` = raw. |
-| `proxy.all` | bool | `false` | Route all storages through the proxy unless a storage opts out. |
+| `proxy.url` | string | `"proxy.php?to={{url}}"` | Proxy URL template for a custom adapter's `createHttpClient({ proxy: ctx.config.proxy })`; `{{url}}` = URL-encoded target, `{{url.raw}}` = raw. |
+| `proxy.all` | bool | `false` | Not applied in 2.0.x: the built-in adapters do not route requests through the proxy. |
 | `thumbnails` | `'url'` \| `'data'` | `'url'` | Deliver thumbnails as a URL, or fetch and inline as a data URI. |
 | `language` | `'auto'` \| `'en'` \| `'de'` | `'auto'` | UI language; `auto` detects from the browser. |
 
@@ -125,7 +125,7 @@ Searches assets via the mediadb services API; logs in through the built-in login
 media: { adapter: 'entermediadb', url: 'https://em.example.org/openinstitute' }
 ```
 
-EnterMediaDB has no CORS headers, so set `proxy: true` (or `proxy.all`) when your app is on a different origin — see [PHP proxy](#php-proxy).
+EnterMediaDB sends no CORS headers, and in 2.0.x the adapter does not use the [PHP proxy](#php-proxy). The adapter logs in with a session cookie, which the PHP proxy would not forward either. The picker therefore has to reach EnterMediaDB on its own origin — for example through a path on your web server that proxies to EnterMediaDB and passes cookies — or EnterMediaDB has to send CORS headers that allow your origin with credentials.
 
 ## Write your own adapter
 
@@ -150,7 +150,7 @@ registerAdapter('mysource', (storage, ctx) => ({
 }));
 ```
 
-`ctx` provides `{ onLoading, thumbnails, config }`. Use the fetch client (`createHttpClient`) for the built-in proxy URL building, throttle and loading indicator.
+`ctx` provides `{ onLoading, thumbnails, config }`. Use the fetch client (`createHttpClient`) for the built-in proxy URL building, throttle and loading indicator: pass `onLoadingChange: ctx.onLoading`, and `proxy: ctx.config.proxy` to route the requests through the [PHP proxy](#php-proxy).
 
 ## PHP proxy
 
