@@ -27,7 +27,7 @@ export function createGoogledriveAdapter(storage, ctx = {}) {
   const http = createHttpClient({
     // Drive's default quota is ~1000 req / 100 s — keep 100 ms between calls.
     defaults: { base: 'https://www.googleapis.com/drive/v3', throttle: 100 },
-    onLoading: ctx.onLoading,
+    onLoadingChange: ctx.onLoading,
     fetch: ctx.fetch,
   });
   let accessToken = storage.access_token || null;
