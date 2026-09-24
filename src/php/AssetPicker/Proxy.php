@@ -106,17 +106,21 @@ class Proxy
     /**
      * Rewrite an upstream redirect so the client follows it back through the
      * proxy instead of hitting the target host directly.
+     *
+     * The proxy URL is the base URL plus the path info: `/proxy.php` for the
+     * standalone script (path info `/`), `/assetpicker` or
+     * `/index.php/assetpicker` for a route behind a front controller.
      */
     private function rewriteRedirect(Request $request, Response $response): void
     {
-        $baseUrl = $request->getBaseUrl();
-        if (basename($baseUrl) !== basename($request->getScriptName())) {
-            $baseUrl .= $request->getPathInfo();
+        $path = $request->getBaseUrl();
+        if ($request->getPathInfo() !== '/') {
+            $path .= $request->getPathInfo();
         }
 
         $response->headers->set(
             'location',
-            $request->getSchemeAndHttpHost() . $baseUrl . '?to='
+            $request->getSchemeAndHttpHost() . $path . '?to='
             . urlencode((string) $response->headers->get('location'))
         );
     }
