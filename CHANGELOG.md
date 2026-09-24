@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2026-07-28
+## [2.0.0] - 2026-09-24
 
 First release since 1.3.4 (2016-10-20). The picker was rebuilt on Vue 3 and
 both published surfaces — the npm entry point and the PHP proxy — changed.
