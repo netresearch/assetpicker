@@ -1,0 +1,43 @@
+name: Node.js
+
+# Gates the Vue app under app/ on every pull request: ESLint, the Vitest suite
+# and the Vite build. tests.yml covers the PHP proxy, security.yml the
+# dependency audit, and pages.yml builds only on pushes to main.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+permissions: {}
+
+jobs:
+  lint:
+    name: Lint
+    uses: netresearch/.github/.github/workflows/ts-check.yml@main
+    permissions:
+      contents: read
+    with:
+      package-manager: bun
+      lint-cmd: bun run lint
+      # Plain JS + Vue SFCs: no type layer, and no Prettier config.
+      enable-type-check: false
+      enable-format-check: false
+
+  test:
+    name: Test
+    uses: netresearch/.github/.github/workflows/node-test.yml@main
+    permissions:
+      contents: read
+    with:
+      package-manager: bun
+      test-cmd: bun run test
+
+  build:
+    name: Build
+    uses: netresearch/.github/.github/workflows/node-build.yml@main
+    permissions:
+      contents: read
+    with:
+      package-manager: bun
+      build-cmd: bun run build

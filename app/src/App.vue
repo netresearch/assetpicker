@@ -2,8 +2,8 @@
 import { ref, provide, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { createPicker, PICKER } from './use-picker.js';
-import Sidebar from './components/Sidebar.vue';
-import Stage from './components/Stage.vue';
+import PickerSidebar from './components/PickerSidebar.vue';
+import PickerStage from './components/PickerStage.vue';
 import ResizeHandle from './components/ResizeHandle.vue';
 
 const props = defineProps({
@@ -56,11 +56,11 @@ onMounted(() => {
     </header>
 
     <div class="ap-main">
-      <aside class="ap-sidebar" :style="{ width: sidebarWidth + 'px' }"><Sidebar /></aside>
+      <aside class="ap-sidebar" :style="{ width: sidebarWidth + 'px' }"><PickerSidebar /></aside>
       <ResizeHandle class="ap-handle" @move="(x) => (sidebarWidth = Math.max(120, x))" />
       <section class="ap-stage">
         <div v-if="!numStorages" class="ap-warning">No storages configured</div>
-        <Stage v-else />
+        <PickerStage v-else />
       </section>
     </div>
 
