@@ -9,7 +9,22 @@ export function joinUrl(url, base) {
   if (!base) {
     return String(url);
   }
-  return `${String(base).replace(/\/+$/, '')}/${String(url).replace(/^\/+/, '')}`;
+  return `${trimTrailingSlashes(String(base))}/${String(url).replace(/^\/+/, '')}`;
+}
+
+/**
+ * Remove trailing slashes in linear time. The regex `/\/+$/` backtracks
+ * quadratically on long runs of slashes that are not at the end.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+function trimTrailingSlashes(value) {
+  let end = value.length;
+  while (end > 0 && value[end - 1] === '/') {
+    end--;
+  }
+  return value.slice(0, end);
 }
 
 /**

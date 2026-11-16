@@ -10,6 +10,13 @@ describe('joinUrl', () => {
   it('returns the url unchanged without a base', () => {
     expect(joinUrl('http://h/a')).toBe('http://h/a');
   });
+  it('collapses several trailing slashes of the base', () => {
+    expect(joinUrl('a', 'http://h///')).toBe('http://h/a');
+  });
+  it('handles a base with a long run of inner slashes in linear time', () => {
+    const base = `http://h${'/'.repeat(200000)}x`;
+    expect(joinUrl('a', base)).toBe(`${base}/a`);
+  });
 });
 
 describe('buildProxyUrl', () => {
