@@ -21,7 +21,7 @@ export function joinUrl(url, base) {
  */
 function trimTrailingSlashes(value) {
   let end = value.length;
-  while (end > 0 && value.charCodeAt(end - 1) === 47) {
+  while (end > 0 && value[end - 1] === '/') {
     end--;
   }
   return value.slice(0, end);
