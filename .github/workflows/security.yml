@@ -6,9 +6,13 @@ on:
   push:
     branches: [main, master]
 
+permissions: {}
+
 jobs:
   node-audit:
     uses: netresearch/.github/.github/workflows/node-audit.yml@main
+    permissions:
+      contents: read
     with:
       package-manager: bun
       audit-level: high
